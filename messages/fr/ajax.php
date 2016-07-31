@@ -18,9 +18,13 @@
  */
 return [
 	/* Title */
-	
+	"To buy"		=> "Acheter",  
+	"To build"		=> "Construire",
+	"To move units"	=> "Déplacer des troupes",
+	'To attack'		=> 'Attaquer',
+		
 	/* Text */
-	'Text_Not_User_Turn'		=> 'Aucune action disponible <br> Veuillez attendre votre tour...',	
+	'Text_Not_User_Turn'		=> 'Aucune action disponible <br> Veuillez attendre votre tour...',
 	'Text_Land_No_Resource'		=> 'Pas de ressource',
 	'Text_Land_No_Building'		=> 'Pas de construction',
 	'Text_Land_Frontier'		=> 'Frontières',
@@ -38,7 +42,7 @@ return [
 	'Text_Resource'				=> 'Ressource',
 	'Text_Units_Pending'		=> 'unités présentes',
 	'Text_Buy_To_Recruit'		=> "Troupes à recruter",
-	'Text_Build_In_Land'		=> 'Construit en', 
+	'Text_Build_In_Land'		=> 'Construit en',
 	'Text_Build_Able_Land'		=> 'Constructions possibles en',
 	'Text_Build_Other'			=> 'Construire un autre bâtiment',
 	'Text_Move_Cant'			=> "Pas d'unité à deplacer",
@@ -52,7 +56,7 @@ return [
 	'Text_Conquered_This_Turn' 	=> "conquis ce tour.",
 	'Text_Income_By_Buildings'	=> 'bâtimens',
 	'Text_Income_By_Lands'		=> 'pays',
-		
+
 	/* Buttons */
 	'Button_Land_Build' 		=> 'Construire',
 	'Button_Land_Buy' 			=> 'Recruter',
@@ -61,8 +65,14 @@ return [
 	'Button_Land_Move' 			=> 'Deplacer des troupes',
 	'Button_Move_Click' 		=> 'Deplacer en',
 	'Button_Return' 			=> 'Retour',
-	
-		
+	'Button_Land_Move_Conquest'	=> 'Déplacement impossible',
+
+	/* Tooltips */
+	"Attack this land."										=> "Attaquer ce pays.",
+	"Move units to another land."							=> "Deplacer des troupes vers un autre pays.",
+	"Construct buildings on the land: fort, camp, mines."	=> "Construire des bâtiments dans le pays : fort, camp, mines.",
+	"Buy units for this land."								=> "Acheter des troupes pour ce pays.",
+
 	/* Error */
 	'Error' 					=> 'Erreur inconnue.',
 	'Error_Turn' 				=> "Erreur : votre tour est terminé.",

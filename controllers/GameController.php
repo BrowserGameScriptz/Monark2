@@ -30,7 +30,7 @@ use app\models\Building;
 class GameController extends \yii\web\Controller
 {
 
-	public $refreshTime = 2000;
+	public $refreshTime = 1800;
 	public $config;
 
 	public function behaviors()
@@ -126,6 +126,10 @@ class GameController extends \yii\web\Controller
 						'modal_error_content'		=> '<center><font size=3>'.Yii::t('map', 'Modal_Error').'</font></center>',
 						'dropdown_loading_content'	=> '<img src=img/site/loading.gif height="20px" width="20px"><br>',
 						'dropdown_error_content'	=> '<font size=3>'.Yii::t('map', 'Modal_Error').'</font>',
+						'to_buy' 			=> '<font size=4>'.Yii::t('ajax', 'To buy').'</font>',
+						'to_build' 			=> '<font size=4>'.Yii::t('ajax', 'To build').'</font>',
+						'to_move' 			=> '<font size=4>'.Yii::t('ajax', 'To move units').'</font>',
+						'to_attack' 			=> '<font size=4>'.Yii::t('ajax', 'To attack').'</font>', 
 				),
 				'url'	=> array(
 						'ajax' => Yii::$app->urlManager->createUrl(['ajax'])
@@ -167,7 +171,7 @@ class GameController extends \yii\web\Controller
     }
 
     /**
-     * 
+     *
      */
     public function setSessionDataNull(){
     	Yii::$app->session['Contient'] = null;
@@ -175,12 +179,12 @@ class GameController extends \yii\web\Controller
     	Yii::$app->session['Resource'] = null;
     	Yii::$app->session['Map'] = null;
     	Yii::$app->session['Color'] = null;
-    	Yii::$app->session['Frontier'] = null;	
+    	Yii::$app->session['Frontier'] = null;
     	Yii::$app->session['Building'] = null;
     	Yii::$app->session['MapData'] = null;
     	Yii::$app->session['Game'] = null;
     }
-    
+
     /**
      *
      * @param unknown $game_current
@@ -296,9 +300,9 @@ class GameController extends \yii\web\Controller
      */
     public function actionStats()
     {
-    	return $this->render('stats'); 
+    	return $this->render('stats');
     }
-    
+
     /**
      *
      * @return string

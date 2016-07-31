@@ -99,10 +99,12 @@ class Move extends \yii\db\ActiveRecord
     		// Turn check
     		if($this->turn->getTurnUserId() == $this->user->getUserID()){
     			// Land check
+    			$conquestAll = Fight::ConquestThisTurnLandAll($this->game->getGameId(), $this->turn->getTurnUserId());
     			if($this->gameData[$this->land_id_from]->getGameDataUserId() == $this->user->getUserID()
     			   && $this->gameData[$this->land_id_to]->getGameDataUserId() == $this->user->getUserID()
     				&& $this->units > 0
-    				 && isset($this->frontierData[$this->land_id_to])){
+    				 && isset($this->frontierData[$this->land_id_to])
+    				  && !isset($conquestAll[$this->land_id_from])){
     				return true;
     			}else{
     				return "Error";

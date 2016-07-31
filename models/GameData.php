@@ -22,7 +22,7 @@ use app\classes\GameDataClass;
 class GameData extends \yii\db\ActiveRecord
 {
 	
-	public static $gold_base = 1;
+	public static $gold_base = 0;
 	
     /**
      * @inheritdoc
@@ -141,7 +141,7 @@ class GameData extends \yii\db\ActiveRecord
     				'game_data_units'         => (array_key_exists($land->getLandId(), $assignedLands) ? ($land->getLandBaseUnits() + $default_units_user_add) : $land->getLandBaseUnits()),
     				'game_data_capital'       => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_resource_id'   => $assignedResources[$land->getLandId()],
-    				'game_data_buildings'     => (array_key_exists($land->getLandId(), $assignedLands) ? "1;6;" : ""),
+    				'game_data_buildings'     => (array_key_exists($land->getLandId(), $assignedLands) ? "6;1;" : ""),
     		);
     		Yii::$app->db->createCommand()->insert(self::tableName(), $returned[$land->getLandId()])->execute();
     		$returned[$land->getLandId()]['game_data_id'] = 0;

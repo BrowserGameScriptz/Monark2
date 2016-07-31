@@ -23,7 +23,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		        	<!-- region info -->
 					<tr>
 						<td style="padding: 4px;text-align:center;"><font size='3' color="black">
-						<?php if($GameData[$land_id]->getGameDataCapital() > 0): ?> 
+						<?php if($GameData[$land_id]->getGameDataCapital() > 0): ?>
 							<?= Html::tag('span', "<img src='img/game/star.png' height='20px' width='20px'>", [
 		                        'title'=>"Capitale du joueur. ",
 		                        'data-toggle'=>'tooltip',
@@ -31,7 +31,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		                        'style'=>'text-decoration: none; cursor:pointer;'
 		                    ]); ?>
 		                <?php endif; ?>
-		                <?= $Land[$land_id]->getLandName() ?> 
+		                <?= $Land[$land_id]->getLandName() ?>
 		                <?php if($Continent[$Land[$land_id]->getLandContinentId()]->getContinentId() != 0): ?>
 		                	( <?= Yii::t('continent', $Continent[$Land[$land_id]->getLandContinentId()]->getContinentName()); ?> )
 						<?php endif; ?>
@@ -126,44 +126,60 @@ $this->registerCssFile("@web/css/ajax.css");
 			</td>
 			<td style="width:40%;">
 				<div class="div-center">
-					<img src=<?= "'".$land->getLandImageTempUrl($Color[$GamePlayer[$GameData[$land_id]->getGameDataUserId()]->getGamePlayerColorId()]->getColorName2())."'"; ?> style="width:130%"> 
+					<img src=<?= "'".$land->getLandImageTempUrl($Color[$GamePlayer[$GameData[$land_id]->getGameDataUserId()]->getGamePlayerColorId()]->getColorName2())."'"; ?> style="width:130%">
 				</div>
 			</td>
 		</tr>
 		<tr style="width:100%;">
 			<td>
 				<div class="div-center">
-					<!-- Bottom buttons -->	
+					<!-- Bottom buttons -->
 					<table class="table-no-style" style="width:100%;">
 					<tbody>
 						<tr>
 							<?php if($userLand): ?>
 							<td>
-								<?= Html::tag('span', "&nbsp;<a href='#Buy' class='buy_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-success ".$buttonDisable."'><i class='fa fa-usd'></i> ".Yii::t('ajax', 'Button_Land_Buy')." </span></a>", [
-				                    'title'=>"Acheter des troupes pour cette région.",
+								<?php ($buttonDisable == "")?$buy_link = "buy_link":$buy_link = ""; ?>
+								<?= Html::tag('span', "&nbsp;<a href='#Buy' class='".$buy_link."' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-success ".$buttonDisable."'><i class='fa fa-usd'></i> ".Yii::t('ajax', 'Button_Land_Buy')." </span></a>", [
+				                    'title'=> Yii::t('ajax', "Buy units for this land."),
 				                    'data-toggle'=>'tooltip',
 				                    'data-placement' => 'bottom',
 				                    'style'=>'text-decoration: none; cursor:pointer;'
 				                ]); ?>
 				            </td><td>
-				                <?= Html::tag('span', "&nbsp;<a href='#Build' class='build_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-primary".$buttonDisable."'><i class='fa fa-gavel'></i> ".Yii::t('ajax', 'Button_Land_Build')." </span></a>", [
-				                    'title'=>"Construire des bâtiments sur la région : fort, camp, mines. ",
+				            	<?php ($buttonDisable == "")?$build_link = "build_link":$build_link = ""; ?>
+				                <?= Html::tag('span', "&nbsp;<a href='#Build' class='".$build_link."' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-primary".$buttonDisable."'><i class='fa fa-gavel'></i> ".Yii::t('ajax', 'Button_Land_Build')." </span></a>", [
+				                    'title'=> Yii::t('ajax', "Construct buildings on the land: fort, camp, mines."),
 				                    'data-toggle'=>'tooltip',
 				                    'data-placement' => 'bottom',
 				                    'style'=>'text-decoration: none; cursor:pointer;'
 				                ]); ?>
-				            </td><td>
-				                <?= Html::tag('span', "&nbsp;<a href='#Build' class='move_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-warning".$buttonDisable."'><i class='fa fa-truck'></i> ".Yii::t('ajax', 'Button_Land_Move')." </span></a>", [
-				                    'title'=>"Deplacer des troupes vers une autre région. ",
-				                    'data-toggle'=>'tooltip',
-				                    'data-placement' => 'bottom',
-				                    'style'=>'text-decoration: none; cursor:pointer;'
-				                ]); ?>
-					        </td>      
+				            </td>
+				            <?php ($buttonDisable == "")?$move_link = "move_link":$move_link = ""; ?>
+					            <?php if(isset($conquestAll[$land_id]) && $conquestAll[$land_id] == true): ?>
+						            <td>
+						                <?= Html::tag('span', "&nbsp;<a href='#Move' class='' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-warning disabled'><i class='fa fa-truck'></i> ".Yii::t('ajax', 'Button_Land_Move_Conquest')." </span></a>", [
+						                    'title'=> Yii::t('ajax', "Move units to another land."),
+						                    'data-toggle'=>'tooltip',
+						                    'data-placement' => 'bottom',
+						                    'style'=>'text-decoration: none; cursor:pointer;'
+						                ]); ?>
+							        </td>
+							    <?php else : ?>
+							    	<td>
+						                <?= Html::tag('span', "&nbsp;<a href='#Move' class='".$move_link."' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-warning".$buttonDisable."'><i class='fa fa-truck'></i> ".Yii::t('ajax', 'Button_Land_Move')." </span></a>", [
+						                    'title'=> Yii::t('ajax', "Move units to another land."),
+						                    'data-toggle'=>'tooltip',
+						                    'data-placement' => 'bottom',
+						                    'style'=>'text-decoration: none; cursor:pointer;'
+						                ]); ?>
+							        </td>
+						    	<?php endif; ?>
 					        <?php elseif(!$userLand && $visible): ?>
 					        <td>
-					        	<?= Html::tag('span', "&nbsp;<a href='#Buy' class='atk_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-danger".$buttonDisable."'><i class='fa fa-bolt'></i> ".Yii::t('ajax', 'Button_Land_Atk')." </span></a>", [
-					                    'title'=>"Attaquer cette région.",
+					        	<?php ($buttonDisable == "")?$atk_link = "atk_link":$atk_link = ""; ?>
+					        	<?= Html::tag('span', "&nbsp;<a href='#Buy' class='".$atk_link."' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-danger".$buttonDisable."'><i class='fa fa-bolt'></i> ".Yii::t('ajax', 'Button_Land_Atk')." </span></a>", [
+					                    'title'=> Yii::t('ajax', "Attack this land."),
 					                    'data-toggle'=>'tooltip',
 					                    'data-placement' => 'bottom',
 					                    'style'=>'text-decoration: none; cursor:pointer;'
@@ -180,6 +196,6 @@ $this->registerCssFile("@web/css/ajax.css");
 	<div class="div-center">
 		<?php if(!$userTurn): ?>
 			<br><?= Yii::t('ajax', 'Text_Not_User_Turn'); ?>
-		<?php endif; ?>	
+		<?php endif; ?>
 	</div>
 </div>

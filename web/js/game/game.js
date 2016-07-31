@@ -15,7 +15,7 @@ $("document").ready(function(){
 // Call Pjax Functions
 function reloadPjax(){reloadMap();reloadHeader();if(config["debugJs"])console.log("Pjax reload called");}
 function reloadMap(){
-	if($("#map_content").length > 0 && !$("modal").is(':visible')){
+	if($("#map_content").length > 0 && !$("#modal-view").is(':visible')){
 		$.pjax.reload({container:"#map_content", async:true});
 		if(config["debugJs"])console.log("Pjax Map reloaded");
 	}

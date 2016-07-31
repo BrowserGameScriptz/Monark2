@@ -2,7 +2,8 @@
 web/assets/
 .project
 .buildpath
+db.php
+temp.txt
+db_local.php
 config/db.php
 config/db_srv.php
-temp.txt
-config/db_local.php

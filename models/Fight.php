@@ -187,6 +187,8 @@ class Fight extends \yii\db\ActiveRecord
 				$this->turn->getTurnId(),
 				$data['conquest']
 		);
+		
+		return $data;
     }
     
     /**
