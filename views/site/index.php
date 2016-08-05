@@ -35,7 +35,7 @@ $this->title = Yii::$app->name['name'];
 
                 <p><?= Html::a("<img src='img/site/tutorial.png' width='200px' height='200px'>", ['/site/tutorial']); echo "<br><i>".Yii::t('site', 'Home_Tutorial_Description') ?></i></p>
                 
-				 <p><?= Html::a(Yii::t('site', 'Button_Tutorial'), ['/site/tutorial'], ['class'=>'btn btn-primary', 'style'=>'width:50%;']); ?></p>
+				 <p><?= Html::a(Yii::t('site', 'Button_Tutorial'), ['/site/tutorial'], ['class'=>'btn btn-primary', 'name'=> 'tutorial_button', 'style'=>'width:50%;']); ?></p>
             </div>
         </div>
 

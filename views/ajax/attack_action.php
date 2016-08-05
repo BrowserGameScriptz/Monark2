@@ -22,13 +22,16 @@ use app\assets\AppAsset;
 		<div id='fight-div'>
 			<table>
 				<tr>
-					<td>Victoire : <span id='win_percent'></span>%</td>
+					<td><?= Yii::t('ajax', 'Text_Victory') ?> : <span id='win_percent'>
+					<?php if($atk_result["conquest"] == 1): ?>  100 <?php else: ?> 0 <?php endif; ?></span>%</td>
 				</tr>
 				<tr>
-					<td>Attaquant : <span id='units_atk'></span></td>
+					<td><?= Yii::t('ajax', 'Text_Attacker') ?> : <span id='units_atk'><?= $atk_result["atk_result_units"]; ?>
+					( - <?= ($atk_result["atk_engage_units"] - $atk_result["atk_result_units"]); ?>)</span></td>
 				</tr>
 				<tr>
-					<td>Défenseur : <span id='units_def'></span></td>
+					<td><?= Yii::t('ajax', 'Text_Defender') ?> : <span id='units_def'><?= $atk_result["def_result_units"]; ?> 
+					( - <?= ($atk_result["def_engage_units"] - $atk_result["def_result_units"]); ?>)</span></td>
 				</tr>
 			</table>
 		</div>
@@ -128,7 +131,7 @@ use app\assets\AppAsset;
                 		, 1000); 
 				    }
 				);
-		</script>				
+		</script>		
 	<?php else: ?>
 		<div class="alert alert-danger" style="text-align:center;">
 			<font size='3'>

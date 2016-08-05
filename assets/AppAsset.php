@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
     		'js/jquery.ui.position.js',
     		'js/jquery.rightClick.js',
     		'js/json.min.js',
+    		'js/chat.js',
     		'js/game/modals.js',
     		'js/game/anim.js',
     		'js/game/header.js',

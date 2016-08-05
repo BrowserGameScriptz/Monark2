@@ -59,5 +59,6 @@ return [
 	
 	/* Other */
 	'Neutral_User_Name'	=> (new Crypt('Neutre'))->s_crypt(),
+	'Unknown_User_Name'	=> (new Crypt('Inconnu'))->s_crypt(),
 ];
 ?>

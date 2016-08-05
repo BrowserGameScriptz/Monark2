@@ -71,6 +71,7 @@ return [
 	'Error_User_Already_In_Game' => 'Vous êtes déjà dans une autre partie !',
 	'Error_Game_Full' => 'La partie est pleine.',
 	'Error_Game_Cant_Join' => 'Impossible de rejoindre la partie.',
+	'Error_Last_Game_Cant_Join' => 'Impossible de rejoindre la dernière partie.',
 	'Error_Game_Not_Exist' => "La partie n'existe plus.",
 	'Error_Start_Multiple_Color' => "La partie n'a pas pu démarrer : Plusieurs joueurs ont la même couleur.",
 	'Error_Start_Not_Ready' => "La partie n'a pas pu démarrer : les joueurs ne sont pas prêts.",
@@ -82,15 +83,19 @@ return [
 	'Success_Game_Created' => 'Partie créée.',
 	'Success_Game_Join' => 'Partie rejointe.',
 	'Notice_Game_Quit' => 'Partie quittée.',
+	'Notice_Games_Quit' => 'Toutes les parties en cours sont désormais quittées.',
+	'Notice_Last_Game_Entered' => 'Dernière partie rejointe',
 
 	/* Buttons */
 	'Button_Send' => 'Envoyer',
 	'Button_Game_Create' => 'Créer une partie',
 	'Button_Game_Enter' => 'Entrer dans la partie',
+	'Button_Last_Game_Enter' => 'Retourner dans la dernière partie',
 	'Button_Game_Return' => 'Retourner dans la partie',
 	'Button_Game_Spec' => 'Regarder la partie',
 	'Button_Game_Ban' => 'Vous avez été bannis',
 	'Button_Game_End' => 'Partie terminée',
+	'Button_Games_Quit' => 'Quitter toutes les parties en cours.',
 	'Button_Enter_In_Game' => 'Entrer dans la partie',
 
 	/* Form */

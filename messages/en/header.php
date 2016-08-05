@@ -18,7 +18,8 @@
  */
 return [
      // Title
-	'Title_Last_Buy'=>  'Last purchases',
+	'Title_Last_Buy'	=>  'Last purchases',
+	'Title_Last_Chat'	=>  'Last messages',
 
     // header
 	'Logout'       	=> 'Logout',
@@ -50,6 +51,8 @@ return [
     'Text_Turn_Other' => 'Please wait, turn of',
 	'Text_Your_turn'	=>  "It's your turn !",
 	'Text_Lost_Connection'=>  'Connection lost with the server',
+	'Text_View_All'	=>  'View all',
+	'Text_No_Unread_Chat' => 'No unread posts',
     
 ];
 ?>

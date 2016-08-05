@@ -13,24 +13,23 @@ $("document").ready(function(){
 });
 
 // Call Pjax Functions
-function reloadPjax(){reloadMap();reloadHeader();if(config["debugJs"])console.log("Pjax reload called");}
-function reloadMap(){
-	if($("#map_content").length > 0 && !$("#modal-view").is(':visible')){
-		$.pjax.reload({container:"#map_content", async:true});
-		if(config["debugJs"])console.log("Pjax Map reloaded");
-	}
-}
+function pjaxReload(div){if(!$("input:hover").length > 0){$.pjax.reload({container:div, async:true});}}
+function reloadPjax(){reloadGameIndex();reloadMap();reloadHeader();if(config["debugJs"])console.log("Pjax reload called");}
+
+function reloadGameIndex(){if($("#list_game").length > 0){pjaxReload("#list_game");if(true){console.log("Pjax Game Index reloaded");}}}
+function reloadMap(){if($("#map_content").length > 0 && !$("#modal-view").is(':visible')){pjaxReload("#map_content");if(config["debugJs"]){console.log("Pjax Map reloaded");}}}
+
 function reloadHeader(){
 	// URL
 	var url = config["url"]["ajax"] + "/" + "header";
 	
-	if($("#navbar-menu-game:hover").length == 0){
+	if($("#navbar-menu-game:hover").length == 0 && config["access"]["in_started_game"]){
 		// Ajax call
 		$.ajax({
 	        url: url,
 	        dataType : "html",  
 	        success: function(data) {
-	        	$.pjax.reload({container:"#navbar-menu-game-data", async:true});
+	        	pjaxReload("#navbar-menu-game-data");
 	        	if(config["debugJs"])console.log("Pjax Header reloaded");
 	        },
 	        error: function(){    

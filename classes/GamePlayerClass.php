@@ -50,6 +50,10 @@ class GamePlayerClass{
 		return $this->gamePlayerOrder;
 	}
 
+	public function getGamePlayerBot(){
+		return $this->gamePlayerBot;
+	}
+	
 	public function getGamePlayerQuit(){
 		return $this->gamePlayerQuit;
 	}

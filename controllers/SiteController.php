@@ -6,10 +6,15 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use app\classes\Access;
 
 
 class SiteController extends Controller
 {
+	
+	public static $refreshTime = 1800;
+	public static $config;
+	
     public function behaviors()
     {
         return [
@@ -49,6 +54,39 @@ class SiteController extends Controller
         ];
     }
 
+    /**
+     *
+     * @return string
+     */
+    public static function getJSConfig(){
+    	self::$config = array(
+    			'debugJs' => false,
+    			'refresh_time' => self::$refreshTime,
+    			'text' => array(
+    					'turn_finished' 			=> Yii::t('header', 'Text_Turn_Finished'),
+    					'modal_loading_content'		=> '<center><font size=3>'.Yii::t('map', 'Modal_Loading').'...</font><br><img src=img/site/loading.gif></center>',
+    					'modal_error_content'		=> '<center><font size=3>'.Yii::t('map', 'Modal_Error').'</font></center>',
+    					'dropdown_loading_content'	=> '<img src=img/site/loading.gif height="20px" width="20px"><br>',
+    					'dropdown_error_content'	=> '<font size=3>'.Yii::t('map', 'Modal_Error').'</font>',
+    					'to_buy' 			=> '<font size=4>'.Yii::t('ajax', 'To buy').'</font>',
+    					'to_build' 			=> '<font size=4>'.Yii::t('ajax', 'To build').'</font>',
+    					'to_move' 			=> '<font size=4>'.Yii::t('ajax', 'To move units').'</font>',
+    					'to_attack' 			=> '<font size=4>'.Yii::t('ajax', 'To attack').'</font>',
+    			),
+    			'url'	=> array(
+    					'ajax' => Yii::$app->urlManager->createUrl(['ajax'])
+    			),
+    			'ajax'	=> array(
+    					'error'	=> AjaxController::returnError(),
+    			),
+    			'access' => array(
+    					'in_game' => Access::UserIsInGame(),
+    					'in_started_game' => Access::UserIsInStartedGame(),
+    			),
+    	);
+    	return "var config = ".json_encode(self::$config).";";
+    }
+    
     public function actionIndex()
     {
         return $this->render('index');

@@ -18,9 +18,9 @@
  */
 return [
 	/* Title */
-	"To buy"		=> "Acheter",  
-	"To build"		=> "Construire",
-	"To move units"	=> "Déplacer des troupes",
+	'To buy'		=> 'Acheter',  
+	'To build'		=> 'Construire',
+	'To move units'	=> 'Déplacer des troupes',
 	'To attack'		=> 'Attaquer',
 		
 	/* Text */
@@ -40,6 +40,9 @@ return [
 	'Text_Income'				=> 'Revenus',
 	'Text_Owner_Player'			=> 'Vous',
 	'Text_Resource'				=> 'Ressource',
+	'Text_Defender'				=> 'Défenseur',
+	'Text_Attacker'				=> 'Attaquant',
+	'Text_Victory'				=> 'Victoire',
 	'Text_Units_Pending'		=> 'unités présentes',
 	'Text_Buy_To_Recruit'		=> "Troupes à recruter",
 	'Text_Build_In_Land'		=> 'Construit en',
@@ -68,10 +71,10 @@ return [
 	'Button_Land_Move_Conquest'	=> 'Déplacement impossible',
 
 	/* Tooltips */
-	"Attack this land."										=> "Attaquer ce pays.",
-	"Move units to another land."							=> "Deplacer des troupes vers un autre pays.",
-	"Construct buildings on the land: fort, camp, mines."	=> "Construire des bâtiments dans le pays : fort, camp, mines.",
-	"Buy units for this land."								=> "Acheter des troupes pour ce pays.",
+	'Attack this land.'										=> 'Attaquer ce pays.',
+	'Move units to another land.'							=> 'Deplacer des troupes vers un autre pays.',
+	'Construct buildings on the land: fort, camp, mines.'	=> 'Construire des bâtiments dans le pays : fort, camp, mines.',
+	'Buy units for this land.'								=> 'Acheter des troupes pour ce pays.',
 
 	/* Error */
 	'Error' 					=> 'Erreur inconnue.',
@@ -79,5 +82,6 @@ return [
 	'Error_Gold' 				=> "Erreur : vous n'avez pas assez d'argent.",
 	'Error_Units' 				=> "Erreur : vous devez conserver au minimum 1 unité sur votre territoire.",
 	'Error_Conquest' 			=> "Erreur : ce pays a été conquis ce tour.",
+	'Error_Message_Empty'		=> "Erreur : votre message est vide.",
 ];
 ?>

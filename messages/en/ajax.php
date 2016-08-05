@@ -18,10 +18,10 @@
  */
 return [
 	/* Title */
-	"To buy"		=> "To buy", 
-	"To build"		=> "To build",
-	"To move units"		=> "To move units",
-	"To attack"		=> "To attack",
+	'To buy'		=> 'To buy', 
+	'To build'		=> 'To build',
+	'To move units'		=> 'To move units',
+	'To attack'		=> 'To attack',
 
 	'Text_Not_User_Turn'		=> 'No actions available <br> Please wait your turn...',
 	/* Text */
@@ -40,6 +40,9 @@ return [
 	'Text_Income'				=> 'Income',
 	'Text_Owner_Player'			=> 'You',
 	'Text_Resource'				=> 'Resource',
+	'Text_Defender'				=> 'Defender',
+	'Text_Attacker'				=> 'Attacker',
+	'Text_Victory'				=> 'Victory',
 	'Text_Units_Pending'		=> 'units pending',
 	'Text_Buy_To_Recruit'		=> 'Recruit unit',
 	'Text_Build_In_Land'		=> 'Build in',
@@ -68,10 +71,10 @@ return [
 	'Button_Land_Move_Conquest'	=> 'Move not allowed',
 
 	/* Tooltips */
-	"Attack this land."										=> "Attack this land.",
-	"Move units to another land."							=> "Move units to another land.",
-	"Construct buildings on the land: fort, camp, mines."	=> "Construct buildings on the land: fort, camp, mines.",
-	"Buy units for this land."								=> "Buy units for this land.",
+	'Attack this land.'										=> 'Attack this land.',
+	'Move units to another land.'							=> 'Move units to another land.',
+	'Construct buildings on the land: fort, camp, mines.'	=> 'Construct buildings on the land: fort, camp, mines.',
+	'Buy units for this land.'								=> 'Buy units for this land.',
 
 	/* Error */
 	'Error' 					=> 'Unknow error.',
@@ -79,5 +82,6 @@ return [
 	'Error_Gold' 				=> 'Error : you have not enough gold.',
 	'Error_Units' 				=> "Error : you must keep at least 1 unit in your territory.",
 	'Error_Conquest' 			=> "Error : this land was conquered this turn.",
+	'Error_Message_Empty'		=> "Error : your post is empty.",
 ];
 ?>

@@ -1,7 +1,8 @@
 <?php
 /**
  * AssetBundle.php
- * @author Revin Roman http://phptime.ru
+ * @author Revin Roman
+ * @link https://rmrevin.ru
  */
 
 namespace rmrevin\yii\fontawesome;
@@ -16,7 +17,7 @@ class AssetBundle extends \yii\web\AssetBundle
     /**
      * @inherit
      */
-    public $sourcePath = '@vendor/fortawesome/font-awesome';
+    public $sourcePath = '@vendor/rmrevin/yii2-fontawesome/assets';
 
     /**
      * @inherit
@@ -28,6 +29,7 @@ class AssetBundle extends \yii\web\AssetBundle
     /**
      * Initializes the bundle.
      * Set publish options to copy only necessary files (in this case css and font folders)
+     * @codeCoverageIgnore
      */
     public function init()
     {

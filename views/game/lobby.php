@@ -4,10 +4,17 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use yii\web\View;
+use app\assets\AppAsset;
 
 /* @var $this yii\web\View */
 $this->title =  Yii::t('game_player', 'Title_Lobby_{params}', ['params' => Yii::$app->session['Game']->getGameName()]);
 $ajax_reload = 4000;
+
+// Set JS var
+$this->registerJs($this->context->getJSConfig(), View::POS_HEAD);
+$this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
 ?>
 
 

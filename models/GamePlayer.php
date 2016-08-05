@@ -115,6 +115,14 @@ class GamePlayer extends \yii\db\ActiveRecord
     			);
     }
 
+    /**
+     *
+     * @return \app\classes\gamePlayerClass
+     */
+    public static function findPlayerUnknown(){
+    	return self::findPlayerZero();
+    }
+
    /**
     *
     * @return \app\classes\UserClass
@@ -124,6 +132,23 @@ class GamePlayer extends \yii\db\ActiveRecord
     			array(
     					'user_id' => 0,
     					'user_name' => Yii::t('game_player', 'Neutral_User_Name'),
+    					'user_pwd' => "",
+    					'user_mail' => "",
+    					'user_type' => 0,
+    					'user_key' => "",
+    			)
+    			);
+    }
+
+    /**
+     *
+     * @return \app\classes\UserClass
+     */
+    public static function findUserUnknown(){
+    	return new UserClass(
+    			array(
+    					'user_id' => 0,
+    					'user_name' => Yii::t('game_player', 'Unknown_User_Name'),
     					'user_pwd' => "",
     					'user_mail' => "",
     					'user_type' => 0,
@@ -224,6 +249,15 @@ class GamePlayer extends \yii\db\ActiveRecord
      */
     public static function findUserGameId($user_id){
     	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => 0])->one();
+    }
+
+    /**
+     *
+     * @param unknown $user_id
+     * @return \app\queries\GamePlayer[]
+     */
+    public static function findAllUserGameId($user_id){
+    	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => 0])->all();
     }
 
     /**

@@ -131,12 +131,9 @@ class Buy extends \yii\db\ActiveRecord
      * @param number $count
      */
     public static function userLastBuy($game_id, $user_id, $count=4){
-    	$i = 0;
     	$returned = array();
-    	foreach (self::userLastBuyAll($game_id, $user_id) as $buy){
+    	foreach (self::userLastBuyAll($game_id, $user_id, $count) as $buy){
     		array_push($returned, new BuyClass($buy));
-    		$i++;
-    		if($i == $count) break; // PAS OUF
     	}
     	return $returned;
     }
@@ -148,8 +145,8 @@ class Buy extends \yii\db\ActiveRecord
   	 * @return \app\models\Buy[]
   	 */
     //->limit($count)
-    public static function userLastBuyAll($game_id, $user_id){
-    	return self::find()->where(['buy_game_id' => $game_id])->andWhere(['buy_user_id' => $user_id])->orderBy(['buy_time' => SORT_DESC])->all();
+    public static function userLastBuyAll($game_id, $user_id, $limit=4){
+    	return self::find()->where(['buy_game_id' => $game_id])->andWhere(['buy_user_id' => $user_id])->orderBy(['buy_time' => SORT_DESC])->limit($limit)->all();
     }
     
     /**

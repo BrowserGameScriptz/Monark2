@@ -47,6 +47,47 @@ class ChatRead extends \yii\db\ActiveRecord
     }
 
     /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     */
+    public static function getUserLastChatReadTimeInGame($game_id, $user_id){
+    	$result = self::find()->where(['chat_read_game_id' => $game_id])->andWhere(['chat_read_user_id' => $user_id])->orderBy(['chat_read_time' => SORT_DESC])->one();
+    	if($result['chat_read_time'] != null)
+    		return $result['chat_read_time'];
+    	else
+    		return 0;
+    }
+    
+    
+    /**
+     * 
+     * @param unknown $user_id
+     */
+    public static function getUserLastChatReadTimeGlobal($user_id){
+    	$result =  self::find()->where(['chat_read_user_id' => $user_id])->orderBy(['chat_read_time' => SORT_DESC])->one();
+    	if($result['chat_read_time'] != null)
+    		return $result['chat_read_time'];
+    	else
+    		return 0;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return number
+     */
+    public static function insertChatReadLog($game_id, $user_id){
+    	if(Chat::countUserUnReadChat($game_id, $user_id) > 0)
+	    	return Yii::$app->db->createCommand()->insert(self::tableName(), [
+	    			'chat_read_game_id'   	=> $game_id,
+	    			'chat_read_user_id'   	=> $user_id,
+	    			'chat_read_time'  		=> time(),
+	    	])->execute();
+    }
+    
+    /**
      * @inheritdoc
      * @return \app\queries\ChatReadQuery the active query used by this AR class.
      */

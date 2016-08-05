@@ -18,7 +18,8 @@
  */
 return [
     // Title
-	'Title_Last_Buy'=>  'Derniers achats',
+	'Title_Last_Buy'	=>  'Derniers achats',
+	'Title_Last_Chat'	=>  'Derniers messages',
 		
     // header
 	'Logout'       	=> 'Déconnexion',
@@ -50,6 +51,8 @@ return [
 	'Text_Turn_Other' 	=> 'Patientez, tour de',
 	'Text_Your_turn'	=>  "C'est votre tour !",
 	'Text_Lost_Connection'=>  'Connexion perdue avec le serveur',
+	'Text_View_All'	=>  'Voir tout',
+	'Text_No_Unread_Chat' => 'Aucun message non lu',
 		
 ];
 ?>

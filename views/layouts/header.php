@@ -178,20 +178,15 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game/mail']) ?>">View all</a></li>
 					            </ul>
 		                	</li>
-		                	<li class="dropdown tasks-menu">
-					            <a href="#" id='header_chat' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+		                	<li id='last_chat_content' class="dropdown tasks-menu">
+					            <a href="#" id='last_chat_link' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 						            <i class="fa fa-weixin"></i>
-						            <span class="label label-warning">4</span>
+						            <span class="label label-warning"><?=Yii::$app->session['MapData']['UserUnReadChat'] ?></span>
 					            </a>
 					            <ul class="dropdown-menu" style="width:100%">
-					              <!--<li class="header">You have 10 notifications</li>-->
-					              <li>
-					                <!-- inner menu: contains the actual data -->
-					                <ul class="menu">
-					                  
-					                </ul>
-					              </li>
-					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game/chat']) ?>">View all</a></li>
+					              <li class="header"><?= Yii::t('header', 'Title_Last_Chat') ?> </li>
+					              <li><ul class="menu"></ul></li>
+					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game/chat']) ?>"><?= Yii::t('header', 'Text_View_All') ?></a></li>
 					            </ul>
 		                	</li>
 		                	<li class="dropdown tasks-menu">
