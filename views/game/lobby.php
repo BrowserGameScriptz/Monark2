@@ -65,15 +65,15 @@ $this->registerJs(
             	'format'    => 'raw',
                 'attribute' => Yii::t('game_player', 'Tab_User_Name'),
                 'value'     => function ($model, $key, $index, $column) use ($userList, $botList, $colorList) {
+                	$returned = "";
                 	if(isset($userList[$model->game_player_user_id]))
             			$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$userList[$model->game_player_user_id]->getUserName().'</font>  ';
 					elseif(isset($botList[$model->game_player_bot]))
-					$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.Yii::t('Bot_Name', ['id' => $model->game_player_bot]).'</font>  ';
-					
+						$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.Yii::t('game_player', 'Bot_Name_{id}', ['id' => $model->game_player_bot]).'</font>  ';
+                		
                 	// If admin
                 	if(Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID() && Yii::$app->session['User']->getId() != $model->game_player_user_id)
-            			return $returned
-    							.Html::a(" <i class='fa fa-sign-out'></i>", ['/game/lobby'], ['class'=>'btn btn-xs btn-danger']);
+            			return $returned.Html::a(" <i class='fa fa-sign-out'></i>", ['/game/lobby'], ['class'=>'btn btn-xs btn-danger']);
                 	else
                 		return $returned;
             	},
@@ -82,7 +82,7 @@ $this->registerJs(
             	'format'    => 'raw',
                 'attribute' => Yii::t('game_player', 'Tab_Color_Name'),
                 'value'     => function ($model, $key, $index, $column) use ($colorList, $colorSQl){
-                	if(Yii::$app->session['User']->getId() == $model->game_player_user_id)
+                	if((Yii::$app->session['User']->getId() == $model->game_player_user_id) || ((Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID()) && $model->game_player_bot > 0))
                 		return Html::activeDropDownList($model, 'game_player_color_id',
                 			ArrayHelper::map($colorSQl,
                 				function($model, $defaultValue) {
@@ -95,7 +95,7 @@ $this->registerJs(
                 				[
                 						'prompt'	=> Yii::t('color', $colorList[$model->game_player_color_id]->getColorName()),
                 						'class'		=> 'selectpicker',
-                						'onchange'	=> 'location = "'.Url::current().'&ui='.$model->game_player_user_id.'&ci="+this.options[this.selectedIndex].value;',
+                						'onchange'	=> 'location = "'.Url::current().'&ui='.$model->game_player_user_id.'&bi='.$model->game_player_bot.'&ci="+this.options[this.selectedIndex].value;',
                 				]);
                 	else
                 		return '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$colorList[$model->game_player_color_id]->getColorName().'</font>';
@@ -107,7 +107,7 @@ $this->registerJs(
 	            'attribute' => Yii::t('game_player', 'Tab_Region_Player'),
 	            'value'     => function ($model, $key, $index, $column) use ($continentList, $continentSQl, $colorList){
 	            	if(count($continentList) > 0){
-		            	if(Yii::$app->session['User']->getId() == $model->game_player_user_id)
+		            	if((Yii::$app->session['User']->getId() == $model->game_player_user_id) || ((Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID()) && $model->game_player_bot > 0))
 		           			return Html::activeDropDownList($model, 'game_player_region_id',
 		           				ArrayHelper::map($continentSQl,
 		           					function($model, $defaultValue) {
@@ -120,7 +120,7 @@ $this->registerJs(
 		           				[
 		           				'prompt'	=> Yii::t('continent_name', $continentList[$model->game_player_region_id]->getContinentName()),
 		           				'class'		=> 'selectpicker',
-		           				'onchange'	=> 'location = "'.Url::current().'&ui='.$model->game_player_user_id.'&ri="+this.options[this.selectedIndex].value;',
+		           				'onchange'	=> 'location = "'.Url::current().'&ui='.$model->game_player_user_id.'&bi='.$model->game_player_bot.'&ri="+this.options[this.selectedIndex].value;',
 			           		]);
 		           		else
 		           			return '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$continentList[$model->game_player_region_id]->getContinentName().'</font>';
@@ -149,5 +149,4 @@ $this->registerJs(
         ],
     ]); ?>
     <?php Pjax::end(); ?>
-
 </div>

@@ -135,6 +135,8 @@ class GameController extends \yii\web\Controller
     	$statut = null;
     	$color_id = null;
     	if(array_key_exists('ui', Yii::$app->request->queryParams)){
+    		$user_id = Yii::$app->request->queryParams['ui'];
+    		$bot_id = Yii::$app->request->queryParams['bi'];
     		if(array_key_exists('ri', Yii::$app->request->queryParams)){
     			$region_id = Yii::$app->request->queryParams['ri'];
     		}elseif(array_key_exists('si', Yii::$app->request->queryParams)){
@@ -143,9 +145,9 @@ class GameController extends \yii\web\Controller
     			$color_id = Yii::$app->request->queryParams['ci'];
     		}
     	}
-
+    	
     	// Update in bd
-    	$gamePlayer->updateGamePlayerById(Yii::$app->session['User']->getId(), Yii::$app->session['Game']->getGameId(), $region_id, $color_id, $statut);
+    	$gamePlayer->updateGamePlayerById($user_id, Yii::$app->session['Game']->getGameId(), $region_id, $color_id, $statut, $bot_id);
 
     	// Clear url & go to lobby
     	return $this->redirect(Url::to(['game/lobby']),302);
@@ -599,10 +601,10 @@ class GameController extends \yii\web\Controller
     	// The game as started
     	$urlparams 	= Yii::$app->request->queryParams;
     	$started 	= $this->checkStarted(Yii::$app->session['Game']->getGameId());
-    	if($started || ($this->checkOwner() && array_key_exists('gid', $urlparams))){
-    		GamePlayer::userInsertJoinGame($urlparams['gid'], 0, (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1));
+    	if($started || ($this->checkOwner() && array_key_exists('gid', $urlparams) && (array_key_exists('gid', $urlparams) == time()))){
+    		GamePlayer::userInsertJoinGame($urlparams['gid'], 0, (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1), 1);
     	}
-    	return $this->actionLobby();
+    	return $this->redirect(Url::to(['game/lobby']));
     }
 
     /**

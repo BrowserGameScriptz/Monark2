@@ -350,7 +350,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param  integer      $user_id
      * @return static|null
      */
-    public static function updateGamePlayerById($user_id, $game_id, $region_id, $color_id, $statut)
+    public static function updateGamePlayerById($user_id, $game_id, $region_id, $color_id, $statut, $bot_id)
     {
     	if(isset($user_id) && isset($game_id)){
     		$key 	= null;
@@ -369,7 +369,10 @@ class GamePlayer extends \yii\db\ActiveRecord
     			if($value > 1 OR $value < 0) $value = 0;
     		}
     		if(isset($key) && isset($value))
-    			Yii::$app->db->createCommand()->update(self::tableName(), [$key => $value], ['game_player_user_id' => $user_id, 'game_player_game_id' => $game_id])->execute();
+    			if($bot_id == 0)
+    				Yii::$app->db->createCommand()->update(self::tableName(), [$key => $value], ['game_player_user_id' => $user_id, 'game_player_game_id' => $game_id])->execute();
+    			else 
+    				Yii::$app->db->createCommand()->update(self::tableName(), [$key => $value], ['game_player_bot' => $bot_id, 'game_player_game_id' => $game_id])->execute();
     	}
     	return null;
     }
@@ -415,11 +418,11 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $gameId
      * @return \app\classes\GameClass
      */
-    public static function userInsertJoinGame($game_id, $user_id, $bot_id){
+    public static function userInsertJoinGame($game_id, $user_id, $bot_id, $statut=0){
     	Yii::$app->db->createCommand()->insert(self::tableName(),[
     			'game_player_region_id' => 1,
     			'game_player_difficulty_id' => 1,
-    			'game_player_statut' => 0,
+    			'game_player_statut' => $statut,
     			'game_player_game_id' => $game_id,
     			'game_player_user_id' => $user_id,
     			'game_player_color_id' => 2,
