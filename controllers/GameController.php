@@ -134,9 +134,11 @@ class GameController extends \yii\web\Controller
     	$region_id = null;
     	$statut = null;
     	$color_id = null;
+    	$bot_id = null;
     	if(array_key_exists('ui', Yii::$app->request->queryParams)){
     		$user_id = Yii::$app->request->queryParams['ui'];
-    		$bot_id = Yii::$app->request->queryParams['bi'];
+    		if(array_key_exists('bi', Yii::$app->request->queryParams))
+    			$bot_id = Yii::$app->request->queryParams['bi'];
     		if(array_key_exists('ri', Yii::$app->request->queryParams)){
     			$region_id = Yii::$app->request->queryParams['ri'];
     		}elseif(array_key_exists('si', Yii::$app->request->queryParams)){
@@ -200,6 +202,7 @@ class GameController extends \yii\web\Controller
     			'CurrentTurnData'	=> $data['TurnData'],
     			'GameData'			=> $data['GameData'],
     			'UserData'			=> $data['UserData'],
+    			'BotData'			=> $data['BotData'],
     			'RefreshTime'		=> $this->refreshTime,
     			'UserUnReadChat'	=> $user_unread_chat,
     	);
@@ -225,6 +228,7 @@ class GameController extends \yii\web\Controller
     	$gameData				= $game_data::getGameDataByIdToArray($game_current->getGameId());
     	$turnData				= $turn_data::getLastTurnByGameId($game_current->getGameId());
     	$userData 				= $game_player::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
+    	$botData				= $game_player::botToUserGamePlayer($gamePlayerDataGlobal);
     	$userData[0]			= $game_player::findUserZero();
     	$userData[-1]			= $game_player::findUserUnknown();
     	$userFrontierData		= $frontier_data::userHaveFrontierLandArray($gameData, Yii::$app->session['User']->getUserID(), Yii::$app->session['Frontier']);
@@ -236,6 +240,7 @@ class GameController extends \yii\web\Controller
     			'GameData'		=> $gameData,
     			'TurnData'		=> $turnData,
     			'UserData'		=> $userData,
+    			'BotData'		=> $botData,
     			'FrontierData'	=> $userFrontierData,
     	);
     }
@@ -276,6 +281,7 @@ class GameController extends \yii\web\Controller
     			'Game' 			=> $dataArray['Game'],
     			'GamePlayer' 	=> $dataArray['GamePlayer'],
     			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
     			'RefreshTime'	=> $this->refreshTime,
     			'ChatData'		=> $chatData,
     			'UnReadUser'	=> $user_unread_chat,
@@ -562,7 +568,7 @@ class GameController extends \yii\web\Controller
 			    				$assignedResources 	= $res->assignResourcesToArray($landData, $resourceData);
 
 			    				// Create Game Data
-			    				$gameData = $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current);
+			    				$gameData 			= $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current);
 
 						    	// Create turn order
 						    	$gameTurnOrder 		= $game_player->updateUserTurnOrder($game_current->getGameId());
@@ -602,7 +608,8 @@ class GameController extends \yii\web\Controller
     	$urlparams 	= Yii::$app->request->queryParams;
     	$started 	= $this->checkStarted(Yii::$app->session['Game']->getGameId());
     	if($started || ($this->checkOwner() && array_key_exists('gid', $urlparams) && (array_key_exists('gid', $urlparams) == time()))){
-    		GamePlayer::userInsertJoinGame($urlparams['gid'], 0, (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1), 1);
+    		$bot_id = (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1);
+    		GamePlayer::userInsertJoinGame($urlparams['gid'], -$bot_id, $bot_id, 1);
     	}
     	return $this->redirect(Url::to(['game/lobby']));
     }

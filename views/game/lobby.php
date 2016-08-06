@@ -66,10 +66,11 @@ $this->registerJs(
                 'attribute' => Yii::t('game_player', 'Tab_User_Name'),
                 'value'     => function ($model, $key, $index, $column) use ($userList, $botList, $colorList) {
                 	$returned = "";
-                	if(isset($userList[$model->game_player_user_id]))
+                	// Check bot
+                	if($model->game_player_bot > 0 && isset($botList[$model->game_player_bot]))
+                		$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.Yii::t('game_player', 'Bot_Name_{id}', ['id' => $model->game_player_bot]).'</font>  ';
+                	elseif(isset($userList[$model->game_player_user_id]))
             			$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$userList[$model->game_player_user_id]->getUserName().'</font>  ';
-					elseif(isset($botList[$model->game_player_bot]))
-						$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.Yii::t('game_player', 'Bot_Name_{id}', ['id' => $model->game_player_bot]).'</font>  ';
                 		
                 	// If admin
                 	if(Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID() && Yii::$app->session['User']->getId() != $model->game_player_user_id)

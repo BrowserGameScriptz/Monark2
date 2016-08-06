@@ -144,9 +144,11 @@ class AjaxController extends Controller
     	
     	if(isset($dataList['UsersData'])){
     		$usersData 						= GamePlayer::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
+    		$usersBot						= GamePlayer::botToUserGamePlayer($gamePlayerDataGlobal);
     		$usersData[0]					= GamePlayer::findUserZero();
     		$usersData[-1]					= GamePlayer::findUserUnknown();
     		$returned['usersData'] 			= $usersData;
+    		$returned['usersBot']			= $usersBot;
     	}
     	
     	if(isset($dataList['Frontier'])){
@@ -243,6 +245,7 @@ class AjaxController extends Controller
 	    			'CurrentTurnData'	=> $data['currentTurnData'],
 	    			'GamePlayer'		=> $data['gamePlayer'],
 	    			'UsersData'			=> $data['usersData'],
+	    			'BotData'			=> $data['usersBot'],
 	    			'BuildingData'		=> $data['buildingData'],
 	    			'FrontierData'		=> $data['frontierData'],
 	    			'UserFrontierData'	=> $data['userFrontierData'],
@@ -605,6 +608,7 @@ class AjaxController extends Controller
 		return $this->renderAjax('last_chat', [
 				'lastChat'			=> $lastChat,
 				'UsersData'			=> $data['usersData'],
+				'BotData'			=> $data['usersBot'],
 		]);
 	}
 	

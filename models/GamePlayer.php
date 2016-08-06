@@ -139,7 +139,24 @@ class GamePlayer extends \yii\db\ActiveRecord
     			)
     			);
     }
-
+    
+    /**
+     *
+     * @return \app\classes\UserClass
+     */
+    public static function findUserBot($bot_id){
+    	return new UserClass(
+    			array(
+    					'user_id' => 0,
+    					'user_name' => Yii::t('game_player', 'Bot_Name_{id}', ['id' => $bot_id]),
+    					'user_pwd' => "",
+    					'user_mail' => "",
+    					'user_type' => 0,
+    					'user_key' => "",
+    			)
+    			);
+    }
+    
     /**
      *
      * @return \app\classes\UserClass
@@ -157,6 +174,21 @@ class GamePlayer extends \yii\db\ActiveRecord
     			);
     }
 
+    /**
+     * 
+     * @param unknown $gamePlayerData
+     * @return unknown[]
+     */
+    public static function botToUserGamePlayer($gamePlayerData){
+    	$returned = array();
+    	foreach ($gamePlayerData as $key => $data)
+    	{
+    		if($data['game_player_bot'] > 0)
+    			$returned[$data['game_player_bot']] = self::findUserBot($data['game_player_bot']);
+    	}
+    	return $returned;
+    }
+    
     /**
      *
      * @param unknown $gamePlayerData
@@ -418,7 +450,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $gameId
      * @return \app\classes\GameClass
      */
-    public static function userInsertJoinGame($game_id, $user_id, $bot_id, $statut=0){
+    public static function userInsertJoinGame($game_id, $user_id, $bot_id=0, $statut=0){
     	Yii::$app->db->createCommand()->insert(self::tableName(),[
     			'game_player_region_id' => 1,
     			'game_player_difficulty_id' => 1,
