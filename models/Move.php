@@ -103,8 +103,8 @@ class Move extends \yii\db\ActiveRecord
     			if($this->gameData[$this->land_id_from]->getGameDataUserId() == $this->user->getUserID()
     			   && $this->gameData[$this->land_id_to]->getGameDataUserId() == $this->user->getUserID()
     				&& $this->units > 0
-    				 && isset($this->frontierData[$this->land_id_to])
-    				  && !isset($conquestAll[$this->land_id_from])){
+    				 && isset($this->frontierData[$this->land_id_to])){ 
+    				//&& !isset($conquestAll[$this->land_id_from])
     				return true;
     			}else{
     				return "Error";

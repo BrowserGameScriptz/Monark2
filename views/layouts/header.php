@@ -109,7 +109,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 		                		<?php if(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId() == Yii::$app->session['User']->getUserID()): ?>
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:6px;padding:0px;">	
 					          		<span class="btn btn-info">	
-					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?> : <span id="turn_length"><?= $turn_length ?></span> 
+					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?>&nbsp;:&nbsp;<span id="turn_length"><?= $turn_length ?></span> 
 					          		</span>&nbsp;&nbsp;
 					          		<span class="btn btn-success">
 					          			<font size="4"><?= Yii::t('header', 'Text_Your_turn') ?></font>
@@ -120,7 +120,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 						        <?php else: ?>
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:6px;padding:0px;">
 						        	<span class="btn btn-info">	
-					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?> : <span id="turn_length"><?= $turn_length ?></span> 
+					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?>&nbsp;:&nbsp;<span id="turn_length"><?= $turn_length ?></span> 
 					          		</span>&nbsp;&nbsp;
 						        	<span class="btn btn-info">
 						        		<font size="4">&nbsp;&nbsp;<?= Yii::t('header', 'Text_Turn_Other') ?></font>
