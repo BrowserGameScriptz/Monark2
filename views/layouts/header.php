@@ -126,10 +126,10 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 						        	<span class="btn btn-info">
 						        		<font size="4">&nbsp;&nbsp;<?= Yii::t('header', 'Text_Turn_Other') ?></font>
 	    								<font size='4' color='#<?=Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerColorId()]->getColorCss()?>'>
-	            							<?php if(Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerBot() > 0): ?>
-	            								<?=Yii::$app->session['MapData']['BotData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerBot()]->getUserName()?>
+	            							<?php if(isset(Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())])): ?>
+	            								<?= Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())]->getUserName()?>
 	            							<?php else: ?>
-	            								MICHEL<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerUserId()]->getUserName()?>
+	            								MICHEL<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getUserName()?>
 	            							<?php endif; ?>
 	            						</font>
 	            					</span>

@@ -23,7 +23,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		        	<!-- region info -->
 					<tr>
 						<td style="padding: 4px;text-align:center;"><font size='3' color="black">
-						<?php if($GameData[$land_id]->getGameDataCapital() > 0): ?>
+						<?php if($GameData[$land_id]->getGameDataCapital() != 0): ?>
 							<?= Html::tag('span', "<img src='img/game/star.png' height='20px' width='20px'>", [
 		                        'title'=>"Capitale du joueur. ",
 		                        'data-toggle'=>'tooltip',

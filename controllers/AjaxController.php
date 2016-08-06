@@ -132,7 +132,7 @@ class AjaxController extends Controller
     		$gamePlayerDataGlobal 			= GamePlayer::findAllGamePlayer($returned['game']->getGameId());
     		$gamePlayerData 				= GamePlayer::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);
     		$gamePlayerData[0]				= GamePlayer::findPlayerZero();
-    		$gamePlayerData[-1]				= GamePlayer::findPlayerUnknown();
+    		$gamePlayerData[-99]			= GamePlayer::findPlayerUnknown();
     		$returned['gamePlayer']			= $gamePlayerData;
     	}
     		 
@@ -146,7 +146,7 @@ class AjaxController extends Controller
     		$usersData 						= GamePlayer::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
     		$usersBot						= GamePlayer::botToUserGamePlayer($gamePlayerDataGlobal);
     		$usersData[0]					= GamePlayer::findUserZero();
-    		$usersData[-1]					= GamePlayer::findUserUnknown();
+    		$usersData[-99]					= GamePlayer::findUserUnknown();
     		$returned['usersData'] 			= $usersData;
     		$returned['usersBot']			= $usersBot;
     	}

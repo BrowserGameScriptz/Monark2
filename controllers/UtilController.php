@@ -19,7 +19,7 @@ class UtilController extends Controller
     					'class' => AccessControl::className(),
     					'rules' => [
     							[
-    									'actions' => ['mdp', 'username'],
+    									'actions' => ['mdp', 'username', 'bot'],
     									'allow' => Access::UserIsConnected() && $this->local, // Connected
     							],
     							[
@@ -64,6 +64,11 @@ class UtilController extends Controller
     public function actionGenerateallcolors()
     {
     	return $this->render('generateallcolors');
+    }
+    
+    public function actionBot()
+    {
+    	return $this->render('bot/bot');
     }
 
 }

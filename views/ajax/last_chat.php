@@ -8,7 +8,7 @@
 	<li><a href='#'><?php if(isset($Users[$chat->getChatUserId()])): ?>
           <?= $UsersData[$chat->getChatUserId()]->getUserName(); ?>
     <?php else: ?>
-          <?= $UsersData[-1]->getUserName(); ?>
+          <?= $UsersData[-99]->getUserName(); ?>
     <?php endif; ?>
 	: <?= $chat->getChatMessage() ?></a></li>
 	<?php $i++; ?>

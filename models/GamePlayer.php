@@ -148,7 +148,7 @@ class GamePlayer extends \yii\db\ActiveRecord
     public static function findUserBot($bot_id){
     	return new UserClass(
     			array(
-    					'user_id' => 0,
+    					'user_id' => -$bot_id,
     					'user_name' => (new Crypt(Yii::t('game_player', 'Bot_Name_{id}', ['id' => $bot_id])))->s_crypt(),
     					'user_pwd' => "",
     					'user_mail' => "",
@@ -226,12 +226,13 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $game_id
      */
     public static function setUserTurnOrderToArray($game_id){
-    	$users = self::findAllGamePlayerToListUserId(null, $game_id);
-    	$bots = self::botToUserGamePlayer(null, $game_id);
+    	$users 		= self::findAllGamePlayerToListUserId(null, $game_id);
+    	$bots 		= self::botToUserGamePlayer(null, $game_id);
+    	$full_array = array_merge($users, $bots);
     	$returned = array();
-    	foreach (array_merge($users, $bots) as $user){
+    	foreach ($full_array as $user){
     		do{
-    			$rand = rand(1, count($users));
+    			$rand = rand(1, count($full_array));
     		}while(array_key_exists($rand, $returned));
     		$returned[$rand] = $user;
     	}

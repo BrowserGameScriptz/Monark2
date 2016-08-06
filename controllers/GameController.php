@@ -224,7 +224,7 @@ class GameController extends \yii\web\Controller
     	$gamePlayerDataGlobal 	= $game_player::findAllGamePlayer($game_current->getGameId());
     	$gamePlayerData 		= $game_player::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);
     	$gamePlayerData[0]		= $game_player::findPlayerZero();
-    	$gamePlayerData[-1]		= $game_player::findPlayerUnknown();
+    	$gamePlayerData[-99]	= $game_player::findPlayerUnknown();
     	$gameData				= $game_data::getGameDataByIdToArray($game_current->getGameId());
     	$turnData				= $turn_data::getLastTurnByGameId($game_current->getGameId());
     	$userData 				= $game_player::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
@@ -554,7 +554,7 @@ class GameController extends \yii\web\Controller
 		    		$resourceData 	= $res->findAllResourcesToArray();
 		    		$landData		= $land->findAllLandsToArray($game_current->getMapId());
 			    	$gamePlayerData = $game_player->findAllGamePlayer($game_current->getGameId());
-
+			    	
 			    	// Checks
 			    	if($gamePlayerData != null){
 			    		// check colors
@@ -572,14 +572,13 @@ class GameController extends \yii\web\Controller
 
 						    	// Create turn order
 						    	$gameTurnOrder 		= $game_player->updateUserTurnOrder($game_current->getGameId());
-
+						    	
 						    	// Create first turn
 						    	$turn->createGameFirstTurn($game_current->getGameId() , array_values($gameTurnOrder)[0]->getUserID(), $gameData);
 
 						    	// Update Game statut
 						    	(new Game())->updateGameStatut($game_current->getGameId(), 50);
 						    	Yii::$app->session['Game']->setGameStatut(50);
-
 			    				return $this->render('start');
 			    			}else
 			    				Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Start_Not_Ready'));
