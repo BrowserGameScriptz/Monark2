@@ -67,7 +67,11 @@ $this->registerCssFile("@web/css/ajax.css");
 							<?php if($userLand): ?>
 								<?= Yii::t('ajax', 'Text_Owner_Player'); ?>
 							<?php else: ?>
-							 	<?= $UsersData[$GameData[$land_id]->getGameDataUserId()]->getUserName(); ?>
+							 	<?php if($GameData[$land_id]->getGameDataUserId() >= 0): ?>
+							 		<?= $UsersData[$GameData[$land_id]->getGameDataUserId()]->getUserName(); ?>
+							 	<?php else: ?>
+							 		<?= $BotData[abs($GameData[$land_id]->getGameDataUserId())]->getUserName(); ?>
+							 	<?php endif; ?>
 							<?php endif; ?>
 						</font></td>
 					</tr>

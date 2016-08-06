@@ -117,6 +117,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					          		<span id='end_of_turn_link' class="btn btn-success">	
 					          			<?= Yii::t('header', 'Button_Turn_Own') ?> 
 					          		</span>
+					          	</a>
 						        <?php else: ?>
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:6px;padding:0px;">
 						        	<span class="btn btn-info">	
@@ -125,11 +126,15 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 						        	<span class="btn btn-info">
 						        		<font size="4">&nbsp;&nbsp;<?= Yii::t('header', 'Text_Turn_Other') ?></font>
 	    								<font size='4' color='#<?=Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerColorId()]->getColorCss()?>'>
-	            							<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerUserId()]->getUserName()?>
+	            							<?php if(Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerBot() > 0): ?>
+	            								<?=Yii::$app->session['MapData']['BotData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerBot()]->getUserName()?>
+	            							<?php else: ?>
+	            								MICHEL<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerUserId()]->getUserName()?>
+	            							<?php endif; ?>
 	            						</font>
 	            					</span>
+	            				</a>
 						        <?php endif; ?>
-						        </a>
 		                	</li>
 		                	<li id='current_gold_content' class="dropdown tasks-menu">
 		                		<a href="#" id='current_gold_link' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">

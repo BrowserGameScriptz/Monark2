@@ -6,6 +6,7 @@ use Yii;
 use app\queries\GamePlayerQuery;
 use app\classes\UserClass;
 use app\classes\GamePlayerClass;
+use app\classes\Crypt;
 
 /**
  * This is the model class for table "game_player".
@@ -148,7 +149,7 @@ class GamePlayer extends \yii\db\ActiveRecord
     	return new UserClass(
     			array(
     					'user_id' => 0,
-    					'user_name' => Yii::t('game_player', 'Bot_Name_{id}', ['id' => $bot_id]),
+    					'user_name' => (new Crypt(Yii::t('game_player', 'Bot_Name_{id}', ['id' => $bot_id])))->s_crypt(),
     					'user_pwd' => "",
     					'user_mail' => "",
     					'user_type' => 0,
@@ -179,8 +180,10 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $gamePlayerData
      * @return unknown[]
      */
-    public static function botToUserGamePlayer($gamePlayerData){
+    public static function botToUserGamePlayer($gamePlayerData=null, $game_id=null){
     	$returned = array();
+    	if($gamePlayerData == null)
+    		$gamePlayerData = self::findAllGamePlayer($game_id);
     	foreach ($gamePlayerData as $key => $data)
     	{
     		if($data['game_player_bot'] > 0)
@@ -224,8 +227,9 @@ class GamePlayer extends \yii\db\ActiveRecord
      */
     public static function setUserTurnOrderToArray($game_id){
     	$users = self::findAllGamePlayerToListUserId(null, $game_id);
+    	$bots = self::botToUserGamePlayer(null, $game_id);
     	$returned = array();
-    	foreach ($users as $user){
+    	foreach (array_merge($users, $bots) as $user){
     		do{
     			$rand = rand(1, count($users));
     		}while(array_key_exists($rand, $returned));
