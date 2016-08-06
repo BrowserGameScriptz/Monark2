@@ -63,7 +63,7 @@ $this->registerCssFile("@web/css/map.css");
                          	<?php if(Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId())): ?>
 	                            <!-- Buildings -->
 	                            <?php foreach($GameData[$land->getLandId()]->getGameDataBuildings() as $building): ?>
-									<?php if($building != null && $Building[$building]->getBuildingNeed() <= 0 && $Building[$building]->getBuildingId() > 0): ?>
+									<?php if($building != null && isset($Building[$building]) && $Building[$building]->getBuildingNeed() <= 0 && $Building[$building]->getBuildingId() > 0): ?>
 										<?= $Building[$building]->getBuildingImg() ?>
 						            <?php endif; ?>
 						        <?php endforeach; ?>
