@@ -26,7 +26,7 @@ return [
     'Continent_Rules' => '* Information * : Vous avez 1 chance sur 5 de vous retrouver en Antarctique Ã  la place du continent choisit !',
 	'Text_Wait_Owner' => 'Partie en attente du propriétaire...',
 	'Text_Owner' => 'Propriétaire de la partie',
-    'Bot_Name_{id}' => 'Ordi {id}',
+    'Bot_Name' => 'Ordi {id}',
     'Text_Add_Bot' => 'Ordinateur ajouté.',
     'Text_Bot_Del' => 'Ordinateur supprimé.',
     'Text_Player_Game_Ban' => 'Joueur exclu de la partie.',

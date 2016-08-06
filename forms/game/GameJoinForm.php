@@ -43,7 +43,7 @@ class gameJoinForm extends Model
     {
     	if ($this->validateJoin()) {   		 
     		// Create in db
-    		$this->_game_player->userJoinGame($this->_game, Yii::$app->session['User']->getId());
+    		$this->_game_player->userJoinGame($this->_game, Yii::$app->session['User']->getId(), 0);
     		return true;
     	}
     	return false;
@@ -53,7 +53,7 @@ class gameJoinForm extends Model
     {
     	if ($this->validateJoin()) {
     		// Create in db
-    		$this->_game_player->userJoinGame($this->_game, true);
+    		$this->_game_player->userJoinGame($this->_game, true, 0);
     		return true;
     	}
     	return false;

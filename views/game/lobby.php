@@ -45,7 +45,7 @@ $this->registerJs(
     <td><?= Html::a(Yii::t('game_player', 'Button_Add_Friend')." <i class='fa fa-group'></i>", ['/game/lobby'], ['class'=>'btn btn-primary']); ?></td>
    	<!-- Game Owner -->
     <?php if (Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID()): ?>
-    <td><?= Html::a(Yii::t('game_player', 'Button_Add_Bot')." <i class='fa fa-plus'></i>", ['/game/lobby'], ['class'=>'btn btn-info']); ?></td>
+    <td><?= Html::a(Yii::t('game_player', 'Button_Add_Bot')." <i class='fa fa-plus'></i>", ['/game/addbot', 'gid' => Yii::$app->session['Game']->getGameId()], ['class'=>'btn btn-info']); ?></td>
     <td><?= Html::a(Yii::t('game_player', 'Button_Sart_Game')." <i class='fa fa-gamepad'></i>", ['/game/start', 'gid' => Yii::$app->session['Game']->getGameId()], ['class'=>'btn btn-warning']); ?></td>
     <?php endif; ?>
     </tr></table></div>
@@ -64,9 +64,12 @@ $this->registerJs(
             [
             	'format'    => 'raw',
                 'attribute' => Yii::t('game_player', 'Tab_User_Name'),
-                'value'     => function ($model, $key, $index, $column) use ($userList, $colorList) {
-                	$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$userList[$model->game_player_user_id]->getUserName().'</font>  ';
-
+                'value'     => function ($model, $key, $index, $column) use ($userList, $botList, $colorList) {
+                	if(isset($userList[$model->game_player_user_id]))
+            			$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.$userList[$model->game_player_user_id]->getUserName().'</font>  ';
+					elseif(isset($botList[$model->game_player_bot]))
+					$returned = '<font size="4" color="'.$colorList[$model->game_player_color_id]->getColorFontChat().'">'.Yii::t('Bot_Name', ['id' => $model->game_player_bot]).'</font>  ';
+					
                 	// If admin
                 	if(Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID() && Yii::$app->session['User']->getId() != $model->game_player_user_id)
             			return $returned

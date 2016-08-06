@@ -26,7 +26,7 @@ return [
     'Continent_Rules' => '* Information *: You have 1 in 5 chance to find yourself in Antarctica instead of your chosen continent !',
     'Text_Wait_Owner' => 'Game host waiting ...',
     'Text_Owner' => 'Host of the game',
-    'Bot_Name_{id}' => 'Bot {id}',
+    'Bot_Name' => 'Bot {id}',
     'Text_Add_Bot' => 'Bot added.',
     'Text_Bot_Del' => 'Bot deleted.',
     'Text_Player_Game_Ban' => 'Players removed from the game.',

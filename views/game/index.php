@@ -17,7 +17,15 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 <div class="game-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <br>
+    <?php if($gameInId != null): ?>
+    	<div class="callout callout-info">
+    		<?= Yii::t('game', 'Error_User_Already_In_Game') ?>
+	    	<?= Html::a("<p class='btn btn-success'>".Yii::t('game', 'Button_Last_Game_Enter')."</p>", ['/game/return'], ['style' => "text-decoration: none;"]);?>
+	    	<?= Html::a("<p class='btn btn-warning'>".Yii::t('game', 'Button_Games_Quit')."</p>", ['/game/clean'], ['style' => "text-decoration: none;"]);?>
+    	</div>
+    <?php else: ?>
+    	<br>
+    <?php endif; ?>
     <?php Pjax::begin(['id' => 'list_game']); ?>
     <?= GridView::widget([
         'summary' => '',

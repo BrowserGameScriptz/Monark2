@@ -212,12 +212,31 @@ class GamePlayer extends \yii\db\ActiveRecord
     }
 
     /**
-     *
-     * @param unknown $color_id
-     * @return \app\classes\ColorClass
+     * 
+     * @param unknown $game_id
+     * @return \app\classes\GamePlayerClass
+     */
+    public static function findGamePlayerLastBot($game_id){
+    	return new GamePlayerClass(self::find()->where(['game_player_game_id' => $game_id])->orderBy(['game_player_bot' => SORT_DESC])->one());
+    }
+    
+    
+    /**
+     * 
+     * @param unknown $player_id
+     * @return \app\classes\GamePlayerClass
      */
     public static function findGamePlayerById($player_id){
-    	return new GamePlayerClass(self::find()->where(['color_id' => $color_id])->one());
+    	return new GamePlayerClass(self::find()->where(['game_player_user_id' => $player_id])->one());
+    }
+    
+    /**
+     *
+     * @param unknown $player_id
+     * @return \app\classes\GamePlayerClass
+     */
+    public static function findGamePlayerByBotId($bot_id){
+    	return new GamePlayerClass(self::find()->where(['game_player_bot' => $bot_id])->one());
     }
 
     /**
@@ -279,6 +298,16 @@ class GamePlayer extends \yii\db\ActiveRecord
     	return self::find()->where(['game_player_game_id' => $game_id])->all();
     }
 
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return \app\queries\GamePlayer[]
+     */
+    public static function findAllGamePlayerBot($game_id){
+    	return self::find()->where(['game_player_game_id' => $game_id])->all();
+    }
+    
     /**
      *
      * @param unknown $game_id
@@ -289,6 +318,18 @@ class GamePlayer extends \yii\db\ActiveRecord
     	foreach (self::findAllGamePlayer($game_id) as $gamePlayer)
     		$returned[$gamePlayer['game_player_user_id']] = new GamePlayerClass($gamePlayer);
     	return $returned;
+    }
+    
+    /**
+     *
+     * @param unknown $game_id
+     * @return \app\queries\GamePlayer[]
+     */
+    public static function findAllGamePlayerBotToArray($game_id){
+    	$returned = array();
+    	foreach (self::findAllGamePlayerBot($game_id) as $gamePlayer)
+    		$returned[$gamePlayer['game_player_bot']] = new GamePlayerClass($gamePlayer);
+    		return $returned;
     }
 
     /**
@@ -374,7 +415,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $gameId
      * @return \app\classes\GameClass
      */
-    public static function userInsertJoinGame($game_id, $user_id){
+    public static function userInsertJoinGame($game_id, $user_id, $bot_id){
     	Yii::$app->db->createCommand()->insert(self::tableName(),[
     			'game_player_region_id' => 1,
     			'game_player_difficulty_id' => 1,
@@ -384,7 +425,7 @@ class GamePlayer extends \yii\db\ActiveRecord
     			'game_player_color_id' => 2,
     			'game_player_enter_time' => time(),
     			'game_player_order'	=> 0,
-    			'game_player_bot' => 0,
+    			'game_player_bot' => $bot_id,
     			'game_player_quit' => 0,
     	])->execute();
     }

@@ -46,7 +46,7 @@ class GameController extends \yii\web\Controller
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
-										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail'],
+										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'addbot'],
 										'allow' => Access::UserIsInGame(), // Into a game
 								],
 								[
@@ -246,9 +246,11 @@ class GameController extends \yii\web\Controller
     {
     	$searchModel = new GameSearch();
     	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,]);
+    	$game_user_in_id = GamePlayer::findUserGameId(Yii::$app->session['User']->getId());
     	return $this->render('index', [
     			'searchModel'   => $searchModel,
     			'dataProvider'  => $dataProvider,
+    			'gameInId'		=> $game_user_in_id,
     	]);
     }
 
@@ -334,7 +336,8 @@ class GameController extends \yii\web\Controller
 		    	// Users
 		    	$gamePlayer 		= new GamePlayer();
 		    	$usersArray			= $gamePlayer->findAllGamePlayerToListUserId(null, Yii::$app->session['Game']->getGameId());
-
+				$botArray			= $gamePlayer->findAllGamePlayerBot(Yii::$app->session['Game']->getGameId());
+		    	
 		    	// Update data
 		    	if(array_key_exists('ui', Yii::$app->request->queryParams))
 		    		$this->updateUserLobby();
@@ -345,6 +348,7 @@ class GameController extends \yii\web\Controller
 		            'searchModel'   => $searchModel,
 		            'dataProvider'  => $dataProvider,
 		        	'userList'		=> $usersArray,
+		        	'botList'		=> $botArray,
 		        	'colorList'		=> $colorsArray,
 		        	'colorSQl'		=> $colorsSQL,
 		        	'continentList'	=> $continentsArray,
@@ -452,9 +456,7 @@ class GameController extends \yii\web\Controller
 					}
 				// In another game
 				}else{
-					$button_Last_Game_Enter = Html::a("<p class='btn btn-success'>".Yii::t('game', 'Button_Last_Game_Enter')."</p>", ['/game/return'], ['style' => "text-decoration: none;"]);
-					$button_Games_Quit = Html::a("<p class='btn btn-warning'>".Yii::t('game', 'Button_Games_Quit')."</p>", ['/game/clean'], ['style' => "text-decoration: none;"]);
-					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_User_Already_In_Game')." ".$button_Last_Game_Enter." ".$button_Games_Quit);
+					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_User_Already_In_Game'));
 					return $this->redirect(Url::to(['game/index']),302);
 				}
 			}else
@@ -479,7 +481,7 @@ class GameController extends \yii\web\Controller
 			$game_player = $gamePlayer->findUserGameId(Yii::$app->session['User']->getId());
 			if ($game_player != null) {
 				if ($game_player->game_player_game_id > 0) {
-					Yii::$app->getSession()->setFlash('info', Yii::t('game', 'Notice_Last_Game_Entered'));
+					//Yii::$app->getSession()->setFlash('info', Yii::t('game', 'Notice_Last_Game_Entered'));
 					return $this->redirect(array('game/join', 'gid' => $game_player->game_player_game_id), 302);
 				} else {
 					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Last_Game_Cant_Join')." n°".$game_player->game_player_game_id);
@@ -588,6 +590,20 @@ class GameController extends \yii\web\Controller
     		return $this->actionLobby();
     }
 
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionAddbot(){
+    	// The game as started
+    	$urlparams 	= Yii::$app->request->queryParams;
+    	$started 	= $this->checkStarted(Yii::$app->session['Game']->getGameId());
+    	if($started || ($this->checkOwner() && array_key_exists('gid', $urlparams))){
+    		GamePlayer::userInsertJoinGame($urlparams['gid'], 0, (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1));
+    	}
+    	return $this->actionLobby();
+    }
 
     /**
      *
