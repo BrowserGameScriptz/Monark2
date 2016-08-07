@@ -90,8 +90,10 @@ class Bot extends \yii\base\Object
 
 		// Evaluations
 		$this->bot_eval 			= new BotEval($this);
-		$this->bot_eval_player		= $this->bot_eval->BotEvalPlayer();
-		$this->bot_eval_land		= $this->bot_eval->BotEvalLand()->eval_land;
+		$this->bot_eval->BotEvalPlayer();
+		$this->bot_eval->BotEvalLand();
+		$this->bot_eval_player		= $this->bot_eval->eval_player;
+		$this->bot_eval_land		= $this->bot_eval->eval_land;
 	}
 	
 	

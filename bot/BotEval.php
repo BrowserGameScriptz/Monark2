@@ -38,7 +38,7 @@ class BotEval extends \yii\base\Object
 		foreach ($this->bot->bot_data->botLand as $key => $land) {
 			
 			// Frontier of land 
-			$landFrontier = Frontier::landHaveFrontierLandArray($this->bot->bot_data->frontier, $land->getLandId());
+			$landFrontier = Frontier::landHaveFrontierLandArray($this->bot->bot_data->frontier, $land->getGameDataLandId());
 			
 			// Each frontier land
 			foreach ($landFrontier as $key => $frontier) {	
