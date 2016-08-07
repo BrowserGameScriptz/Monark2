@@ -20,7 +20,8 @@ class Bot extends \yii\base\Object
 	public $pc_build_id;
 	public $frt_build_id;
 
-	// Eval Array
+	// Bot Eval
+	public $bot_eval;
 	public $bot_eval_player;
 	public $bot_eval_land;
 	public $eval_action;

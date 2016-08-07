@@ -17,6 +17,7 @@ class BotData extends \yii\base\Object
 	public $currentTurn;
 	public $gamePlayer;
 	public $gameData;
+	public $botLand;
 	public $buildingData;
 	public $frontier;
 	public $botFrontierData;
@@ -43,11 +44,12 @@ class BotData extends \yii\base\Object
 		$this->gamePlayer				= $gamePlayerData;
 														 
 		// Game data
-		$this->gameData				= GameData::getGameDataByIdToArray($this->bot->game_id);
-		$this->botLand				= GameData::	 
+		// TODO global & botLand use global game data
+		$this->gameData					= GameData::getGameDataByIdToArray($this->bot->game_id);
+		$this->botLand					= GameData::getUserLandId(null, $this->bot->game_id, $this->bot->bot_id);	 
 		
 		// Building
-		$this->buildingData			= Building::findAllBuildingToArray();
+		$this->buildingData				= Building::findAllBuildingToArray();
 			
 		// Frontier	 
 		if(Yii::$app->session['Frontier'] == null)

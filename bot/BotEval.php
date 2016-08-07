@@ -1,9 +1,14 @@
 <?php 
 namespace app\bot;
+use app\models\Frontier;
+
 class BotEval extends \yii\base\Object
 {
 	private $bot;
 	public $eval_land;
+	public $eval_land_ennemy;
+	public $eval_land_owned;
+	public $eval_player;
 	
 	public function __construct($bot){
 		$this->bot = $bot;
@@ -26,52 +31,35 @@ class BotEval extends \yii\base\Object
 	 * @return object var array eval_land full
 	 */
 	public function BotEvalLand(){
-		$this->eval_land 		= array();
-		$i 	= 0;
-		$n 	= 0;
-		$u 	= 0;
-	
-		/* GET INFORMATIONS OF FRONTIERS LANDS */
-		/* Search all the lands owned by the bot */
-		foreach ($this->game_data as $key => $value) {
-			if($value['user_id'] == $this->bot_id){
-				$this->allland_owned[$i] = array(
-						'land_info' 	=> $this->game_data[$value['land_id']],
-						'frontier'		=> "",
-						'only_own_front'=> "",
-				);
-				$i++;
-			}
-		}
-	
-		/* Search Info Land Frontier */
-		foreach ($this->allland_owned as $key => $value) {
-			$u = 0;
-			foreach ($this->frontier_data as $key => $frontier) {
-	
-				/* If this land have frontier with a bot land */
-				if($frontier['land_id_one'] == $value['land_info']['land_id']){
-	
-					/* An ennemy land */
-					if($this->game_data[$frontier['land_id_two']]['user_id'] != $this->bot_id){
-	
-						$this->allland_owned[$n]['frontier'][$u] = array(
-								'land_frontier_data' 	=> $this->game_data[$frontier['land_id_two']],
-						);
-	
-						/* An Owned bot land */
-					}else{
-						$this->allland_owned[$n]['frontier'][$u] = array(
-								'land_frontier_data' 	=> $this->game_data[$frontier['land_id_two']],
-						);
+		$this->eval_land_ennemy 		= array();
+		$this->eval_land_owned 			= array();
+		
+		// Search land frontier
+		foreach ($this->bot->bot_data->botLand as $key => $land) {
+			
+			// Frontier of land 
+			$landFrontier = Frontier::landHaveFrontierLandArray($this->bot->bot_data->frontier, $land->getLandId());
+			
+			// Each frontier land
+			foreach ($landFrontier as $key => $frontier) {	
+				// Ennemy land
+				if($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()]->getGameDataUserId() != $this->bot->bot_id){
+					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_ennemy)){
+						$this->eval_land_ennemy[$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
 					}
-					$u++;
+					
+					/* An Owned bot land */
+				}else{
+					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_owned)){
+						$this->eval_land_owned[$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
+					}
 				}
 			}
-			$n++;
 		}
-		/* END GET INFORMATIONS OF FRONTIERS LANDS */
-	
+		$this->eval_land = array(
+			'ennemy' => $this->eval_land_ennemy,
+			'owned'	 => $this->eval_land_owned,
+		);
 	}
 
 	
