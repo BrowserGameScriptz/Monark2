@@ -1,18 +1,29 @@
 <?php 
 
+namespace app\bot;
+
+use Yii;
+use app\models\Turn;
+use app\models\Resource;
+use app\models\GamePlayer;
+use app\models\GameData;
+use app\models\Building;
+use app\models\Frontier;
+
 class BotData extends \yii\base\Object
 {
 	private $bot;
-	private $resource;
-	private $currentTurn;
-	private $gamePlayer;
-	private $gameData;
-	private $buildingData;
-	private $frontier;
-	private $botFrontierData;
+	public $resource;
+	public $currentTurn;
+	public $gamePlayer;
+	public $gameData;
+	public $buildingData;
+	public $frontier;
+	public $botFrontierData;
 	
 	public function __construct($bot){
 		$this->bot = $bot;
+		$this->getData();
 	}
 	
 	public function getData(){
@@ -30,10 +41,11 @@ class BotData extends \yii\base\Object
 		$gamePlayerData[0]				= GamePlayer::findPlayerZero();
 		$gamePlayerData[-99]			= GamePlayer::findPlayerUnknown();
 		$this->gamePlayer				= $gamePlayerData;
-															 
+														 
 		// Game data
 		$this->gameData				= GameData::getGameDataByIdToArray($this->bot->game_id);
-			 
+		$this->botLand				= GameData::	 
+		
 		// Building
 		$this->buildingData			= Building::findAllBuildingToArray();
 			

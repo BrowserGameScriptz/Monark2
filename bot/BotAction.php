@@ -1,5 +1,5 @@
 <?php 
-
+namespace app\bot;
 use yii\base\Object;
 
 class BotAction extends \yii\base\Object

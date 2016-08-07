@@ -17,19 +17,16 @@ $this->title = 'Test Bot';
     
 
     <?php 
-    $gameid = Yii::$app->session['game']['id'];
-    $gold   = 10;
+    $game_id = Yii::$app->session['Game']->getGameId();
     $bot_id = -1;
     ?>
 
     <?= "<center><font size='6'>Simulation de BOT ".$bot_id."</font><br>" ?>
-    <?= "<font size='5'>Or : ".$gold."<br>Partie id : ".$gameid."</font></center><font size='6'>Réponse : </font><br><br>" ?>
+    <?= "<font size='5'>Partie id : ".$game_id."</font></center><font size='6'>Réponse : </font><br><br>" ?>
 
     <div class='alert alert-danger'>
 
-    <?php $Bot = new Bot(); ?>
-
-    <?php $Bot->BotStartTurn($gameid, $bot_id, $gold, 1); ?>
+    <?php $Bot = new Bot($game_id, $bot_id, 1); ?>
 
     </div>
 

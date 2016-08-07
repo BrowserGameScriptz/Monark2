@@ -1,8 +1,9 @@
 <?php 
-
+namespace app\bot;
 class BotEval extends \yii\base\Object
 {
 	private $bot;
+	public $eval_land;
 	
 	public function __construct($bot){
 		$this->bot = $bot;
@@ -14,7 +15,7 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return object var array eval_player full
 	 */
-	private function BotEvalPlayer(){
+	public function BotEvalPlayer(){
 		$this->eval_player 		= array();
 	}
 	
@@ -24,9 +25,8 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return object var array eval_land full
 	 */
-	private function BotEvalLand(){
+	public function BotEvalLand(){
 		$this->eval_land 		= array();
-		$this->allland_owned 	= array();
 		$i 	= 0;
 		$n 	= 0;
 		$u 	= 0;
@@ -81,7 +81,7 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return object var array eval_action full
 	 */
-	private function BotEvalAction(){
+	public function BotEvalAction(){
 		$count_own_land 			= count($this->allland_owned);
 		$attack_array				= array();
 		$defense_array				= array();
@@ -249,7 +249,7 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return void
 	 */
-	private function BotEvalAtkLand($botownlanddata, $botatklanddata, $atkuserdata=null){
+	public function BotEvalAtkLand($botownlanddata, $botatklanddata, $atkuserdata=null){
 		/* Initialisation */
 		$bot_atk_land_buildings				= explode(';', $botatklanddata['buildings']);
 		$bot_own_land_buildings				= explode(';', $botownlanddata['buildings']);
@@ -289,7 +289,7 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return void
 	 */
-	private function BotEvalDefLand($botownlanddata, $botatklanddata, $atkuserdata=null){
+	public function BotEvalDefLand($botownlanddata, $botatklanddata, $atkuserdata=null){
 		/* Initialisation */
 		$bot_atk_land_buildings				= explode(';', $botatklanddata['buildings']);
 		$bot_own_land_buildings				= explode(';', $botownlanddata['buildings']);

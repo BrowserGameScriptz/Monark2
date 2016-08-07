@@ -1,26 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\bot;
 
 use Yii;
-use yii\db\Query;
-
-use app\models\Difficulty;
-
-use app\models\Building;
-use app\models\Frontier;
-use app\models\Game;
-use app\models\GameData;
-use app\models\GamePlayer;
-use app\models\Harbor;
-use app\models\Ressource;
-use app\models\Turn;
-
-use app\models\Buy;
 use app\models\Fight;
-use app\models\Move;
-use app\models\Pact;
-use app\models\Spy;
+use yii\base\Object;
 
 /**
  * This is the model class for bot gestion.
@@ -29,40 +13,38 @@ use app\models\Spy;
 
 class Bot extends \yii\base\Object
 {
-	/* Basic info */
-	private $game_id;
-	private $bot_id;
-	private $pc_build_id;
-	private $frt_build_id;
+	// Basic
+	public $game_id;
+	public $bot_id;
+	public $bot_data;
+	public $pc_build_id;
+	public $frt_build_id;
 
-	/* Array SQL Info */
-	private $allland_owned;
+	// Eval Array
+	public $bot_eval_player;
+	public $bot_eval_land;
+	public $eval_action;
 
-	/* Eval Array */
-	private $eval_player;
-	private $eval_land;
-	private $eval_action;
+	// Evaluation data
+	public $bot_difficulty_data;
+	public $units_point;
+	public $atk_max_units;
+	public $def_max_units;
+	public $bonus_fort;
+	public $bonus_camp;
+	public $ressource_gold_point;
+	public $ressource_silver_point;
+	public $ressource_bronze_point;
+	public $marge_frt;
+	public $marge_pc;
+	public $build_mine;
 
-	/* Evaluation informations */
-	private $bot_difficulty_data;
-	private $units_point;
-	private $atk_max_units;
-	private $def_max_units;
-	private $bonus_fort;
-	private $bonus_camp;
-	private $ressource_gold_point;
-	private $ressource_silver_point;
-	private $ressource_bronze_point;
-	private $marge_frt;
-	private $marge_pc;
-	private $build_mine;
-
-	/* Execute action */
-	private $bot_need_units_atk_percent;
-	private $bot_need_units_def_percent;
-	private $bot_atk_percent;
-	private $bot_def_percent;
-	private $bot_build_percent;
+	// Execute action
+	public $bot_need_units_atk_percent;
+	public $bot_need_units_def_percent;
+	public $bot_atk_percent;
+	public $bot_def_percent;
+	public $bot_build_percent;
 
 
 	/**
@@ -71,8 +53,8 @@ class Bot extends \yii\base\Object
      * @param  integer gameid, bot_id, gold
      * @return void
      */
-	public function BotStartTurn($game_id, $bot_id, $test=null){
-		// TURN Begin
+	public function __construct($game_id, $bot_id, $test=null){
+		/* INIT */
 		// GET Info
 		$this->game_id 				= $game_id;
 		$this->bot_id 				= $bot_id;
@@ -88,7 +70,12 @@ class Bot extends \yii\base\Object
 		$this->ressource_silver_point 	= 2;
 		$this->ressource_bronze_point 	= 1;
 
-		/* Evaluations */
+		/* INIT end */
+		
+		// DATA
+		$this->bot_data 		= new BotData($this); 
+		
+		// Set Configuration
 		/*$this->ftrs_point 					= $this->bot_difficulty_data['rate_atk_frt'];
 		$this->pc_point 					= $this->bot_difficulty_data['rate_def_pc'];
 		$this->bot_need_units_atk_percent 	= $this->bot_difficulty_data['rate_units_atk'];
@@ -100,36 +87,32 @@ class Bot extends \yii\base\Object
 		$this->bot_def_percent 				= $this->bot_difficulty_data['rate_exec_def'];
 		$this->bot_build_percent 			= $this->bot_difficulty_data['rate_exec_build'];*/
 
-		// Players
-		//$this->BotEvalPlayer();
-		// Lands
-		//$this->BotEvalLand();
-		
-		/* Actions */
-		// Execute actions
-		//$this->BotEvalAction();
-
-		/*print "<pre>";
-		print_r($this->allland_owned);
-		print "</pre>";*/
-
-		//print $this->turn_data['id'];
-
-		/* TURN END */
-		//if($test == null){
-			//$this->BotEndTurn();
-		//}
+		// Evaluations
+		$this->bot_eval 			= new BotEval($this);
+		$this->bot_eval_player		= $this->bot_eval->BotEvalPlayer();
+		$this->bot_eval_land		= $this->bot_eval->BotEvalLand()->eval_land;
 	}
 	
 	
+	// Players
+	//$this->BotEvalPlayer();
+	// Lands
+	//$this->BotEvalLand();
 	
+	/* Actions */
+	// Execute actions
+	//$this->BotEvalAction();
 	
+	/*print "<pre>";
+	 print_r($this->allland_owned);
+	 print "</pre>";*/
 	
+	//print $this->turn_data['id'];
 	
-	
-	
-	
-	
-	
+	/* TURN END */
+	//if($test == null){
+	//$this->BotEndTurn();
+	//}
+
 	
 }
