@@ -43,7 +43,7 @@ class GameController extends \yii\web\Controller
 						'class' => AccessControl::className(),
 						'rules' => [
 								[
-										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history'],
+										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight'],
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
@@ -309,6 +309,7 @@ class GameController extends \yii\web\Controller
     
     /**
      * 
+     * @return string
      */
     public function actionHistory(){
     	$fightData = Fight::fightDataAllToArray(Yii::$app->session['Game']->getGameId(), 200);
@@ -321,6 +322,27 @@ class GameController extends \yii\web\Controller
     			'GamePlayer' 	=> $dataArray['GamePlayer'],
     			'Land'			=> Yii::$app->session['Land'],
     			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionFight(){
+    	$fightData = Fight::fightDataAllToArray(Yii::$app->session['Game']->getGameId(), 200);
+    	 
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	 
+    	return $this->render('history', [
+    			'FightData' 	=> $fightData,
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Land'			=> Yii::$app->session['Land'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
     			'Color'			=> Yii::$app->session['Color'],
     	]);
     }
