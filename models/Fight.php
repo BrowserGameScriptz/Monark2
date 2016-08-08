@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\classes\FightClass;
+use app\classes\FightDataClass;
 
 /**
  * This is the model class for table "fight".
@@ -225,6 +226,34 @@ class Fight extends \yii\db\ActiveRecord
     }
     
     /**
+     *
+     * @param unknown $game_id
+     * @param unknown $user_id
+     */
+    public static function fightDataUserAllToArray($game_id, $user_id){
+    	$data = self::fightLandDataUserAll($game_id, $user_id);
+    	$returned = array();
+    	foreach ($data as $fight){
+    		array_push($returned, new FightDataClass($fight));
+    	}
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $limit
+     */
+    public static function fightDataAllToArray($game_id, $limit=null){
+    	$data = self::fightGameDataAll($game_id, $limit);
+    	$returned = array();
+    	foreach ($data as $fight){
+    		array_push($returned, new FightDataClass($fight));
+    	}
+    	return $returned;
+    }
+    
+    /**
      * 
      * @param unknown $game_id
      * @param unknown $turn_id
@@ -238,6 +267,19 @@ class Fight extends \yii\db\ActiveRecord
     		->andWhere(['fight_def_land_id' => $land_id])->all();
     }
     
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return \app\models\Fight[]
+     */
+    public static function fightLandDataUserAll($game_id, $user_id){
+    	return $fightLandDataThisTurn = self::find()
+    	->where(['fight_game_id' => $game_id])
+    	->andWhere(['fight_def_user_id' => $user_id])
+    	->orWhere(['fight_atk_user_id' => $user_id])
+    	->all();
+    }
     
     /**
      * 
@@ -250,6 +292,20 @@ class Fight extends \yii\db\ActiveRecord
     	->where(['fight_game_id' => $game_id])
     	->andWhere(['fight_turn_id' => $turn_id])
 		->all();
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param number $limit
+     * @return \app\models\Fight[]
+     */
+    public static function fightGameDataAll($game_id, $limit=1000000){
+    	return $fightLandDataThisTurn = self::find()
+    	->where(['fight_game_id' => $game_id])
+    	->orderBy(['fight_time' => SORT_DESC])
+    	->limit($limit)
+    	->all();
     }
     
     /**

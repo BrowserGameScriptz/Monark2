@@ -28,6 +28,7 @@ return [
 	'Title_Game_News' => 'Game news',
 	'Title_Game_Stats' => 'Game stats',
 	'Title_Game_Diplomacy' => 'Diplomacy',
+	'Title_Game_History' => 'Game history',
 
 	/* Tab */
 	'Tab_Game_Name' => 'Game Name',
@@ -64,6 +65,9 @@ return [
 	'Txt_Game_Won_Time' => 'Game Won Time',
 	'Txt_Game_Pwd' => 'Game Pwd',
 	'Txt_Game_Key' => 'Game Key',
+	'Txt_History_Defeated' => 'defeated',
+	'Txt_History_Conquest' => 'and captured',
+	'Txt_History_Lost' => 'lost versus',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',

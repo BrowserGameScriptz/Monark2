@@ -28,6 +28,7 @@ return [
 	'Title_Game_News' => 'Dernières actualités',
 	'Title_Game_Stats' => 'Statistiques',
 	'Title_Game_Diplomacy' => 'Portail diplomatique',
+	'Title_Game_History' => 'Histoire de la partie',
 
 	/* Tabs */
 	'Tab_Game_Name' => 'Nom de la partie',
@@ -64,6 +65,9 @@ return [
 	'Txt_Game_Won_Time' => 'Meilleur temps',
 	'Txt_Game_Pwd' => 'Mot de passe de la partie',
 	'Txt_Game_Key' => 'Clé de la partie',
+	'Txt_History_Defeated' => 'a vaincu',
+	'Txt_History_Conquest' => "et s'est emparé de",
+	'Txt_History_Lost' => 'a perdu contre',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',

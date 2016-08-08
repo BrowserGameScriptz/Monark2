@@ -129,7 +129,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 	            							<?php if(isset(Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())])): ?>
 	            								<?= Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())]->getUserName()?>
 	            							<?php else: ?>
-	            								MICHEL<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getUserName()?>
+	            								Gros <?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getUserName()?>
 	            							<?php endif; ?>
 	            						</font>
 	            					</span>

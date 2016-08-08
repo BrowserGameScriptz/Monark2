@@ -66,7 +66,7 @@ class UserController extends \yii\web\Controller
     	if ($model->load(Yii::$app->request->post()) && $model->login()) {
     		// all inputs are valid
     		Yii::$app->session->setFlash('success', 'Login in successfuly.');
-    		return $this->actionIndex();
+    		return $this->redirect(Url::to(['game/index']),302);
     	}else{
     		// validation failed: $errors is an array containing error messages
     		$errors = $model->errors;
@@ -86,7 +86,7 @@ class UserController extends \yii\web\Controller
     	if ($model->load(Yii::$app->request->post()) && $model->sign() != false) {
     		// all inputs are valid
     		Yii::$app->session->setFlash('success', 'Create account successed.');
-    		return $this->actionLogin();
+    		return $this->redirect(Url::to(['user/login']),302);
     	}else{
     		// validation failed: $errors is an array containing error messages
     		$errors = $model->errors;

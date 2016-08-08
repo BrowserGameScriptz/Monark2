@@ -56,6 +56,7 @@ use app\classes\Access;
                 	['label' => Yii::t('menu', 'Title_Game_Map'), 'icon' => 'fa fa-globe', 'url' => ['game/map'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
                 	['label' => Yii::t('menu', 'Title_Game_News'), 'icon' => 'fa fa-newspaper-o', 'url' => ['game/news'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
                 	['label' => Yii::t('menu', 'Title_Game_Diplomacy'), 'icon' => 'glyphicon glyphicon-knight', 'url' => ['game/diplomacy'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_History'), 'icon' => 'fa fa-history', 'url' => ['game/history'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
                 	['label' => Yii::t('menu', 'Title_Game_Stats'), 'icon' => 'fa fa-pie-chart', 'url' => ['game/stats'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
                 		
                 	// Statut ==> after game
