@@ -68,6 +68,12 @@ return [
 	'Txt_History_Defeated' => 'defeated',
 	'Txt_History_Conquest' => 'and captured',
 	'Txt_History_Lost' => 'lost versus',
+	'Txt_Diplomacy_Status_War' => 'War',
+	'Txt_Diplomacy_Status_Tension' => 'Tension',
+	'Txt_Diplomacy_Status_Peace' => 'Peace',
+	'Txt_Diplomacy_Table_User' => 'Player',
+	'Txt_Diplomacy_Table_Progress' => 'Progress',
+	'Txt_Diplomacy_Table_Status' => 'Status',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',

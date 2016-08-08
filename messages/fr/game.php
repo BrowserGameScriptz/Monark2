@@ -68,6 +68,12 @@ return [
 	'Txt_History_Defeated' => 'a vaincu',
 	'Txt_History_Conquest' => "et s'est emparé de",
 	'Txt_History_Lost' => 'a perdu contre',
+	'Txt_Diplomacy_Status_War' => 'Guerre',
+	'Txt_Diplomacy_Status_Tension' => 'Tension',
+	'Txt_Diplomacy_Status_Peace' => 'Paix',
+	'Txt_Diplomacy_Table_User' => 'Joueur',
+	'Txt_Diplomacy_Table_Progress' => 'Progression',
+	'Txt_Diplomacy_Table_Status' => 'Status',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',

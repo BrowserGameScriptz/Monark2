@@ -362,7 +362,15 @@ class GameController extends \yii\web\Controller
      */
     public function actionDiplomacy()
     {
-    	return $this->render('diplomacy');
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	return $this->render('diplomacy', [
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
     }
 
     /**
