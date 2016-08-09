@@ -2,7 +2,6 @@
 
 namespace app\classes;
 
-use Yii;
 use app\models\Building;
 use app\models\Fight;
 

@@ -242,6 +242,17 @@ class Fight extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
+     * @param unknown $fight_id
+     * @return \app\classes\FightDataClass
+     */
+    public static function fightDataByIdToArray($game_id, $fight_id){
+    	$data = self::fightDataById($game_id, $fight_id);
+    	return new FightDataClass($data);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
      * @param unknown $limit
      */
     public static function fightDataAllToArray($game_id, $limit=null){
@@ -256,12 +267,25 @@ class Fight extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
+     * @param unknown $fight_id
+     * @return \app\models\Fight|NULL
+     */
+    public static function fightDataById($game_id, $fight_id){
+    	return self::find()
+    	->where(['fight_game_id' => $game_id])
+    	->andWhere(['fight_id' => $fight_id])
+    	->one();
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
      * @param unknown $turn_id
      * @param unknown $land_id
      * @return \app\models\Fight[]
      */
     public static function fightLandDatathisTurn($game_id, $turn_id, $land_id){
-    	return $fightLandDataThisTurn = self::find()
+    	return self::find()
     		->where(['fight_game_id' => $game_id])
     		->andWhere(['fight_turn_id' => $turn_id])
     		->andWhere(['fight_def_land_id' => $land_id])->all();
@@ -274,7 +298,7 @@ class Fight extends \yii\db\ActiveRecord
      * @return \app\models\Fight[]
      */
     public static function fightLandDataUserAll($game_id, $user_id){
-    	return $fightLandDataThisTurn = self::find()
+    	return self::find()
     	->where(['fight_game_id' => $game_id])
     	->andWhere(['fight_def_user_id' => $user_id])
     	->orWhere(['fight_atk_user_id' => $user_id])
@@ -288,7 +312,7 @@ class Fight extends \yii\db\ActiveRecord
      * @return \app\models\Fight[]
      */
     public static function fightLandDatathisTurnAll($game_id, $turn_id){
-    	return $fightLandDataThisTurn = self::find()
+    	return self::find()
     	->where(['fight_game_id' => $game_id])
     	->andWhere(['fight_turn_id' => $turn_id])
 		->all();
@@ -301,7 +325,7 @@ class Fight extends \yii\db\ActiveRecord
      * @return \app\models\Fight[]
      */
     public static function fightGameDataAll($game_id, $limit=1000000){
-    	return $fightLandDataThisTurn = self::find()
+    	return self::find()
     	->where(['fight_game_id' => $game_id])
     	->orderBy(['fight_time' => SORT_DESC])
     	->limit($limit)

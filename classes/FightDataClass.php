@@ -78,4 +78,32 @@ class FightDataClass{
 	public function getFightDefUserId(){
 		return $this->fightDefUserId;
 	}
+	
+	public function getFightThimbleAtk(){
+		return $this->fightThimbleAtk;
+	}
+	
+	public function getFightThimbleDef(){
+		return $this->fightThimbleDef;
+	}
+	
+	public function getFightAtkUnits(){
+		return $this->fightAtkUnits;
+	}
+	
+	public function getFightDefUnits(){
+		return $this->fightDefUnits;
+	}
+	
+	public static function getFightThimbleToRoundArray($fightThimble){
+		return explode('/', $fightThimble);
+	}
+	
+	public static function getFightThimbleToThimbleArray($fightRound){
+		return explode(';', $fightRound);
+	}
+	
+	public static function getFightUnitsToRoundArray($fightUnits){
+		return explode('/', $fightUnits);
+	}
 }

@@ -332,19 +332,25 @@ class GameController extends \yii\web\Controller
      * @return string
      */
     public function actionFight(){
-    	$fightData = Fight::fightDataAllToArray(Yii::$app->session['Game']->getGameId(), 200);
-    	 
-    	// Get data
-    	$dataArray = $this->getGameData();
-    	 
-    	return $this->render('history', [
-    			'FightData' 	=> $fightData,
-    			'GamePlayer' 	=> $dataArray['GamePlayer'],
-    			'Land'			=> Yii::$app->session['Land'],
-    			'Users'			=> $dataArray['UserData'],
-    			'Bots'			=> $dataArray['BotData'],
-    			'Color'			=> Yii::$app->session['Color'],
-    	]);
+    	$urlparams = Yii::$app->request->queryParams;
+    	if (array_key_exists('fi', $urlparams)) {
+    		$fightData = Fight::fightDataByIdToArray(Yii::$app->session['Game']->getGameId(), $urlparams['fi']);
+    		
+    		if($fightData != null){
+	    		// Get data
+	    		$dataArray = $this->getGameData();
+	    		
+	    		return $this->render('fight', [
+	    				'FightData' 	=> $fightData,
+	    				'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    				'Land'			=> Yii::$app->session['Land'],
+	    				'Users'			=> $dataArray['UserData'],
+	    				'Bots'			=> $dataArray['BotData'],
+	    				'Color'			=> Yii::$app->session['Color'],
+	    		]);
+    		}
+    	}
+    	return $this->redirect(Url::to(['game/history']),302);
     }
 
     /**
