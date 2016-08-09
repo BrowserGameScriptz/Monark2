@@ -3,21 +3,20 @@
 namespace app\queries;
 
 /**
- * This is the ActiveQuery class for [[\app\models\Message]].
+ * This is the ActiveQuery class for [[\app\models\Mail]].
  *
- * @see \app\models\Message
+ * @see \app\models\Mail
  */
-class MessageQuery extends \yii\db\ActiveQuery
+class MailQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
-        $this->andWhere('[[status]]=1');
-        return $this;
+        return $this->andWhere('[[status]]=1');
     }*/
 
     /**
      * @inheritdoc
-     * @return \app\models\Message[]|array
+     * @return \app\models\Mail[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +25,7 @@ class MessageQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return \app\models\Message|array|null
+     * @return \app\models\Mail|array|null
      */
     public function one($db = null)
     {

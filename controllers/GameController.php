@@ -47,7 +47,7 @@ class GameController extends \yii\web\Controller
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
-										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'addbot'],
+										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'newmail', 'addbot'],
 										'allow' => Access::UserIsInGame(), // Into a game
 								],
 								[
@@ -296,6 +296,15 @@ class GameController extends \yii\web\Controller
     public function actionMail()
     {
     	return $this->render('mail');
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionNewmail()
+    {
+    	return $this->render('newmail'); 
     }
 
     /**

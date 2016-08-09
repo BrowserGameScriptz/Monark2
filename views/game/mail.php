@@ -10,37 +10,65 @@ $this->title = Yii::t('game', 'Title_Game_Mail');
 // Set JS var
 $this->registerJs($this->context->getJSConfig(), View::POS_HEAD);
 $this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className()]]);
-$this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/ajax.js", ['depends' => [ 
+				AppAsset::className () 
+		] 
+] );
 ?>
 
 <div class="game-mail">
-	<h1><?= Html::encode($this->title) ?></h1>
-	<div class="box box-info">
-		<div class="box-header ui-sortable-handle" style="cursor: move;">
-			<i class="fa fa-envelope"></i>
+	<div class="box box-primary">
+		<div class="box-header with-border">
+			<h3 class="box-title">Inbox</h3>
 
-			<h3 class="box-title">Game mail</h3>
+			<div class="box-tools pull-right">
+                <?= Html::a("<i class='fa fa-plus'></i> ".Yii::t('game', 'Button_New_Mail'), ['game/newmail'], ['class'=>'btn btn-success']); ?>
+              </div>
+			<!-- /.box-tools -->
 		</div>
-		<div class="box-body">
-			<form action="#" method="post">
-				<div class="form-group">
-					<input type="email" class="form-control" name="emailto"
-						placeholder="Email to:">
-				</div>
-				<div class="form-group">
-					<input type="text" class="form-control" name="subject"
-						placeholder="Subject">
-				</div>
-				<div>
-					<textarea class="textarea" style="width: 100%; height: 125px;"></textarea>
-				</div>
-			</form>
-		</div>
-		<div class="box-footer clearfix">
-			<button type="button" class="pull-right btn btn-default"
-				id="sendEmail">
-				Send <i class="fa fa-arrow-circle-right"></i>
-			</button>
+		<!-- /.box-header -->
+		<div class="box-body no-padding">
+			<div class="table-responsive mailbox-messages">
+				<table class="table table-hover table-striped">
+					<tbody>
+						<tr>
+
+							<td class="mailbox-star"><a href="#"><i
+									class="fa fa fa-share"></i></a></td>
+							<td class="mailbox-name"><a href="read-mail.html">Alexander
+									Pierce</a></td>
+							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
+								find a solution to this problem...</td>
+							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
+							<td class="mailbox-date">5 mins ago</td>
+						</tr>
+						<tr>
+
+							<td class="mailbox-star"><a href="#"><i
+									class="fa fa fa-share"></i></a></td>
+							<td class="mailbox-name"><a href="read-mail.html">Alexander
+									Pierce</a></td>
+							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
+								find a solution to this problem...</td>
+							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
+							<td class="mailbox-date">28 mins ago</td>
+						</tr>
+						<tr>
+
+							<td class="mailbox-star"><a href="#"><i
+									class="fa fa fa-share"></i></a></td>
+							<td class="mailbox-name"><a href="read-mail.html">Alexander
+									Pierce</a></td>
+							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
+								find a solution to this problem...</td>
+							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
+							<td class="mailbox-date">11 hours ago</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- /.table -->
+			</div>
+			<!-- /.mail-box-messages -->
 		</div>
 	</div>
 </div>
