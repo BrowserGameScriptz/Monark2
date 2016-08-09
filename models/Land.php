@@ -133,12 +133,11 @@ class Land extends \yii\db\ActiveRecord
     			// If map has continent
     			if($mapData['map_continent'] == 1){
     				// Random antarctic continent
-    				$antarcticRand 	= rand(1, 10);
-    				$antarcticId	= 6;
+    				$antarcticRand 	= rand(1, 100);
+    				$antarcticId	= 7;
     				
     				// 1/10 to go in antarctic
-    				if ($antarcticRand < 10) {
-    					//game_player_region_id
+    				if ($antarcticRand < 95) {
     					$landId = rand($continentData[$user['game_player_region_id']]->getContinentLandIdBegin(), $continentData[$user['game_player_region_id']]->getContinentLandIdEnd());
     				}else{
     					$landId = rand($continentData[$antarcticId]->getContinentLandIdBegin(), $continentData[$antarcticId]->getContinentLandIdEnd());

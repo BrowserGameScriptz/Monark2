@@ -45,10 +45,10 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 		                  <td><a href="#" style="text-decoration: none;"><font size='4' color="#<?= $Color[$GamePlayer[$player->getGamePlayerUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($player->getGamePlayerUserId() >= 0)?$Users[$player->getGamePlayerUserId()]->getUserName():$Bots[$player->getGamePlayerUserId()]->getUserName(); ?></font></a></td>
 		                  <td>
 		                    <div class="progress progress">
-		                      <div class="progress-bar progress-bar-<?= $statusColor; ?>" style="width: <?= $status; ?>%"></div>
+		                      <div class="progress-bar progress-bar-<?= $statusColor; ?>" style="width: <?= $status; ?>%"><?= $status;?> %</div>
 		                    </div>
 		                  </td>
-		                  <td><span class="alert alert-<?= $statusColor; ?>">
+		                  <td><span class="btn btn-<?= $statusColor; ?>">
 		                  	<?= $statusName ?>
               			  </span></td>
 		                </tr>
