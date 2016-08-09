@@ -31,6 +31,7 @@ use app\models\Chat;
 use app\models\ChatRead;
 use app\models\Fight;
 use app\models\Mail;
+use app\forms\game\gameSendMailForm;
 
 class GameController extends \yii\web\Controller
 {
@@ -334,32 +335,43 @@ class GameController extends \yii\web\Controller
      * @return string
      */
     public function actionNewmail() {
-		$urlparams = Yii::$app->request->queryParams;
-		if (array_key_exists ( 'mi', $urlparams )) {
-			$mailData = Mail::getMailDataToArray( Yii::$app->session ['Game']->getGameId (), Yii::$app->session ['User']->getUserID (), $urlparams ['mi'] );
-			
-			if ($mailData != null) {
-    			// Get data
-    			$dataArray = $this->getGameData();
-    			 
-    			return $this->render('newmail', [
-    					'MailData' 		=> $mailData,
-    					'GamePlayer' 	=> $dataArray['GamePlayer'],
-    					'Users'			=> $dataArray['UserData'],
-    					'Bots'			=> $dataArray['BotData'],
-    					'Color'			=> Yii::$app->session['Color'],
-    			]);
-    		}
+    	$model = new GameSendMailForm();
+    	if ($model->load(Yii::$app->request->post()) && $model->send()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Mail_Send'));
+    		return $this->redirect(Url::to(['game/mail']),302);
+    	}else{
+    		$errors = $model->errors;
+			$urlparams = Yii::$app->request->queryParams;
+			if (array_key_exists ( 'mi', $urlparams )) {
+				$mailData = Mail::getMailDataToArray(Yii::$app->session['Game']->getGameId(), Yii::$app->session['User']->getUserID(), $urlparams['mi']);
+				
+				if ($mailData != null) {
+	    			// Get data
+	    			$dataArray = $this->getGameData();
+	
+	    			return $this->render('newmail', [
+	    					'model' 		=> $model,
+	    					'errors'		=> $errors,
+	    					'MailData' 		=> $mailData,
+	    					'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    					'Users'			=> $dataArray['UserData'],
+	    					'Bots'			=> $dataArray['BotData'],
+	    					'Color'			=> Yii::$app->session['Color'],
+	    			]);
+	    		}
+	    	}
+	    	// Get data
+	    	$dataArray = $this->getGameData();
+	    			 
+	    	return $this->render('newmail', [
+	    		'model' 		=> $model,
+	    		'errors'		=> $errors,
+	    		'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    		'Users'			=> $dataArray['UserData'],
+	    		'Bots'			=> $dataArray['BotData'],
+	    		'Color'			=> Yii::$app->session['Color'],
+	    	]);
     	}
-    	// Get data
-    	$dataArray = $this->getGameData();
-    			 
-    	return $this->render('newmail', [
-    		'GamePlayer' 	=> $dataArray['GamePlayer'],
-    		'Users'			=> $dataArray['UserData'],
-    		'Bots'			=> $dataArray['BotData'],
-    		'Color'			=> Yii::$app->session['Color'],
-    	]);
     }
 
     /**
@@ -528,7 +540,6 @@ class GameController extends \yii\web\Controller
      */
     public function actionCreate()
     {
-
     	$model = new GameCreateForm();
     	if ($model->load(Yii::$app->request->post()) && $model->create()) {
     		// all inputs are valid

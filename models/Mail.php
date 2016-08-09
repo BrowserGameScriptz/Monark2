@@ -120,7 +120,7 @@ class Mail extends \yii\db\ActiveRecord
      * @return \app\models\Mail[]
      */
     public static function getUserGameMailUnRead($game_id, $user_id, $limit=4){
-    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['not in','mail_id', MailRead::getUserHasReadMailById($game_id, $user_id)])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
+    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['not in','mail_id', MailRead::getUserHasReadMailById($game_id, $user_id)])->andWhere(['mail_del' => 0])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
     }
     
     /**
@@ -151,7 +151,7 @@ class Mail extends \yii\db\ActiveRecord
      * @return \app\models\Mail[]
      */
     public static function getUserGameMail($game_id, $user_id, $limit=500){
-    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
+    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['mail_del' => 0])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
     }
     
     /**
