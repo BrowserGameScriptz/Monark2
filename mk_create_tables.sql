@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 09 Août 2016 à 21:57
+-- Généré le :  Mar 09 Août 2016 à 22:53
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -1655,7 +1655,7 @@ INSERT INTO `mail` (`mail_id`, `mail_game_id`, `mail_time`, `mail_message`, `mai
 CREATE TABLE IF NOT EXISTS `mail_read` (
   `mail_read_id` int(12) unsigned NOT NULL AUTO_INCREMENT,
   `mail_read_game_id` int(12) NOT NULL,
-  `mail_read_message_id` int(12) NOT NULL,
+  `mail_read_mail_id` int(12) NOT NULL,
   `mail_read_user_receive_id` int(12) NOT NULL,
   `mail_read_time` int(12) NOT NULL,
   PRIMARY KEY (`mail_read_id`)
@@ -1665,7 +1665,7 @@ CREATE TABLE IF NOT EXISTS `mail_read` (
 -- Contenu de la table `mail_read`
 --
 
-INSERT INTO `mail_read` (`mail_read_id`, `mail_read_game_id`, `mail_read_message_id`, `mail_read_user_receive_id`, `mail_read_time`) VALUES
+INSERT INTO `mail_read` (`mail_read_id`, `mail_read_game_id`, `mail_read_mail_id`, `mail_read_user_receive_id`, `mail_read_time`) VALUES
 (1, 11, 1, 67, 1441724958);
 
 -- --------------------------------------------------------

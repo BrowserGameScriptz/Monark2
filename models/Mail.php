@@ -108,6 +108,40 @@ class Mail extends \yii\db\ActiveRecord
     }
     
     /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $mail_id
+     * @return number
+     */
+    public static function setMailRead($game_id, $user_id, $mail_id){
+    	return MailRead::insertMailReadLog($game_id, $user_id, $mail_id);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $mail_message
+     * @param unknown $mail_subject
+     * @param unknown $mail_pact_id
+     * @param unknown $mail_user_send_id
+     * @param unknown $mail_user_receive_id
+     * @return number
+     */
+  	public static function insertMail($game_id, $mail_message, $mail_subject, $mail_pact_id, $mail_user_send_id, $mail_user_receive_id){
+  		return Yii::$app->db->createCommand()->insert(self::tableName(), [
+            	'mail_game_id' 			=> $game_id,
+            	'mail_time' 			=> time(),
+            	'mail_message' 			=> $mail_message,
+            	'mail_subject' 			=> $mail_subject,
+            	'mail_pact_id' 			=> $mail_pact_id,
+            	'mail_user_send_id' 	=> $mail_user_send_id,
+            	'mail_user_receive_id' 	=> $mail_user_receive_id,
+            	'mail_del' 				=> 0,
+  		])->execute();
+  	}
+    
+    /**
      * @inheritdoc
      * @return \app\queries\MailQuery the active query used by this AR class.
      */

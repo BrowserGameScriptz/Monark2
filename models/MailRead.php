@@ -9,7 +9,7 @@ use Yii;
  *
  * @property string $mail_read_id
  * @property integer $mail_read_game_id
- * @property integer $mail_read_message_id
+ * @property integer $mail_read_mail_id
  * @property integer $mail_read_user_receive_id
  * @property integer $mail_read_time
  */
@@ -29,8 +29,8 @@ class MailRead extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mail_read_game_id', 'mail_read_message_id', 'mail_read_user_receive_id', 'mail_read_time'], 'required'],
-            [['mail_read_game_id', 'mail_read_message_id', 'mail_read_user_receive_id', 'mail_read_time'], 'integer'],
+            [['mail_read_game_id', 'mail_read_mail_id', 'mail_read_user_receive_id', 'mail_read_time'], 'required'],
+            [['mail_read_game_id', 'mail_read_mail_id', 'mail_read_user_receive_id', 'mail_read_time'], 'integer'],
         ];
     }
 
@@ -42,12 +42,63 @@ class MailRead extends \yii\db\ActiveRecord
         return [
             'mail_read_id' => 'Mail Read ID',
             'mail_read_game_id' => 'Mail Read Game ID',
-            'mail_read_message_id' => 'Mail Read Message ID',
+            'mail_read_mail_id' => 'Mail Read Message ID',
             'mail_read_user_receive_id' => 'Mail Read User Receive ID',
             'mail_read_time' => 'Mail Read Time',
         ];
     }
 
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $mail_id
+     * @return boolean
+     */
+    public static function getUserHasReadMail($game_id, $user_id, $mail_id){
+    	if(self::find()->where(['mail_read_mail_id' => $mail_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->one() === null)
+    		return false;
+    	return true;
+    }
+    
+    /**
+     * 
+     * @param unknown $user_id
+     * @return \app\models\Mail[]
+     */
+    public static function getUserReadNotGameMail($user_id){
+    	return self::getUserReadGameMail(0, $user_id);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return \app\models\MailRead[]
+     */
+    public static function getUserReadGameMail($game_id, $user_id){
+    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->all();
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $mail_id
+     * @return number
+     */
+    public static function insertMailReadLog($game_id, $user_id, $mail_id){
+    	if(!self::getUserHasReadMail($game_id, $user_id, $mail_id))
+	    	return Yii::$app->db->createCommand()->insert(self::tableName(), [
+	            		'mail_read_game_id' 		=> $game_id,
+	            		'mail_read_mail_id' 		=> $mail_id,
+	            		'mail_read_user_receive_id' => $user_id,
+	            		'mail_read_time' 			=> time(),
+	    		])->execute();
+	    return 0;
+    }
+    
+    
     /**
      * @inheritdoc
      * @return \app\queries\MailReadQuery the active query used by this AR class.
