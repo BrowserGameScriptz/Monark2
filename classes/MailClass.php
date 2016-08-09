@@ -2,8 +2,6 @@
 
 namespace app\classes;
 
-use Yii;
-
 /**
  * 
  * @author Paul

@@ -2,11 +2,9 @@
 
 namespace app\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Game;
-use app\classes\GameClass;
 
 /**
  * GameSearch represents the model behind the search form about `app\models\Game`.
