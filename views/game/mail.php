@@ -15,4 +15,32 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 
 <div class="game-mail">
 	<h1><?= Html::encode($this->title) ?></h1>
+	<div class="box box-info">
+		<div class="box-header ui-sortable-handle" style="cursor: move;">
+			<i class="fa fa-envelope"></i>
+
+			<h3 class="box-title">Game mail</h3>
+		</div>
+		<div class="box-body">
+			<form action="#" method="post">
+				<div class="form-group">
+					<input type="email" class="form-control" name="emailto"
+						placeholder="Email to:">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="subject"
+						placeholder="Subject">
+				</div>
+				<div>
+					<textarea class="textarea" style="width: 100%; height: 125px;"></textarea>
+				</div>
+			</form>
+		</div>
+		<div class="box-footer clearfix">
+			<button type="button" class="pull-right btn btn-default"
+				id="sendEmail">
+				Send <i class="fa fa-arrow-circle-right"></i>
+			</button>
+		</div>
+	</div>
 </div>
