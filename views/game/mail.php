@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\web\View;
 use app\assets\AppAsset;
+use app\classes\DateClass;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('game', 'Title_Game_Mail');
@@ -31,39 +32,15 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [
 			<div class="table-responsive mailbox-messages">
 				<table class="table table-hover table-striped">
 					<tbody>
-						<tr>
-
-							<td class="mailbox-star"><a href="#"><i
-									class="fa fa fa-share"></i></a></td>
-							<td class="mailbox-name"><a href="read-mail.html">Alexander
-									Pierce</a></td>
-							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
-								find a solution to this problem...</td>
-							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
-							<td class="mailbox-date">5 mins ago</td>
-						</tr>
-						<tr>
-
-							<td class="mailbox-star"><a href="#"><i
-									class="fa fa fa-share"></i></a></td>
-							<td class="mailbox-name"><a href="read-mail.html">Alexander
-									Pierce</a></td>
-							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
-								find a solution to this problem...</td>
-							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
-							<td class="mailbox-date">28 mins ago</td>
-						</tr>
-						<tr>
-
-							<td class="mailbox-star"><a href="#"><i
-									class="fa fa fa-share"></i></a></td>
-							<td class="mailbox-name"><a href="read-mail.html">Alexander
-									Pierce</a></td>
-							<td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to
-								find a solution to this problem...</td>
-							<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
-							<td class="mailbox-date">11 hours ago</td>
-						</tr>
+						<?php foreach($MailData as $mail): ?>
+							<tr>
+								<td class="mailbox-star"><a href="#"><i class="fa fa fa-share"></i></a></td>
+								<td class="mailbox-name"><a href="#"><?= $this->context->getGamePlayerName($mail->getMailUserSendId(), $Users, $Bots) ?></a></td>
+								<td class="mailbox-subject"><b><?= $mail->getMailSubject() ?></b> - <?= $mail->getMailMessage() ?>...</td>
+								<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
+								<td class="mailbox-date"><?= (new DateClass($mail->getMailTime()))->showTimeElapsed(); ?></td>
+							</tr>
+						<?php endforeach; ?>
 					</tbody>
 				</table>
 				<!-- /.table -->

@@ -68,7 +68,7 @@ class Mail extends \yii\db\ActiveRecord
     	$data = self::getUserNotGameMail($user_id, $limit);
     	$returned = array();
     	foreach($data as $mail)
-    		array_push($returned, new MailClass($data));
+    		array_push($returned, new MailClass($mail));
     	return $returned;
     }
     
@@ -82,7 +82,7 @@ class Mail extends \yii\db\ActiveRecord
     	$data = self::getUserGameMail($game_id, $user_id, $limit);
     	$returned = array();
     	foreach($data as $mail)
-    		array_push($returned, new MailClass($data));
+    		array_push($returned, new MailClass($mail));
     	return $returned;
     }
     

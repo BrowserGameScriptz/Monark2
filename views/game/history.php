@@ -33,13 +33,13 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 	                      </span>
 	                      
 	                      <h3 class="timeline-header">
-	                      <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$fight->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($fight->getFightAtkUserId() >= 0)?$Users[$fight->getFightAtkUserId()]->getUserName():$Bots[$fight->getFightAtkUserId()]->getUserName(); ?></font></a>
+	                      <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$fight->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $this->context->getGamePlayerName($fight->getFightAtkUserId(), $Users, $Bots) ?></font></a>
 	                      <?php if ($conquest): ?>
 	                      	<?= Yii::t('game', 'Txt_History_Defeated'); ?>
 	                      <?php else: ?>
 	                      	<?= Yii::t('game', 'Txt_History_Lost'); ?>
 	                      <?php endif; ?>
-	                      <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$fight->getFightDefUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($fight->getFightDefUserId() >= 0)?$Users[$fight->getFightDefUserId()]->getUserName():$Bots[$fight->getFightDefUserId()]->getUserName(); ?></font></a>
+	                      <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$fight->getFightDefUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $this->context->getGamePlayerName($fight->getFightDefUserId(), $Users, $Bots) ?></font></a>
 	                      
 	                      <?php if ($conquest): ?>
 	                      	<?= Yii::t('game', 'Txt_History_Conquest'); ?> <font color="#<?= $Color[$GamePlayer[$fight->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $Land[$fight->getFightDefLandId()]->getLandName() ?></font>

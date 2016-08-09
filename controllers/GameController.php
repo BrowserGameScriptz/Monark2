@@ -30,6 +30,7 @@ use app\models\Building;
 use app\models\Chat;
 use app\models\ChatRead;
 use app\models\Fight;
+use app\models\Mail;
 
 class GameController extends \yii\web\Controller
 {
@@ -247,6 +248,25 @@ class GameController extends \yii\web\Controller
     }
 
     /**
+     * 
+     * @param unknown $id
+     * @param unknown $user
+     * @param unknown $bot
+     * @return unknown
+     */
+    public static function getGamePlayerName($id, $user, $bot){
+    	if(isset($user[$id]) || isset($bot[$id])){
+	    	if($id >= 0)
+	    		$returned = $user[$id]->getUserName();
+	    	else 
+	    		$returned = $bot[$id]->getUserName();
+    	}else{
+    		$returned = $user[-1]->getUserName();
+    	}
+    	return $returned;
+    }
+    
+    /**
      *
      * @return string
      */
@@ -295,7 +315,18 @@ class GameController extends \yii\web\Controller
      */
     public function actionMail()
     {
-    	return $this->render('mail');
+    	$mailData = Mail::getUserGameMailToArray(Yii::$app->session['Game']->getGameId(), Yii::$app->session['User']->getUserID());
+    	
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	 
+    	return $this->render('mail', [
+    			'MailData' 		=> $mailData,
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
     }
     
     /**

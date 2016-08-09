@@ -1,6 +1,4 @@
 <?php
-use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\web\View;
 use app\assets\AppAsset;
 use yii\helpers\Url;
@@ -21,13 +19,13 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
        
     <h1><?= $this->title; ?></h1>   
     <h3 class="timeline-header" style="text-align:center;">
-       <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$FightData->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($FightData->getFightAtkUserId() >= 0)?$Users[$FightData->getFightAtkUserId()]->getUserName():$Bots[$FightData->getFightAtkUserId()]->getUserName(); ?></font></a>
+       <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$FightData->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $this->context->getGamePlayerName($FightData->getFightAtkUserId(), $Users, $Bots) ?></font></a>
           <?php if ($conquest): ?>
              <?= Yii::t('game', 'Txt_History_Defeated'); ?>
           <?php else: ?>
               <?= Yii::t('game', 'Txt_History_Lost'); ?>
          <?php endif; ?>
-         <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$FightData->getFightDefUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($FightData->getFightDefUserId() >= 0)?$Users[$FightData->getFightDefUserId()]->getUserName():$Bots[$FightData->getFightDefUserId()]->getUserName(); ?></font></a>
+         <a href="#" style="text-decoration: none;"><font color="#<?= $Color[$GamePlayer[$FightData->getFightDefUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $this->context->getGamePlayerName($FightData->getFightDefUserId(), $Users, $Bots) ?></font></a>
                       
          <?php if ($conquest): ?>
             <?= Yii::t('game', 'Txt_History_Conquest'); ?> <font color="#<?= $Color[$GamePlayer[$FightData->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $Land[$FightData->getFightDefLandId()]->getLandName() ?></font>

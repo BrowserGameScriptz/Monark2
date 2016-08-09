@@ -40,4 +40,35 @@ class MailClass{
 		return $this->mailId;
 	}
 	
+	public function getMailGameId(){
+		return $this->mailGameId;
+	}
+	
+	public function getMailTime(){
+		return $this->mailTime;
+	}
+	
+	public function getMailMessage(){
+		return $this->mailMessage;
+	}
+	
+	public function getMailSubject(){
+		return $this->mailSubject;
+	}
+	
+	public function getMailPactId(){
+		return $this->mailPactId;
+	}
+	
+	public function getMailUserSendId(){
+		return $this->mailUserSendId;
+	}
+	
+	public function getMailUserReceiveId(){
+		return $this->mailUserReceiveId;
+	}
+	
+	public function getMailDel(){
+		return $this->mailDel;
+	}
 }

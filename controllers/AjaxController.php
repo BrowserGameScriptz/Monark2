@@ -187,6 +187,16 @@ class AjaxController extends Controller
 	
 	/**
 	 * 
+	 * @param unknown $id
+	 * @param unknown $users
+	 * @param unknown $bots
+	 */
+	public function getGamePlayerName($id, $users, $bots){
+		return (new GameController(null, null))->getGamePlayerName($id, $users, $bots);
+	}
+	
+	/**
+	 * 
 	 * @return mixed|NULL|string
 	 */
 	public function getJson($arrayParams){
