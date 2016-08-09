@@ -95,6 +95,14 @@ class FightDataClass{
 		return $this->fightDefUnits;
 	}
 	
+	public function getFightAtkLostUnit(){
+		return $this->fightAtkLostUnit;
+	}
+	
+	public function getFightDefLostUnit(){
+		return $this->fightDefLostUnit;
+	}
+	
 	public static function getFightThimbleToRoundArray($fightThimble){
 		return explode('/', $fightThimble);
 	}

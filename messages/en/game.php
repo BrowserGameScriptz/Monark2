@@ -29,6 +29,7 @@ return [
 	'Title_Game_Stats' => 'Game stats',
 	'Title_Game_Diplomacy' => 'Diplomacy',
 	'Title_Game_History' => 'Game history',
+	'Title_Fight_Details' => 'Fight details',	
 
 	/* Tab */
 	'Tab_Game_Name' => 'Game Name',
@@ -74,7 +75,10 @@ return [
 	'Txt_Diplomacy_Table_User' => 'Player',
 	'Txt_Diplomacy_Table_Progress' => 'Progress',
 	'Txt_Diplomacy_Table_Status' => 'Status',
-
+	'Txt_Fight_Attacker' => 'Attacker',
+	'Txt_Fight_Defender' => 'Defender',
+		
+		
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',
   'Error_Password_Incorrect' => 'A password is required : incorrect password.',

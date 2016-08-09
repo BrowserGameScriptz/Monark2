@@ -29,6 +29,7 @@ return [
 	'Title_Game_Stats' => 'Statistiques',
 	'Title_Game_Diplomacy' => 'Portail diplomatique',
 	'Title_Game_History' => 'Histoire de la partie',
+	'Title_Fight_Details' => 'Détails du combat',
 
 	/* Tabs */
 	'Tab_Game_Name' => 'Nom de la partie',
@@ -74,6 +75,8 @@ return [
 	'Txt_Diplomacy_Table_User' => 'Joueur',
 	'Txt_Diplomacy_Table_Progress' => 'Progression',
 	'Txt_Diplomacy_Table_Status' => 'Status',
+	'Txt_Fight_Attacker' => 'Attaquant',
+	'Txt_Fight_Defender' => 'Défenseur',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',
