@@ -104,7 +104,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 		                      			<span style="float:right;">	
 				                      		<?= Land::LandCountUnitsToArrayShow($defUnitsArray[$i]); ?>
 				                      		<?php if(isset($defUnitsArray[$i+1]) && ($defUnitsArray[$i] - $defUnitsArray[$i+1]) > 0): ?>
-				                      		- <?= Land::LandCountUnitsToArrayShow(($defUnitsArray[$i] - $defUnitsArray[$i+1])); ?>
+				                      			- <?= Land::LandCountUnitsToArrayShow(($defUnitsArray[$i] - $defUnitsArray[$i+1])); ?>
 				                      		<?php endif; ?>
 			                      		</span>
 			                      	</h3>
