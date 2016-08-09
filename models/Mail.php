@@ -88,12 +88,59 @@ class Mail extends \yii\db\ActiveRecord
     
     /**
      * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $mail_id
+     * @return \app\classes\MailClass
+     */
+    public static function getMailDataToArray($game_id, $user_id, $mail_id){
+    	$data = self::getMailData($game_id, $user_id, $mail_id);
+    	return new MailClass($data);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $limit
+     */
+    public static function getUserGameMailUnReadToArray($game_id, $user_id, $limit=null){
+    	$data = self::getUserGameMailUnRead($game_id, $user_id, $limit);
+    	$returned = array();
+    	foreach($data as $mail)
+    		array_push($returned, new MailClass($mail));
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param number $limit
+     * @return \app\models\Mail[]
+     */
+    public static function getUserGameMailUnRead($game_id, $user_id, $limit=4){
+    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['not in','mail_id', MailRead::getUserHasReadMailById($game_id, $user_id)])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
+    }
+    
+    /**
+     * 
      * @param unknown $user_id
      * @param number $limit
      * @return \app\models\Mail[]
      */
     public static function getUserNotGameMail($user_id, $limit=500){
     	return self::getUserGameMail(0, $user_id, $limit);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @param unknown $mail_id
+     */
+    public static function getMailData($game_id, $user_id, $mail_id){
+    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_id' => $mail_id])->andWhere(['mail_user_receive_id' => $user_id])->one();
     }
     
     /**

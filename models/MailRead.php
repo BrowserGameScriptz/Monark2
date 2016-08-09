@@ -63,6 +63,29 @@ class MailRead extends \yii\db\ActiveRecord
     
     /**
      * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     */
+    public static function getUserHasReadMailById($game_id, $user_id){
+    	$data = self::getUserHasReadMailAll($game_id, $user_id);
+    	$returned = array();
+    	foreach ($data as $read)
+    		array_push($returned, $read['mail_read_id']);
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return \app\models\MailRead[]
+     */
+    public static function getUserHasReadMailAll($game_id, $user_id){
+    	return self::find()->where(['mail_user_receive_id' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->all();
+    }
+    
+    /**
+     * 
      * @param unknown $user_id
      * @return \app\models\Mail[]
      */

@@ -333,9 +333,33 @@ class GameController extends \yii\web\Controller
      *
      * @return string
      */
-    public function actionNewmail()
-    {
-    	return $this->render('newmail'); 
+    public function actionNewmail() {
+		$urlparams = Yii::$app->request->queryParams;
+		if (array_key_exists ( 'mi', $urlparams )) {
+			$mailData = Mail::getMailDataToArray( Yii::$app->session ['Game']->getGameId (), Yii::$app->session ['User']->getUserID (), $urlparams ['mi'] );
+			
+			if ($mailData != null) {
+    			// Get data
+    			$dataArray = $this->getGameData();
+    			 
+    			return $this->render('newmail', [
+    					'MailData' 		=> $mailData,
+    					'GamePlayer' 	=> $dataArray['GamePlayer'],
+    					'Users'			=> $dataArray['UserData'],
+    					'Bots'			=> $dataArray['BotData'],
+    					'Color'			=> Yii::$app->session['Color'],
+    			]);
+    		}
+    	}
+    	// Get data
+    	$dataArray = $this->getGameData();
+    			 
+    	return $this->render('newmail', [
+    		'GamePlayer' 	=> $dataArray['GamePlayer'],
+    		'Users'			=> $dataArray['UserData'],
+    		'Bots'			=> $dataArray['BotData'],
+    		'Color'			=> Yii::$app->session['Color'],
+    	]);
     }
 
     /**

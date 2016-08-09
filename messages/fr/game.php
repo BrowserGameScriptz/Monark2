@@ -77,6 +77,10 @@ return [
 	'Txt_Diplomacy_Table_Status' => 'Status',
 	'Txt_Fight_Attacker' => 'Attaquant',
 	'Txt_Fight_Defender' => 'Défenseur',
+	'Txt_Mail_Re' => 'Re',
+	'Txt_Mail_By_To_{user}_{time}_{date}' => 'Réponse au mail de {user} à {time} le {date}',
+	'Txt_Mail_Subject' => 'Sujet',
+	'Txt_Mail_To' => 'Destinataire',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',
@@ -111,6 +115,7 @@ return [
 	'Button_Game_End' => 'Partie terminée',
 	'Button_Games_Quit' => 'Quitter toutes les parties en cours.',
 	'Button_Enter_In_Game' => 'Entrer dans la partie',
+	'Button_New_Mail' => 'Ecrire un mail',
 
 	/* Form */
 	'Form_Create_Name' => 'Nom de la partie',

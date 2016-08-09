@@ -11,6 +11,18 @@ $this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className
 $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
 ?>
 
+<?php 
+	$subject = "";
+	$to = "";
+	$mail = "";
+	if(isset($MailData)){
+		$subject = Yii::t('game', 'Txt_Mail_Re').":".$MailData->getMailSubject();
+		$to = $this->context->getGamePlayerName($MailData->getMailUserSendId(), $Users, $Bots);
+		$mail = "	".Yii::t('game', 'Txt_Mail_By_To_{user}_{time}_{date}', ['user' => $to, 'time' => date("H:i:s", $MailData->getMailTime()), 'date' => date("d/m/Y", $MailData->getMailTime())])." : 
+		".$MailData->getMailMessage();
+	}
+?>
+
 <div class="game-mail">
 	<div class="box box-info">
 		<div class="box-header ui-sortable-handle" style="cursor: move;">
@@ -21,15 +33,13 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 		<div class="box-body">
 			<form action="#" method="post">
 				<div class="form-group">
-					<input type="email" class="form-control" name="emailto"
-						placeholder="Email to:">
+					<input type="email" class="form-control" name="emailto" value="<?= $to ?>" placeholder="<?= Yii::t('game', 'Txt_Mail_To') ?>">
 				</div>
 				<div class="form-group">
-					<input type="text" class="form-control" name="subject"
-						placeholder="Subject">
+					<input type="text" class="form-control" name="subject" value="<?= $subject ?>" placeholder="<?= Yii::t('game', 'Txt_Mail_Subject') ?>">
 				</div>
 				<div>
-					<textarea class="textarea" style="width: 100%; height: 125px;"></textarea>
+					<textarea class="textarea" style="width: 100%; height: 125px;"><?= $mail ?></textarea>
 				</div>
 			</form>
 		</div>

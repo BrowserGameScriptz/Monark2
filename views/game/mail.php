@@ -34,7 +34,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [
 					<tbody>
 						<?php foreach($MailData as $mail): ?>
 							<tr>
-								<td class="mailbox-star"><a href="#"><i class="fa fa fa-share"></i></a></td>
+								<td class="mailbox-star"><?= Html::a("<i class='fa fa-share'></i>", ['game/newmail', 'mi' => $mail->getMailId()]); ?></td>
 								<td class="mailbox-name"><a href="#"><?= $this->context->getGamePlayerName($mail->getMailUserSendId(), $Users, $Bots) ?></a></td>
 								<td class="mailbox-subject"><b><?= $mail->getMailSubject() ?></b> - <?= $mail->getMailMessage() ?>...</td>
 								<td class="mailbox-trash"><a href="#"><i class="fa fa-trash"></i></a></td>
