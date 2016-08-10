@@ -39,6 +39,8 @@ $this->registerJs(
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+	<div class="alert-warning"><?= Yii::t('game', 'Info_Game_Lobby_Antartic') ?></div><br>
+
     <!-- Top Buttons -->
     <div style="margin: 0 auto;"><table style="border-spacing: 4px;border-collapse: separate;"><tr>
     <!-- Classic -->

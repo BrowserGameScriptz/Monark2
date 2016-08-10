@@ -662,7 +662,6 @@ class AjaxController extends Controller
 		));
 	
 		$lastMail = Mail::getUserGameMailUnReadToArray($data['game']->getGameId(), $data['user']->getUserID(), 4);
-		//TODO SET MAIL READ ChatRead::insertChatReadLog($data['game']->getGameId(), $data['user']->getUserID());
 	
 		return $this->renderAjax('last_mail', [
 				'lastMail'			=> $lastMail,

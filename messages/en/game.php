@@ -130,5 +130,8 @@ return [
     'Form_Create_Map_Id' => 'Map',
     'Form_Create_Owner' => 'Host of the game',
     'Form_Join_Pwd' => 'Password',
+		
+	// Info
+	'Info_Game_Lobby_Antartic' => 'Please note, you have a 5% chance of being moved in Antarctica',
 ];
 ?>

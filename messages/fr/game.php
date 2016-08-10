@@ -128,5 +128,8 @@ return [
 	'Form_Create_Map_Id' => 'Carte',
 	'Form_Create_Owner' => 'Hôte de la partie',
 	'Form_Join_Pwd' => 'Mot de passe',
+		
+	// Info
+	'Info_Game_Lobby_Antartic' => "Attention, vous avez 5% de chance d'être déplacé en Antarctique",
 ];
 ?>
