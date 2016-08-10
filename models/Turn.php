@@ -58,6 +58,63 @@ class Turn extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
+     * @return number[]
+     */
+    public static function getRankUserLongTurn($game_id){
+    	$timeArray = self::getUserLongTurnTimeArray($game_id);
+    	$rankArray = array();
+    	foreach($timeArray as $user){
+    		$turnTimeSum = 0;
+    		foreach($user['turn'] as $turn){
+    			$turnTimeSum += $turn->getTurnTime() - $turn->getTurnTimeBegin();
+    		}
+    		if(isset($user['count']) && $user['count'] > 0)
+    			$rankArray[$user['user_id']] = $turnTimeSum / $user['count'];
+    		else 
+    			$rankArray[$user['user_id']] = 0;
+    	}
+    	arsort($rankArray);
+    	return $rankArray; 
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return number|NULL[]
+     */
+    public static function getUserLongTurnTimeArray($game_id){
+    	$data = self::getAllGameTurnToArray($game_id);
+    	$returned = array();
+    	foreach($data as $turn){
+    		if(isset($returned[$turn->getTurnUserId()])){
+    			array_push($returned[$turn->getTurnUserId()]['turn'], $turn);
+    			$returned[$turn->getTurnUserId()]['count']++;
+    		}else{
+    			$returned[$turn->getTurnUserId()]['turn'] = array();
+    			array_push($returned[$turn->getTurnUserId()]['turn'], $turn);
+    			$returned[$turn->getTurnUserId()]['count'] = 1;
+    			$returned[$turn->getTurnUserId()]['user_id'] = $turn->getTurnUserId();
+    		}
+    	}
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return \app\classes\TurnClass[]
+     */
+    public static function getAllGameTurnToArray($game_id){
+    	$data = self::getAllGameTurn($game_id);
+    	$returned = array();
+    	foreach($data as $turn)
+    		$returned[$turn['turn_id']] = new TurnClass($turn);
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
      * @return \app\classes\TurnClass
      */
     public static function getLastTurnByGameId($game_id){
@@ -72,6 +129,15 @@ class Turn extends \yii\db\ActiveRecord
      */
     public static function getLastTurnByUserId($user_id, $game_id){
     	return new TurnClass(self::find()->where(['turn_game_id' => $game_id])->andWhere(['turn_user_id' => $user_id])->orderBy(['turn_id' => SORT_DESC])->one());
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return \app\models\Turn[]
+     */
+    public static function getAllGameTurn($game_id){
+    	return self::find()->where(['turn_game_id' => $game_id])->all();
     }
     
     /**
