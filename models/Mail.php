@@ -116,10 +116,20 @@ class Mail extends \yii\db\ActiveRecord
      * 
      * @param unknown $game_id
      * @param unknown $user_id
+     * @return number
+     */
+    public static function countUserGameMailUnread($game_id, $user_id){
+    	return count(self::getUserGameMailUnReadToArray($game_id, $user_id));
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
      * @param number $limit
      * @return \app\models\Mail[]
      */
-    public static function getUserGameMailUnRead($game_id, $user_id, $limit=4){
+    public static function getUserGameMailUnRead($game_id, $user_id, $limit=99){
     	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['not in','mail_id', MailRead::getUserHasReadMailById($game_id, $user_id)])->andWhere(['mail_del' => 0])->orderBy(['mail_time' => SORT_DESC])->limit($limit)->all();
     }
     

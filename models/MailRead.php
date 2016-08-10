@@ -56,7 +56,7 @@ class MailRead extends \yii\db\ActiveRecord
      * @return boolean
      */
     public static function getUserHasReadMail($game_id, $user_id, $mail_id){
-    	if(self::find()->where(['mail_read_mail_id' => $mail_id])->andWhere(['mail_user_receive_id' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->one() === null)
+    	if(self::find()->where(['mail_read_mail_id' => $mail_id])->andWhere(['mail_read_user_receive_id	' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->one() === null)
     		return false;
     	return true;
     }
@@ -81,7 +81,7 @@ class MailRead extends \yii\db\ActiveRecord
      * @return \app\models\MailRead[]
      */
     public static function getUserHasReadMailAll($game_id, $user_id){
-    	return self::find()->where(['mail_user_receive_id' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->all();
+    	return self::find()->where(['mail_read_user_receive_id' => $user_id])->andWhere(['mail_read_game_id' => $game_id])->all();
     }
     
     /**
@@ -100,7 +100,7 @@ class MailRead extends \yii\db\ActiveRecord
      * @return \app\models\MailRead[]
      */
     public static function getUserReadGameMail($game_id, $user_id){
-    	return self::find()->where(['mail_game_id' => $game_id])->andWhere(['mail_user_receive_id' => $user_id])->all();
+    	return self::find()->where(['mail_read_game_id' => $game_id])->andWhere(['mail_read_user_receive_id' => $user_id])->all();
     }
     
     /**

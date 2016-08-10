@@ -27,6 +27,7 @@ use yii\web\View;
 use app\models\Fight;
 use app\models\Chat;
 use app\models\ChatRead;
+use app\models\Mail;
 
 /**
  * AjaxController implements the CRUD actions for Ajax model.
@@ -46,7 +47,7 @@ class AjaxController extends Controller
 										'attackbegin', 'attackaction',
 										'movebegin', 'moveaction', 
 										'lastgold', 'income',
-										'lastchat'],
+										'lastchat', 'lastmail'],
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
@@ -146,7 +147,7 @@ class AjaxController extends Controller
     		$usersData 						= GamePlayer::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
     		$usersBot						= GamePlayer::botToUserGamePlayer($gamePlayerDataGlobal);
     		$usersData[0]					= GamePlayer::findUserZero();
-    		$usersData[-99]					= GamePlayer::findUserUnknown();
+    		$usersData[-1]					= GamePlayer::findUserUnknown();
     		$returned['usersData'] 			= $usersData;
     		$returned['usersBot']			= $usersBot;
     	}
@@ -622,6 +623,10 @@ class AjaxController extends Controller
 		]);
 	}
 	
+	/**
+	 * 
+	 * @return string
+	 */
 	public function actionSendchat(){
 		$urlArgsArray = $this->getJson(array('message'));
 		if($urlArgsArray != null){
@@ -641,5 +646,28 @@ class AjaxController extends Controller
 			]);
 		}
 		return $this->returnError();
+	}
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function actionLastmail(){
+		// Load data
+		$data = $this->getData(array(
+				'game_id' => true,
+				'user_id' => true,
+				'UsersData'	=> true,
+				'GamePlayer' => true,
+		));
+	
+		$lastMail = Mail::getUserGameMailUnReadToArray($data['game']->getGameId(), $data['user']->getUserID(), 4);
+		//TODO SET MAIL READ ChatRead::insertChatReadLog($data['game']->getGameId(), $data['user']->getUserID());
+	
+		return $this->renderAjax('last_mail', [
+				'lastMail'			=> $lastMail,
+				'UsersData'			=> $data['usersData'],
+				'BotData'			=> $data['usersBot'],
+		]);
 	}
 }

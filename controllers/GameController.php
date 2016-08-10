@@ -196,8 +196,9 @@ class GameController extends \yii\web\Controller
     	$this->updateSessionData($game_current);
     	$data = $this->getGameData();
     	$user_unread_chat = Chat::countUserUnReadChat($game_current->getGameId(), Yii::$app->session['User']->getUserID());
-
-    	// Add header info to session
+    	$user_unread_mail = Mail::countUserGameMailUnread($game_current->getGameId(), Yii::$app->session['User']->getUserID());
+    	
+    	// Add header info to session 
     	Yii::$app->session['MapData'] = array(
     			'RefreshTime'		=> $this->refreshTime,
     			'GamePlayer'		=> $data['GamePlayer'],
@@ -208,6 +209,7 @@ class GameController extends \yii\web\Controller
     			'BotData'			=> $data['BotData'],
     			'RefreshTime'		=> $this->refreshTime,
     			'UserUnReadChat'	=> $user_unread_chat,
+    			'UserUnReadMail'	=> $user_unread_mail,
     	);
     }
 
