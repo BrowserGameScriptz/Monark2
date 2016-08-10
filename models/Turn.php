@@ -66,11 +66,12 @@ class Turn extends \yii\db\ActiveRecord
     	foreach($timeArray as $user){
     		$turnTimeSum = 0;
     		foreach($user['turn'] as $turn){
-    			$turnTimeSum += $turn->getTurnTime() - $turn->getTurnTimeBegin();
+    			$turnTimeSum += ($turn->getTurnTime() - $turn->getTurnTimeBegin());
+    			print ($turn->getTurnTime() - $turn->getTurnTimeBegin())."<br>"; 
     		}
     		if(isset($user['count']) && $user['count'] > 0)
     			$rankArray[$user['user_id']] = $turnTimeSum / $user['count'];
-    		else 
+    		else
     			$rankArray[$user['user_id']] = 0;
     	}
     	arsort($rankArray);
@@ -159,8 +160,6 @@ class Turn extends \yii\db\ActiveRecord
     	// Turn Data
     	$previousTurnData 			= self::getLastTurnByGameId($game_id);
     	
-    	
-    	
     	// Game Player
     	$game_player 				= new GamePlayer();
     	$gamePlayerData 			= $game_player->findAllGamePlayerToArray($game_id);
@@ -187,17 +186,12 @@ class Turn extends \yii\db\ActiveRecord
     	$count_land = GameData::CountLandByUserId($gameData, $game_id, $next_user_id);
     	$count_gold = GameData::GoldGameDataUser($gameData, $game_id, $next_user_id, $count_land);
     	$next_gold 	= $previousUserTurnData->getTurnGold() + $count_gold;
-    
-    	$previous_turn_begin        = $previousUserTurnData->getTurnTimeBegin();
-    	$previous_turn_game_time    = $previousUserTurnData->getTurnTime();
-    	if($previous_turn_game_time != null)
-    		$turn_time              = 0;
+      	
+    	if($previousTurnData->getTurnTime() == null)
+    		$new_turn_begin = time();
     	else
-    		$turn_time              = time() - $previous_turn_game_time;
+    		$new_turn_begin = $previousTurnData->getTurnTime();
     	
-    	$new_turn_begin             = $previous_turn_begin + $turn_time;
-    	
-    	// TO CHECK
     	if($previousTurnData->getTurnUserId() == $user_id || $previousUserTurnData->getTurnUserId() == null){
     		self::createNewTurn(array(
     				'user_id' 		=> $next_user_id,

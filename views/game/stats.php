@@ -26,13 +26,13 @@ $this->registerJsFile ( "@web/js/game/ajax.js", [
 
 // Player long turn
 $donutDataPlayerLongTurn = "";
-$sum = 0;
+$sumPlayerLongTurn = 0;
 foreach($PlayerLongTurn as $user => $time)
-	$sum += $time;
+	$sumPlayerLongTurn += $time;
 
-if($sum > 0)
+if($sumPlayerLongTurn > 0)
 	foreach($PlayerLongTurn as $user => $time)
-		$donutDataPlayerLongTurn .= "{label: '".$this->context->getGamePlayerName($user, $Users, $Bots)."', data: ".($time * 100)/$sum.", color: '#".$Color[$GamePlayer[$user]->getGamePlayerColorId()]->getColorCSS()."'},";
+		$donutDataPlayerLongTurn .= "{label: '".$this->context->getGamePlayerName($user, $Users, $Bots)."', data: ".($time * 100)/$sumPlayerLongTurn.", color: '#".$Color[$GamePlayer[$user]->getGamePlayerColorId()]->getColorCSS()."'},";
 
 $this->registerJs ( '
 		  $(function () {
@@ -260,6 +260,10 @@ $this->registerJs ( '
 						<div class="box-header with-border">
 							<i class="fa fa-bar-chart-o"></i>
 							<h3 class="box-title">Joueur avec les tours les plus longs</h3>
+							<h4>Temps moyen :
+							<?= date("H", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> h 
+							<?= date("i", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> min
+							<?= date("s", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> sec</h4>
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-player-long-turn"
