@@ -29,7 +29,8 @@ return [
 	'Title_Game_Stats' => 'Game stats',
 	'Title_Game_Diplomacy' => 'Diplomacy',
 	'Title_Game_History' => 'Game history',
-	'Title_Fight_Details' => 'Fight details',	
+	'Title_Fight_Details' => 'Fight details',
+	'Title_Game_New_Mail'=> 'Send a mail',
 
 	/* Tab */
 	'Tab_Game_Name' => 'Game Name',

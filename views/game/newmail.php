@@ -14,13 +14,13 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 ?>
 
 <?php 
-	$subject = Yii::t('game', 'Txt_Mail_Subject');
-	$to = Yii::t('game', 'Txt_Mail_To');
+	$subject = "";
+	$to = "";
 	$mail = "";
 	if(isset($MailData)){
 		$subject = Yii::t('game', 'Txt_Mail_Re').":".$MailData->getMailSubject();
 		$to = $this->context->getGamePlayerName($MailData->getMailUserSendId(), $Users, $Bots);
-		$mail = "	".Yii::t('game', 'Txt_Mail_By_To_{user}_{time}_{date}', ['user' => $to, 'time' => date("H:i:s", $MailData->getMailTime()), 'date' => date("d/m/Y", $MailData->getMailTime())])." : 
+		$mail = Yii::t('game', 'Txt_Mail_By_To_{user}_{time}_{date}', ['user' => $to, 'time' => date("H:i:s", $MailData->getMailTime()), 'date' => date("d/m/Y", $MailData->getMailTime())])." : 
 		".$MailData->getMailMessage();
 	}
 ?>
@@ -34,13 +34,13 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
     	]); ?>
 <div class="game-mail">
 	<div class="box box-info">
-		<h3 class="box-titles"> <i class="fa fa-envelope"></i> Game mail</h3>
+		<h3 class="box-titles"> <i class="fa fa-envelope"></i> <?= Yii::t('game', 'Title_Game_New_Mail') ?></h3>
 		<?= $form->field($model, 'mail_to')->textInput(['style'=>'width:500px', 'value' => $to]) ?>
 		<?= $form->field($model, 'mail_subject')->textInput(['style'=>'width:500px', 'value' => $subject]) ?>
 		<?= $form->field($model, 'mail_message')->textArea(['rows' => '8', 'style'=>'width:500px', 'value' => $mail]) ?>
 		
 		<div style='text-align:center;'>
-        	 <?= Html::submitButton(Yii::t('game', 'txt_Mail_Send'), ['class' => 'btn btn-success', 'name' => 'send-button']) ?>
+        	 <?= Html::submitButton(Yii::t('game', 'Button_Mail_Send'), ['class' => 'btn btn-success', 'name' => 'send-button']) ?>
     	</div>
     	<br>
     </div>

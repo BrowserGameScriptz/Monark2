@@ -92,7 +92,7 @@ class gameSendMailForm extends Model
     public function send()
     {
     	if ($this->validate()) {
-	        $this->_game->insertMail(Yii::$app->session ['Game']->getGameId(), $this->mail_message, $this->mail_subject, 0, Yii::$app->session['User']->getUserID(), $this->mail_receive_user_id);
+	        $this->_mail->insertMail(Yii::$app->session ['Game']->getGameId(), $this->mail_message, $this->mail_subject, 0, Yii::$app->session['User']->getUserID(), $this->mail_receive_user_id);
 	        return true;
 	    }
 	    return false;

@@ -30,6 +30,7 @@ return [
 	'Title_Game_Diplomacy' => 'Portail diplomatique',
 	'Title_Game_History' => 'Histoire de la partie',
 	'Title_Fight_Details' => 'Détails du combat',
+	'Title_Game_New_Mail'=> 'Envoyer un message',
 
 	/* Tabs */
 	'Tab_Game_Name' => 'Nom de la partie',
