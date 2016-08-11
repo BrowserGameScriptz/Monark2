@@ -226,6 +226,101 @@ class Fight extends \yii\db\ActiveRecord
     }
     
     /**
+     * 
+     * @param unknown $game_id
+     * @return number[]
+     */
+    public static function getRankAttackedLandArray($game_id){
+    	$attackedArray = self::getMostAttackedLandsArray($game_id);
+    	$rankArray = array();
+    	foreach($attackedArray as $land){
+    		if(isset($land['count']) && $land['count'] > 0)
+    			$rankArray[$land['land_id']] = $land['count'];
+    		else
+    			$rankArray[$land['land_id']] = 0;
+    	}
+    	arsort($rankArray);
+    	return $rankArray;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return number
+     */
+    public static function getMostAttackedLandsArray($game_id){
+    	$data = self::fightGameDataAllToArray($game_id);
+    	$returned = array();
+    	foreach ($data as $fight){
+    		if(isset($returned[$fight->getFightDefLandId()])){
+    			$returned[$fight->getFightDefLandId()]['count']++;
+    		}else{
+    			$returned[$fight->getFightDefLandId()]['land_id'] 	= $fight->getFightDefLandId();
+    			$returned[$fight->getFightDefLandId()]['count'] 	= 1;
+    		}
+    	}
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return unknown[]
+     */
+    public static function getWinRateRankArray($game_id){
+    	$winRateArray = self::getWinUserRateArray($game_id);
+    	$rankArray = array();
+    	foreach($winRateArray as $user){
+    		if(isset($user['count']) && $user['count'] > 0)
+    			$rankArray[$user['user_id']] = $user['win'] / $user['count'];
+    		else 
+    			$rankArray[$user['user_id']] = 0;
+    	}
+    	arsort($rankArray);
+    	return $rankArray;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return number
+     */
+    public static function getWinUserRateArray($game_id){
+    	$data = self::fightGameDataAllToArray($game_id);
+    	$returned = array();
+    	foreach ($data as $fight){
+    		// Attacker
+    		if(isset($returned[$fight->getFightAtkUserId()])){
+    			$returned[$fight->getFightAtkUserId()]['count']++;
+    			if($fight->getFightConquest() == 1)
+    				$returned[$fight->getFightAtkUserId()]['win']++;
+    		}else{
+    			$returned[$fight->getFightAtkUserId()]['user_id'] 	= $fight->getFightAtkUserId();
+    			$returned[$fight->getFightAtkUserId()]['count'] 	= 1;
+    			if($fight->getFightConquest() == 1) 
+    				$returned[$fight->getFightAtkUserId()]['win'] 	= 1;
+    			else 
+    				$returned[$fight->getFightAtkUserId()]['win'] 	= 0;
+    		}
+    		
+    		// Defender    		
+    		if(isset($returned[$fight->getFightDefUserId()])){
+    			$returned[$fight->getFightDefUserId()]['count']++;
+    			if($fight->getFightConquest() == 0)
+    				$returned[$fight->getFightDefUserId()]['win']++;
+    		}else{
+    			$returned[$fight->getFightDefUserId()]['user_id'] 	= $fight->getFightDefUserId();
+    			$returned[$fight->getFightDefUserId()]['count'] 	= 1;
+    			if($fight->getFightConquest() == 0) 
+    				$returned[$fight->getFightDefUserId()]['win'] 	= 1;
+    			else 
+    				$returned[$fight->getFightDefUserId()]['win'] 	= 0;
+    		}
+    	}
+    	return $returned;
+    }
+    
+    /**
      *
      * @param unknown $game_id
      * @param unknown $user_id
@@ -321,10 +416,24 @@ class Fight extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
+     * @param unknown $limit
+     * @return \app\classes\FightDataClass[]
+     */
+    public static function fightGameDataAllToArray($game_id, $limit=null){
+    	$data = self::fightGameDataAll($game_id, $limit);
+    	$returned = array();
+    	foreach ($data as $fight)
+    		$returned[$fight['fight_id']] = new FightDataClass($fight);
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
      * @param number $limit
      * @return \app\models\Fight[]
      */
-    public static function fightGameDataAll($game_id, $limit=1000000){
+    public static function fightGameDataAll($game_id, $limit=10000000){
     	return self::find()
     	->where(['fight_game_id' => $game_id])
     	->orderBy(['fight_time' => SORT_DESC])

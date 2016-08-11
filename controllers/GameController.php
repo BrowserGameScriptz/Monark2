@@ -437,22 +437,23 @@ class GameController extends \yii\web\Controller
      */
     public function actionStats()
     {
-    	// To JSon
-    	$mostAttackedLandArray = "";
-    	$bestPlayerWinRatioArray = "";
-    	$landOwnedArray = "";
-    	$playerLongTurnArray = Turn::getRankUserLongTurn(Yii::$app->session['Game']->getGameId());
-
     	// Get data
     	$dataArray = $this->getGameData();
+    	
+    	// Get stats
+    	$mostAttackedLandArray = Fight::getRankAttackedLandArray(Yii::$app->session['Game']->getGameId());
+    	$playerWinRateArray = Fight::getWinRateRankArray(Yii::$app->session['Game']->getGameId());
+    	$landOwnedArray = GameData::countLandUserArray($dataArray['GameData'], Yii::$app->session['Game']->getGameId());
+    	$playerLongTurnArray = Turn::getRankUserLongTurn(Yii::$app->session['Game']->getGameId());
     	
     	return $this->render('stats', [
     			'GamePlayer' 		=> $dataArray['GamePlayer'],
     			'Users'				=> $dataArray['UserData'],
     			'Bots'				=> $dataArray['BotData'],
+    			'Land'			=> Yii::$app->session['Land'],
     			'Color'				=> Yii::$app->session['Color'],
     			'MostAttackedLand'	=> $mostAttackedLandArray,
-    			'BestPlayerWinRatio'=> $bestPlayerWinRatioArray,
+    			'PlayerWinRate'		=> $playerWinRateArray,
     			'LandOwned'			=> $landOwnedArray,
     			'PlayerLongTurn'	=> $playerLongTurnArray,
 		]);

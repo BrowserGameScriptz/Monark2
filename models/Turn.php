@@ -65,10 +65,8 @@ class Turn extends \yii\db\ActiveRecord
     	$rankArray = array();
     	foreach($timeArray as $user){
     		$turnTimeSum = 0;
-    		foreach($user['turn'] as $turn){
-    			$turnTimeSum += ($turn->getTurnTime() - $turn->getTurnTimeBegin());
-    			print ($turn->getTurnTime() - $turn->getTurnTimeBegin())."<br>"; 
-    		}
+    		foreach($user['turn'] as $turn)
+    			$turnTimeSum += ($turn->getTurnTime() - $turn->getTurnTimeBegin()); 
     		if(isset($user['count']) && $user['count'] > 0)
     			$rankArray[$user['user_id']] = $turnTimeSum / $user['count'];
     		else

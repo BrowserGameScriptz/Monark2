@@ -43,6 +43,8 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 	                      
 	                      <?php if ($conquest): ?>
 	                      	<?= Yii::t('game', 'Txt_History_Conquest'); ?> <font color="#<?= $Color[$GamePlayer[$fight->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $Land[$fight->getFightDefLandId()]->getLandName() ?></font>
+	                      <?php else: ?>
+	                      	<?= Yii::t('game', 'Txt_History_In'); ?> <font color="#<?= $Color[$GamePlayer[$fight->getFightAtkUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $Land[$fight->getFightDefLandId()]->getLandName() ?></font>
 	                      <?php endif; ?>
 	                      
 	                      <?php if($concerned): ?>

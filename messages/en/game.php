@@ -70,6 +70,7 @@ return [
 	'Txt_History_Defeated' => 'defeated',
 	'Txt_History_Conquest' => 'and captured',
 	'Txt_History_Lost' => 'lost versus',
+	'Txt_History_In' => 'in',
 	'Txt_Diplomacy_Status_War' => 'War',
 	'Txt_Diplomacy_Status_Tension' => 'Tension',
 	'Txt_Diplomacy_Status_Peace' => 'Peace',
