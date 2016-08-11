@@ -76,7 +76,7 @@ if($sumPlayerLongTurn > 0)
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-most-attacked-land"
-								style="height: 300px; padding: 0px; position: relative;">
+								style="height: 360px; padding: 0px; position: relative;">
 								<canvas class="flot-base" width="743" height="375"
 									style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 595px; height: 300px;"></canvas>
 								<canvas class="flot-overlay" width="743" height="375"
@@ -99,7 +99,7 @@ if($sumPlayerLongTurn > 0)
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-best-player-win-ratio"
-								style="height: 300px; padding: 0px; position: relative;">
+								style="height: 360px; padding: 0px; position: relative;">
 								<canvas class="flot-base" width="743" height="375"
 									style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 595px; height: 300px;"></canvas>
 								<canvas class="flot-overlay" width="743" height="375"
@@ -124,7 +124,7 @@ if($sumPlayerLongTurn > 0)
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-land-owned"
-								style="height: 300px; padding: 0px; position: relative;">
+								style="height: 360px; padding: 0px; position: relative;">
 								<canvas class="flot-base" width="743" height="375"
 									style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 595px; height: 300px;"></canvas>
 								<canvas class="flot-overlay" width="743" height="375"
@@ -149,7 +149,7 @@ if($sumPlayerLongTurn > 0)
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-player-long-turn"
-								style="height: 300px; padding: 0px; position: relative;">
+								style="height: 360px; padding: 0px; position: relative;">
 								<canvas class="flot-base" width="743" height="375"
 									style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 595px; height: 300px;"></canvas>
 								<canvas class="flot-overlay" width="743" height="375"

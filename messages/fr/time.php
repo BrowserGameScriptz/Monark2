@@ -8,6 +8,7 @@ return [
     'Before_Ago'    => 'Il y a',
 	'After_Ago'		=> ' ',
 	'Second'        => 'seconde',
+	'Minute'	 	=> 'minute',
 	'Hour'        	=> 'heure',
 	'Day'        	=> 'jour',
 	'Week'        	=> 'semaine',

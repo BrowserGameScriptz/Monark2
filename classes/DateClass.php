@@ -27,7 +27,7 @@ class DateClass
 	 */
 	private function timeElapsedToString()
 	{    
-	   $periods = array(Yii::t('time', 'second'), Yii::t('time', 'minute'), Yii::t('time', 'hour'), Yii::t('time', 'day'), Yii::t('time', 'week'), Yii::t('time', 'month'), Yii::t('time', 'year'), Yii::t('time', 'decade'));
+	   $periods = array(Yii::t('time', 'Second'), Yii::t('time', 'Minute'), Yii::t('time', 'Hour'), Yii::t('time', 'Day'), Yii::t('time', 'Week'), Yii::t('time', 'Month'), Yii::t('time', 'Year'), Yii::t('time', 'Decade'));
 	   $lengths = array("60","60","24","7","4.35","12","10");
 	
 	   $now = time();

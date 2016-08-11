@@ -36,7 +36,7 @@ use dmstr\widgets\Alert;
 </div>
 
 <footer class="hidden-xs" style="text-align: center;">
-<font color="white">Copyright &copy; <?= Yii::$app->name['name'] ?> 2016 - Version 2.0.3.0 - Theme by <a href="http://almsaeedstudio.com" target="_blank">Almsaeed Studio</a></font>
+<font color="white">Copyright &copy; <?= Yii::$app->name['name'] ?> 2016 - Version 2.0.5.0 - Theme by <a href="http://almsaeedstudio.com" target="_blank">Almsaeed Studio</a></font>
 </footer>
 
 <!-- Control Sidebar -->
