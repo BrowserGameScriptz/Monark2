@@ -450,7 +450,7 @@ class GameController extends \yii\web\Controller
     			'GamePlayer' 		=> $dataArray['GamePlayer'],
     			'Users'				=> $dataArray['UserData'],
     			'Bots'				=> $dataArray['BotData'],
-    			'Land'			=> Yii::$app->session['Land'],
+    			'Land'				=> Yii::$app->session['Land'],
     			'Color'				=> Yii::$app->session['Color'],
     			'MostAttackedLand'	=> $mostAttackedLandArray,
     			'PlayerWinRate'		=> $playerWinRateArray,

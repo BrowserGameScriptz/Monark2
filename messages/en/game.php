@@ -83,6 +83,15 @@ return [
 	'Txt_Mail_By_To_{user}_{time}_{date}' => 'Reply to email of {user} at {time} the {date}',
 	'Txt_Mail_Subject' => 'Subject',
 	'Txt_Mail_To' => 'Mail to',
+	'Txt_Stats_Most_Attacked_Land_Title' => 'Most attacked lands',
+	'Txt_Stats_Most_Attacked_Land_Description_{nb}' => 'Top {nb}',
+	'Txt_Stats_Win_Rate_Title' => 'Win rate rank',
+	'Txt_Stats_Win_Rate_Description' => 'Average win rate',
+	'Txt_Stats_Count_Occuped_Land_Player_Title' => 'Countries occupied',
+	'Txt_Stats_Count_Occuped_Land_Player_Description' => 'Average number of countries',
+	'Txt_Stats_Player_Long_Turn_Title' => 'Player with the longest turn',
+	'Txt_Stats_Player_Long_Turn_Description' => 'Averge turn length',
+	'Txt_Stats_Player_Long_Turn_Warning' => 'Warning incorrect data in case of resumed game',
 		
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',

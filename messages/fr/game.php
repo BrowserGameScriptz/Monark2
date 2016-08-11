@@ -83,6 +83,15 @@ return [
 	'Txt_Mail_By_To_{user}_{time}_{date}' => 'Réponse au mail de {user} à {time} le {date}',
 	'Txt_Mail_Subject' => 'Sujet',
 	'Txt_Mail_To' => 'Destinataire',
+	'Txt_Stats_Most_Attacked_Land_Title' => 'Pays les plus attaqués',
+	'Txt_Stats_Most_Attacked_Land_Description_{nb}' => 'Top {nb}',
+	'Txt_Stats_Win_Rate_Title' => 'Ratio victoire / défaite',
+	'Txt_Stats_Win_Rate_Description' => 'Ratio victoire / défaite moyen',
+	'Txt_Stats_Count_Occuped_Land_Player_Title' => 'Pays occupés',
+	'Txt_Stats_Count_Occuped_Land_Player_Description' => 'Nombre de pays moyen',
+	'Txt_Stats_Player_Long_Turn_Title' => 'Joueur avec les tours les plus longs',
+	'Txt_Stats_Player_Long_Turn_Description' => 'Temps moyen des tours',
+	'Txt_Stats_Player_Long_Turn_Warning' => 'Attention données inexactes en cas de reprise de partie',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',
