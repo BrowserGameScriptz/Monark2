@@ -205,7 +205,11 @@ class Turn extends \yii\db\ActiveRecord
     
     	// If a user loose OR user quit the game
     	if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
-    		return self::NewTurn($game_id, $next_user_id, $gameData);
+    		// if end game
+    		/*if()
+    			
+    		else*/ 
+    			return self::NewTurn($game_id, $next_user_id, $gameData);
     	}
     
     	// If bot user
