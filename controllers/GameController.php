@@ -45,7 +45,7 @@ class GameController extends \yii\web\Controller
 						'class' => AccessControl::className(),
 						'rules' => [
 								[
-										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight'],
+										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight', 'rank'],
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
@@ -543,11 +543,12 @@ class GameController extends \yii\web\Controller
     public function actionClean()
     {
     	// DB
-			$gamePlayer = new GamePlayer();
-			$userGamesList = $gamePlayer->findAllUserGameId(Yii::$app->session['User']->getId());
-			foreach ($userGamesList as $userGame) {
-				$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->game_player_game_id);
-			}
+		$gamePlayer = new GamePlayer();
+		$userGamesList = $gamePlayer->findAllUserGameId(Yii::$app->session['User']->getId());
+		foreach ($userGamesList as $userGame) {
+			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->game_player_game_id);
+		}
+		
     	// Session
     	$this->setSessionDataNull();
     	Yii::$app->session->setFlash('info', Yii::t('game', 'Notice_Games_Quit'));
@@ -570,7 +571,8 @@ class GameController extends \yii\web\Controller
     		// validation failed: $errors is an array containing error messages
     		$errors = $model->errors;
     		return $this->render('create', [
-    				'model' => $model,
+    				'model' 	=> $model,
+    				'MapData' 	=> Map::findAllMapToArray(0),
     		]);
     	}
     }
@@ -802,5 +804,14 @@ class GameController extends \yii\web\Controller
 	    	]);
     	}else
     		return $this->actionLobby();
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionRank()
+    {
+    	return $this->render('rank');
     }
 }
