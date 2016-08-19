@@ -5,6 +5,7 @@ namespace app\bot;
 use Yii;
 use app\models\Fight;
 use yii\base\Object;
+use app\models\Turn;
 
 /**
  * This is the model class for bot gestion.
@@ -94,6 +95,8 @@ class Bot extends \yii\base\Object
 		$this->bot_eval->BotEvalLand();
 		$this->bot_eval_player		= $this->bot_eval->eval_player;
 		$this->bot_eval_land		= $this->bot_eval->eval_land;
+		
+		Turn::NewTurn($game_id, $bot_id, $this->bot_data->gameData);
 	}
 	
 	

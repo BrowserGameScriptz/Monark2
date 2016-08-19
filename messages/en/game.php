@@ -144,6 +144,6 @@ return [
     'Form_Join_Pwd' => 'Password',
 		
 	// Info
-	'Info_Game_Lobby_Antartic' => 'Please note, you have a 5% chance of being moved in Antarctica',
+	'Info_Game_Lobby_Antartic' => 'Information : You have a 5% chance of being moved in Antarctica',
 ];
 ?>

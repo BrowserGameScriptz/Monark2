@@ -1,3 +1,6 @@
+// Prepare header
+$("document").ready(function(){	reloadHeader();});
+
 // Land interaction
 $(document).on("click", ".land_content", function (){
     var land_id = $(this).attr("i");

@@ -190,6 +190,10 @@ class Turn extends \yii\db\ActiveRecord
     	else
     		$new_turn_begin = $previousTurnData->getTurnTime();
     	
+    	// If end
+    	if(GameData::checkGameEnd($user_id, $game_id, $gameData))
+    		return Game::updateGameStatut($game_id, 100);
+    		
     	if($previousTurnData->getTurnUserId() == $user_id || $previousUserTurnData->getTurnUserId() == null){
     		self::createNewTurn(array(
     				'user_id' 		=> $next_user_id,
@@ -200,24 +204,18 @@ class Turn extends \yii\db\ActiveRecord
     		));
     	}
     
-    	// If end
-    	//Game::GameEnd($gameid);
+    	// If bot
+    	if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0){
+    		$Bot = new Bot($game_id, $next_user_id);
+    		return true;
+    		//return $Bot->BotStartTurn($gameid, $next_user_id, $next_gold);
+    	}	
     
     	// If a user loose OR user quit the game
     	if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
-    		// if end game
-    		/*if()
-    			
-    		else*/ 
-    			return self::NewTurn($game_id, $next_user_id, $gameData);
+    		return self::NewTurn($game_id, $next_user_id, $gameData);
     	}
-    
-    	// If bot user
-    	/*if($allgameplayerorder[$next_order]['bot'] > 0 AND $next_user_info['type'] == 2){
-    		$Bot = new Bot();
-    		return $Bot->BotStartTurn($gameid, $next_user_id, $next_gold);
-    	}*/
-    
+
     }
     
     /**

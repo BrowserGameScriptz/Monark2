@@ -45,8 +45,8 @@ class GameController extends \yii\web\Controller
 						'class' => AccessControl::className(),
 						'rules' => [
 								[
-										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight', 'rank'],
-										'allow' => Access::UserIsInStartedGame(), // Into a started game
+										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight', 'rank', 'end'],
+										'allow' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame(), // Into a started || ended game
 								],
 								[
 										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'newmail', 'addbot'],
@@ -109,12 +109,25 @@ class GameController extends \yii\web\Controller
 	 * @param unknown $game_id
 	 * @return boolean
 	 */
-	public function checkStarted($game_id)
+	public function checkStarted()
 	{
-		if((new Game)->getGameById($game_id)->getGameStatut() >= 50)
+		if(Yii::$app->session['Game']->getGameStatut() >= 50)
 			return true;
 		else
 			return false;
+	}
+	
+	/**
+	 *
+	 * @param unknown $game_id
+	 * @return boolean
+	 */
+	public function checkEnded()
+	{
+		if(Yii::$app->session['Game']->getGameStatut() > 99)
+			return false;
+		else
+			return true;
 	}
 
 	/**
@@ -257,12 +270,12 @@ class GameController extends \yii\web\Controller
      * @param unknown $bot
      * @return unknown
      */
-    public static function getGamePlayerName($id, $user, $bot){
-    	if(isset($user[$id]) || isset($bot[$id])){
+    public static function getGamePlayerName($id, $user, $bot){    	
+    	if(isset($user[$id]) || isset($bot[abs($id)])){
 	    	if($id >= 0)
 	    		$returned = $user[$id]->getUserName();
 	    	else 
-	    		$returned = $bot[$id]->getUserName();
+	    		$returned = $bot[abs($id)]->getUserName();
     	}else{
     		$returned = $user[-1]->getUserName();
     	}
@@ -520,9 +533,9 @@ class GameController extends \yii\web\Controller
 		        	'continentSQl'	=> $continentsSQL,
 		        ]);
     		}else
-    			return $this->actionStart();
+    			return $this->redirect(Url::to(['game/start']),302);
     	}else
-    		return $this->actionIndex();
+    		return $this->redirect(Url::to(['game/index']),302);
     }
 
 		/**
@@ -558,7 +571,7 @@ class GameController extends \yii\web\Controller
     	$this->setSessionDataNull();
     	Yii::$app->session->setFlash('info', Yii::t('game', 'Notice_Games_Quit'));
 
-    	return $this->actionIndex();
+    	return $this->redirect(Url::to(['game/index']),302);
     }
 
     /**
@@ -663,7 +676,7 @@ class GameController extends \yii\web\Controller
 						    	$turn->createGameFirstTurn($game_current->getGameId() , array_values($gameTurnOrder)[0]->getUserID(), $gameData);
 
 						    	// Update Game statut
-						    	(new Game())->updateGameStatut($game_current->getGameId(), 50);
+						    	Game::updateGameStatut($game_current->getGameId(), 50);
 						    	Yii::$app->session['Game']->setGameStatut(50);
 			    				return $this->render('start');
 			    			}else
@@ -680,7 +693,7 @@ class GameController extends \yii\web\Controller
 	    	Yii::$app->session['Game']->setGameStatut(50);
 	    	return $this->render('start');
     	}else
-    		return $this->actionLobby();
+    		return $this->redirect(Url::to(['game/lobby']),302);
     }
 
     
@@ -704,39 +717,42 @@ class GameController extends \yii\web\Controller
      * @return string
      */
     public function actionMap(){
-    	// Create 1rst turn
-    	// Check if a turn exist
-
+    	Yii::$app->session['Game'] = Game::getGameById(Yii::$app->session['Game']->getGameId());
+    	
     	// The game as started
-    	if($this->checkStarted(Yii::$app->session['Game']->getGameId())){
-    		//$urlparams 		= Yii::$app->request->queryParams;
-
-    		// Session
-    		$this->updateSessionData(Yii::$app->session['Game']);
-
-	    	// Get data
-	    	$dataArray = $this->getGameData();
-
-	    	// Data to map
-	    	return $this->render('map', [
-	    			'User' 			=> Yii::$app->session['User'],
-	    			'Resource' 		=> Yii::$app->session['Resource'],
-	    			'Continent' 	=> Yii::$app->session['Contient'],
-	    			'Map' 			=> Yii::$app->session['Map'],
-	    			'Land'			=> Yii::$app->session['Land'],
-	    			'Color'			=> Yii::$app->session['Color'],
-	    			'Frontier'		=> Yii::$app->session['Frontier'],
-	    			'Building'		=> Yii::$app->session['Building'],
-	    			'Game' 			=> $dataArray['Game'],
-	    			'GamePlayer' 	=> $dataArray['GamePlayer'],
-	    			'GameData' 		=> $dataArray['GameData'],
-	    			'Turn' 			=> $dataArray['TurnData'],
-	    			'Users'			=> $dataArray['UserData'],
-	    			'UserFrontier'	=> $dataArray['FrontierData'],
-	    			'RefreshTime'	=> $this->refreshTime,
-	    	]);
+    	if($this->checkStarted()){
+    		
+    		// Game is end
+			if($this->checkEnded()){
+				
+	    		// Session
+	    		$this->updateSessionData(Yii::$app->session['Game']);
+	
+		    	// Get data
+		    	$dataArray = $this->getGameData();
+	
+		    	// Data to map
+		    	return $this->render('map', [
+		    			'User' 			=> Yii::$app->session['User'],
+		    			'Resource' 		=> Yii::$app->session['Resource'],
+		    			'Continent' 	=> Yii::$app->session['Contient'],
+		    			'Map' 			=> Yii::$app->session['Map'],
+		    			'Land'			=> Yii::$app->session['Land'],
+		    			'Color'			=> Yii::$app->session['Color'],
+		    			'Frontier'		=> Yii::$app->session['Frontier'],
+		    			'Building'		=> Yii::$app->session['Building'],
+		    			'Game' 			=> $dataArray['Game'],
+		    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+		    			'GameData' 		=> $dataArray['GameData'],
+		    			'Turn' 			=> $dataArray['TurnData'],
+		    			'Users'			=> $dataArray['UserData'],
+		    			'UserFrontier'	=> $dataArray['FrontierData'],
+		    			'RefreshTime'	=> $this->refreshTime,
+		    	]);
+    		}else
+    			return $this->redirect(Url::to(['game/end']),302);
     	}else
-    		return $this->actionLobby();
+    		return $this->redirect(Url::to(['game/lobby']),302);
     }
     
     /**
@@ -746,5 +762,14 @@ class GameController extends \yii\web\Controller
     public function actionRank()
     {
     	return $this->render('rank');
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionEnd()
+    {
+    	return $this->render('end'); 
     }
 }

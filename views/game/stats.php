@@ -95,7 +95,10 @@ if($sumPlayerLongTurn > 0)
 							<i class="fa fa-bar-chart-o"></i>
 							<h3 class="box-title"><?= Yii::t('game','Txt_Stats_Win_Rate_Title') ?></h3>
 							<h4><?= Yii::t('game','Txt_Stats_Win_Rate_Description') ?> :
-							<?= round($sumWinRate/count($PlayerWinRate), 2)*100 ?> %</h4>
+							<?php if(count($PlayerWinRate) > 0): ?>
+								<?= round($sumWinRate/count($PlayerWinRate), 2)*100 ?> 
+							<?php endif; ?>
+							%</h4>
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-best-player-win-ratio"
@@ -120,7 +123,10 @@ if($sumPlayerLongTurn > 0)
 							<i class="fa fa-bar-chart-o"></i>
 							<h3 class="box-title"><?= Yii::t('game','Txt_Stats_Count_Occuped_Land_Player_Title') ?></h3>
 							<h4><?= Yii::t('game','Txt_Stats_Count_Occuped_Land_Player_Description') ?> :
-							<?= round($sumLandOwned/count($LandOwned)) ?></h4>
+							<?php if(count($LandOwned) > 0): ?>
+								<?= round($sumLandOwned/count($LandOwned)) ?>
+							<?php endif; ?>
+							</h4>
 						</div>
 						<div class="box-body">
 							<div id="donut-chart-land-owned"
@@ -143,7 +149,7 @@ if($sumPlayerLongTurn > 0)
 							<i class="fa fa-bar-chart-o"></i>
 							<h3 class="box-title"><?= Yii::t('game','Txt_Stats_Player_Long_Turn_Title') ?></h3>
 							<h4><?= Yii::t('game','Txt_Stats_Player_Long_Turn_Description') ?> :
-							<?= date("h", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> h
+							<!--<? date("h ", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> h-->
 							<?= date("i", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> min
 							<?= date("s", $sumPlayerLongTurn/count($PlayerLongTurn)) ?> sec *</h4>
 						</div>
@@ -272,7 +278,7 @@ $this->registerJs ( '
 	          var percent = Math.round(series.percent);
 	          var number = series.data[0][1];
 			  var date = new Date(number*1000);
-			  return ("<b>" + date.getHours() + "h " + date.getMinutes() + "m " + date.getSeconds() + "s</b>");
+			  return ("<b>" + date.getMinutes() + "m " + date.getSeconds() + "s</b>"); // date.getHours() + "h " +
 	        }
           }
 

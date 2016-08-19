@@ -53,16 +53,12 @@ use app\classes\Access;
                 	['label' => Yii::t('menu', 'Title_Game_Lobby'), 'icon' => 'fa fa-users', 'url' => ['game/lobby'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInNotStartedGame()], 
                 		
                 	// Statut ==> in game
-                	['label' => Yii::t('menu', 'Title_Game_Map'), 'icon' => 'fa fa-globe', 'url' => ['game/map'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                	['label' => Yii::t('menu', 'Title_Game_News'), 'icon' => 'fa fa-newspaper-o', 'url' => ['game/news'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                	['label' => Yii::t('menu', 'Title_Game_Diplomacy'), 'icon' => 'glyphicon glyphicon-knight', 'url' => ['game/diplomacy'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                	['label' => Yii::t('menu', 'Title_Game_History'), 'icon' => 'fa fa-history', 'url' => ['game/history'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                	['label' => Yii::t('menu', 'Title_Game_Stats'), 'icon' => 'fa fa-pie-chart', 'url' => ['game/stats'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                	['label' => Yii::t('menu', 'Title_Game_Ranking'), 'icon' => 'fa fa-star', 'url' => ['game/rank'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame()],
-                		
-                	// Statut ==> after game
-                	//['label' => Yii::t('menu', 'Title_Quit_Game'), 'icon' => 'fa fa-sign-out', 'url' => ['game/quit'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => isset(Yii::$app->session['Game'])],	 
-                	['label' => Yii::t('menu', 'Title_Game_Stats'), 'icon' => 'fa fa-bar-chart', 'url' => ['game/stats'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_Map'), 'icon' => 'fa fa-globe', 'url' => ['game/map'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_News'), 'icon' => 'fa fa-newspaper-o', 'url' => ['game/news'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_Diplomacy'), 'icon' => 'glyphicon glyphicon-knight', 'url' => ['game/diplomacy'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_History'), 'icon' => 'fa fa-history', 'url' => ['game/history'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_Stats'), 'icon' => 'fa fa-pie-chart', 'url' => ['game/stats'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
+                	['label' => Yii::t('menu', 'Title_Game_Ranking'), 'icon' => 'fa fa-star', 'url' => ['game/rank'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame()],
                 	
                 	// Always in game
                 	['label' => Yii::t('menu', 'Title_Game_Chat'), 'icon' => 'fa fa-weixin', 'url' => ['game/chat'], 'template' => '<a href="{url}" data-method="post">{icon}{label}</a>', 'visible' => Access::UserIsInGame()],

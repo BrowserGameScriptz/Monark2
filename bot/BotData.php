@@ -27,7 +27,7 @@ class BotData extends \yii\base\Object
 		$this->getData();
 	}
 	
-	public function getData(){
+	private function getData(){
 		// Resources
 		if(Yii::$app->session['Resource'] == null){
 			$this->resource 			= Resource::findAllResourcesToArray();}else{
