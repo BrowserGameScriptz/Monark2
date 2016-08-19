@@ -6,6 +6,7 @@ use yii\web\View;
 use app\assets\AppAsset;
 use app\models\GamePlayer;
 use yii\widgets\ActiveForm;
+use app\classes\DateClass;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('game', 'Title_Loby');
@@ -31,7 +32,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
     	<br>
     <?php endif; ?>
     
-    <?php if(isset($model->errors)): ?>
+    <?php if(isset($model->errors["Game"])): ?>
     	<div class='alert alert-danger'><?= $model->errors["Game"][0] ?></div>
     <?php endif;?>
     
@@ -69,21 +70,16 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
             ],
             [
 	            'filter' => false,
+	            'attribute' => Yii::t('game', 'Tab_Map'),
+	            'value'     => function ($model, $key, $index, $column) use ($mapData){
+	            return $mapData[$model->game_map_id]->getMapName();
+	            },
+            ],
+            [
+	            'filter' => false,
 	            'attribute' => Yii::t('game', 'Tab_Create_Time'),
 	            'value'     => function ($model, $key, $index, $column){
-		            if(time() - $model->game_create_time <= 60){
-		            	return Yii::t('game', 'Text_Second_{nb}', ['nb' => date('s', time() - $model->game_create_time)]);
-		            }elseif(time() - $model->game_create_time <= 60*60){
-		            	return Yii::t('game', 'Text_Min_{nb}', ['nb' => date('i', time() - $model->game_create_time)]);
-		            }elseif(time() - $model->game_create_time <= 60*60*24){
-		            	return Yii::t('game', 'Text_Hour_{nb}', ['nb' => date('H', time() - $model->game_create_time)]);
-		            }elseif(time() - $model->game_create_time <= 60*60*24*2){
-		            	return Yii::t('game', 'Text_Yesterday');
-		            }elseif(time() - $model->game_create_time <= 60*60*24*7){
-		            	return Yii::t('game', 'Text_Week');
-		            }else{
-		            	return date(Yii::t('game', 'Text_Date'), $model->game_create_time);
-		            }
+		            return (new DateClass($model->game_create_time))->showTimeElapsed();
 	            },
             ],
             [

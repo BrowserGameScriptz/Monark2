@@ -280,11 +280,13 @@ class GameController extends \yii\web\Controller
     	$showEnded = true;
     	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,], $showStarted, $showEnded);
     	$userGamePlayerData = GamePlayer::findAllUserGameIdToArray(Yii::$app->session['User']->getId());
+    	$mapData			= Map::findAllMapToArray();
     	return $this->render('index', [
     			'model' 				=> $model,
     			'searchModel'   		=> $searchModel,
     			'dataProvider'  		=> $dataProvider,
     			'userGamePlayerData' 	=> $userGamePlayerData,
+    			'mapData'				=> $mapData,
     	]);
     }
 
