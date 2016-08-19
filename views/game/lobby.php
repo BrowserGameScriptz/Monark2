@@ -39,6 +39,8 @@ $this->registerJs(
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+	<div class="alert-warning"><?= Yii::t('game', 'Info_Game_Lobby_Antartic') ?></div><br>
+
     <!-- Top Buttons -->
     <div style="margin: 0 auto;"><table style="border-spacing: 4px;border-collapse: separate;"><tr>
     <!-- Classic -->
@@ -51,6 +53,7 @@ $this->registerJs(
     </tr></table></div>
     <br>
     <?php Pjax::begin(['id' => 'GridView-Lobby', 'timeout' => $ajax_reload]); ?>
+    <!--  TODO : LOBBY TO FORM = CHECK COLOR EXISTS... -->
     <?= GridView::widget([
         'summary' => '',
         'dataProvider' => $dataProvider,
@@ -85,7 +88,8 @@ $this->registerJs(
                 'value'     => function ($model, $key, $index, $column) use ($colorList, $colorSQl){
                 	if((Yii::$app->session['User']->getId() == $model->game_player_user_id) || ((Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID()) && $model->game_player_bot > 0))
                 		return Html::activeDropDownList($model, 'game_player_color_id',
-                			ArrayHelper::map($colorSQl,
+                			// TODO : Revoir utilisation de ColorClass
+                				ArrayHelper::map($colorSQl,
                 				function($model, $defaultValue) {
                 					return $model->color_id;
                 				},

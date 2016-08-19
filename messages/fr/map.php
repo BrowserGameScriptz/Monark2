@@ -17,6 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+	// DB
+	'risk' => 'Risk officielle',
+	'USA' => 'Etats Unis',
+	'africa' => 'Afrique',
+	'france' => 'France',
+	'europa' => 'Europe',
+	'russia' => 'Russie',
+		
     /* Title */
 	'Title_Map' => 'Carte de la partie',
 

@@ -28,6 +28,9 @@ return [
 	'Title_Game_News' => 'Dernières actualités',
 	'Title_Game_Stats' => 'Statistiques',
 	'Title_Game_Diplomacy' => 'Portail diplomatique',
+	'Title_Game_History' => 'Histoire de la partie',
+	'Title_Fight_Details' => 'Détails du combat',
+	'Title_Game_New_Mail'=> 'Envoyer un message',
 
 	/* Tabs */
 	'Tab_Game_Name' => 'Nom de la partie',
@@ -64,6 +67,33 @@ return [
 	'Txt_Game_Won_Time' => 'Meilleur temps',
 	'Txt_Game_Pwd' => 'Mot de passe de la partie',
 	'Txt_Game_Key' => 'Clé de la partie',
+	'Txt_History_Defeated' => 'a vaincu',
+	'Txt_History_Conquest' => "et s'est emparé de",
+	'Txt_History_Lost' => 'a perdu contre',
+	'Txt_History_In' => 'en',
+	'Txt_Diplomacy_Status_War' => 'Guerre',
+	'Txt_Diplomacy_Status_Tension' => 'Tension',
+	'Txt_Diplomacy_Status_Peace' => 'Paix',
+	'Txt_Diplomacy_Table_User' => 'Joueur',
+	'Txt_Diplomacy_Table_Progress' => 'Progression',
+	'Txt_Diplomacy_Table_Status' => 'Status',
+	'Txt_Fight_Attacker' => 'Attaquant',
+	'Txt_Fight_Defender' => 'Défenseur',
+	'Txt_Mail_Re' => 'Re',
+	'Txt_Mail_By_To_{user}_{time}_{date}' => 'Réponse au mail de {user} à {time} le {date}',
+	'Txt_Mail_Subject' => 'Sujet',
+	'Txt_Mail_To' => 'Destinataire',
+	'Txt_Stats_Most_Attacked_Land_Title' => 'Pays les plus attaqués',
+	'Txt_Stats_Most_Attacked_Land_Description_{nb}' => 'Top {nb}',
+	'Txt_Stats_Win_Rate_Title' => 'Ratio victoires / défaites',
+	'Txt_Stats_Win_Rate_Description' => 'Ratio victoires / défaites moyen',
+	'Txt_Stats_Count_Occuped_Land_Player_Title' => 'Pays occupés',
+	'Txt_Stats_Count_Occuped_Land_Player_Description' => 'Nombre de pays moyen',
+	'Txt_Stats_Player_Long_Turn_Title' => 'Joueur avec les tours les plus longs',
+	'Txt_Stats_Player_Long_Turn_Description' => 'Temps moyen des tours',
+	'Txt_Stats_Player_Long_Turn_Warning' => 'Attention données inexactes en cas de reprise de partie',
+	'Txt_Show_Started_Game' => 'Montrer les parties en cours',
+	'Txt_Show_Ended_Game' => 'Montrer les parties terminées',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',
@@ -98,6 +128,7 @@ return [
 	'Button_Game_End' => 'Partie terminée',
 	'Button_Games_Quit' => 'Quitter toutes les parties en cours.',
 	'Button_Enter_In_Game' => 'Entrer dans la partie',
+	'Button_New_Mail' => 'Ecrire un mail',
 
 	/* Form */
 	'Form_Create_Name' => 'Nom de la partie',
@@ -109,5 +140,8 @@ return [
 	'Form_Create_Map_Id' => 'Carte',
 	'Form_Create_Owner' => 'Hôte de la partie',
 	'Form_Join_Pwd' => 'Mot de passe',
+		
+	// Info
+	'Info_Game_Lobby_Antartic' => "Attention, vous avez 5% de chance d'être déplacé en Antarctique",
 ];
 ?>

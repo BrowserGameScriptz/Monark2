@@ -5,12 +5,8 @@
 ?>
 <?php $i = 0; ?>
 <?php foreach($lastChat as $chat): ?>
-	<li><a href='#'><?php if(isset($Users[$chat->getChatUserId()])): ?>
-          <?= $UsersData[$chat->getChatUserId()]->getUserName(); ?>
-    <?php else: ?>
-          <?= $UsersData[-99]->getUserName(); ?>
-    <?php endif; ?>
-	: <?= $chat->getChatMessage() ?></a></li>
+	<li><a href='#'>
+	<?= $this->context->getGamePlayerName($chat->getChatUserId(), $UsersData, $BotData) ?> : <?= $chat->getChatMessage() ?></a></li>
 	<?php $i++; ?>
 <?php endforeach; ?>
 <?php if($i == 0): ?>

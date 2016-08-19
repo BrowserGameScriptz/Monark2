@@ -28,6 +28,9 @@ return [
 	'Title_Game_News' => 'Game news',
 	'Title_Game_Stats' => 'Game stats',
 	'Title_Game_Diplomacy' => 'Diplomacy',
+	'Title_Game_History' => 'Game history',
+	'Title_Fight_Details' => 'Fight details',
+	'Title_Game_New_Mail'=> 'Send a mail',
 
 	/* Tab */
 	'Tab_Game_Name' => 'Game Name',
@@ -64,7 +67,34 @@ return [
 	'Txt_Game_Won_Time' => 'Game Won Time',
 	'Txt_Game_Pwd' => 'Game Pwd',
 	'Txt_Game_Key' => 'Game Key',
-
+	'Txt_History_Defeated' => 'defeated',
+	'Txt_History_Conquest' => 'and captured',
+	'Txt_History_Lost' => 'lost versus',
+	'Txt_History_In' => 'in',
+	'Txt_Diplomacy_Status_War' => 'War',
+	'Txt_Diplomacy_Status_Tension' => 'Tension',
+	'Txt_Diplomacy_Status_Peace' => 'Peace',
+	'Txt_Diplomacy_Table_User' => 'Player',
+	'Txt_Diplomacy_Table_Progress' => 'Progress',
+	'Txt_Diplomacy_Table_Status' => 'Status',
+	'Txt_Fight_Attacker' => 'Attacker',
+	'Txt_Fight_Defender' => 'Defender',
+	'Txt_Mail_Re' => 'Re',
+	'Txt_Mail_By_To_{user}_{time}_{date}' => 'Reply to email of {user} at {time} the {date}',
+	'Txt_Mail_Subject' => 'Subject',
+	'Txt_Mail_To' => 'Mail to',
+	'Txt_Stats_Most_Attacked_Land_Title' => 'Most attacked lands',
+	'Txt_Stats_Most_Attacked_Land_Description_{nb}' => 'Top {nb}',
+	'Txt_Stats_Win_Rate_Title' => 'Win rate rank',
+	'Txt_Stats_Win_Rate_Description' => 'Average win rate',
+	'Txt_Stats_Count_Occuped_Land_Player_Title' => 'Countries occupied',
+	'Txt_Stats_Count_Occuped_Land_Player_Description' => 'Average number of countries',
+	'Txt_Stats_Player_Long_Turn_Title' => 'Player with the longest turn',
+	'Txt_Stats_Player_Long_Turn_Description' => 'Averge turn length',
+	'Txt_Stats_Player_Long_Turn_Warning' => 'Warning incorrect data in case of resumed game',
+	'Txt_Show_Started_Game' => 'Show started games',
+	'Txt_Show_Ended_Game' => 'Show ended games',
+		
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',
   'Error_Password_Incorrect' => 'A password is required : incorrect password.',
@@ -91,15 +121,16 @@ return [
     /* Buttons */
     'Button_Send' => 'Send',
     'Button_Game_Create' => 'Create a game',
-		'Button_Game_Enter' => 'Join the game',
-		'Button_Map_Enter' => 'Join the map',
-		'Button_Last_Game_Enter' => 'Return to last game',
+	'Buton_Game_Enter' => 'Join the game',
+	'Button_Map_Enter' => 'Join the map',
+	'Button_Last_Game_Enter' => 'Return to last game',
     'Button_Game_Return' => 'Return to game',
     'Button_Game_Spec' => 'Spectate the game',
     'Button_Game_Ban' => 'You were ban of the game',
-		'Button_Game_End' => 'End Game',
-		'Button_Games_Quit' => 'Quit all open games',
-	  'Button_Enter_In_Game' => 'Join the game',
+	'Button_Game_End' => 'End Game',
+	'Button_Games_Quit' => 'Quit all open games',
+	'Button_Enter_In_Game' => 'Join the game',
+	'Button_New_Mail' => 'Write a mail',
 
     /* Form */
     'Form_Create_Name' => 'Name',
@@ -111,5 +142,8 @@ return [
     'Form_Create_Map_Id' => 'Map',
     'Form_Create_Owner' => 'Host of the game',
     'Form_Join_Pwd' => 'Password',
+		
+	// Info
+	'Info_Game_Lobby_Antartic' => 'Please note, you have a 5% chance of being moved in Antarctica',
 ];
 ?>

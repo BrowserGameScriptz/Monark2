@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use app\models\Game;
 use app\classes\Crypt;
+use app\models\Map;
 
 /**
  * LoginForm is the model behind the login form.
@@ -15,6 +16,7 @@ class gameCreateForm extends Model
     public $game_name;
     public $game_pwd;
     public $game_max_player;
+    public $game_map_id;
 
     private $_game;
 
@@ -29,7 +31,7 @@ class gameCreateForm extends Model
     {
         return [
             // gamename and password are both required
-            [['game_name', 'game_max_player'], 'required'],
+            [['game_name', 'game_max_player', 'game_map_id'], 'required'],
         	['game_pwd', 'string'],
         	// password is validated by validatePassword()
         	['game_name', 'validateGameName'],
@@ -37,6 +39,8 @@ class gameCreateForm extends Model
             ['game_pwd', 'validatePassword'],
         	// player_max is validated by validatePlayerMax()
         	['game_max_player', 'validatePlayerMax'],
+        	// map id valid
+        	['game_map_id', 'validateMapId']
         ];
     }
 
@@ -69,6 +73,21 @@ class gameCreateForm extends Model
     }
     
     /**
+     * Validates the map.
+     * This method serves as the inline validation for map.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateMapId($attribute, $params)
+    {
+    	if(Map::findMapById($this->game_map_id) == null)
+    		$this->addError($attribute, Yii::t('game', 'Error_Incorrect_Map'));
+    }
+    
+    
+    
+    /**
      * Validates the mail.
      * This method serves as the inline validation for player_max.
      *
@@ -98,7 +117,7 @@ class gameCreateForm extends Model
 	    	$game_pwd = (new Crypt($this->game_pwd))->crypt();
 	    	 
 	    	// Create in db
-	        $this->_game->createGame($game_name, $game_pwd, $this->game_max_player);
+	        $this->_game->createGame($game_name, $game_pwd, $this->game_max_player, $this->game_map_id);
 	        return true;
 	    }
 	    return false;

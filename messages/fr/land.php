@@ -18,7 +18,7 @@ return [
         "Chita" => "Chita",
         "Japan" => "Japon",
         "Kamchatka" => "Kamchatka",
-        "Middle East" => "moyen-Orient",
+        "Middle East" => "Moyen-Orient",
         "Mongolia" => "Mongolie",
         "Siam" => "Siam",
         "Siberia" => "Sibérie",

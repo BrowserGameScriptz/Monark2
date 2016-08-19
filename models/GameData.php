@@ -63,6 +63,33 @@ class GameData extends \yii\db\ActiveRecord
     }
 
     /**
+     * 
+     * @param unknown $gameData
+     * @param unknown $game_id
+     * @return number[]
+     */
+    public static function countLandUserArray($gameData, $game_id){
+    	$returned = array();
+    	foreach ($gameData as $data)
+    		if(!isset($returned[$data->getGameDataUserId()]))
+    			$returned[$data->getGameDataUserId()] = self::CountLandByUserId($gameData, $game_id, $data->getGameDataUserId());
+    			 
+    	return $returned;
+    }
+    
+    /**
+     *
+     * @param unknown $gameData
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return number
+     */
+    public static function CountLandByUserId($gameData, $game_id, $user_id)
+    {
+    	return count(self::getUserLandId($gameData, $game_id, $user_id));
+    }
+    
+    /**
      *
      * @param unknown $gameId
      * @return \app\classes\GameClass
@@ -81,18 +108,6 @@ class GameData extends \yii\db\ActiveRecord
     	foreach (self::getGameDataById($game_Id) as $data)
     		$returned[$data['game_data_land_id']] = new GameDataClass($data);
     	return $returned;
-    }
-    
-    /**
-     * 
-     * @param unknown $gameData
-     * @param unknown $game_id
-     * @param unknown $user_id
-     * @return number
-     */
-    public static function CountLandByUserId($gameData, $game_id, $user_id)
-    {
-    	return count(self::getUserLandId($gameData, $game_id, $user_id));
     }
     
     /**
