@@ -42,7 +42,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 		                	}
 		                ?>
 		                <tr>
-		                  <td><a href="#" style="text-decoration: none;"><font size='4' color="#<?= $Color[$GamePlayer[$player->getGamePlayerUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= ($player->getGamePlayerUserId() >= 0)?$Users[$player->getGamePlayerUserId()]->getUserName():$Bots[$player->getGamePlayerUserId()]->getUserName(); ?></font></a></td>
+		                  <td><a href="#" style="text-decoration: none;"><font size='4' color="#<?= $Color[$GamePlayer[$player->getGamePlayerUserId()]->getGamePlayerColorId()]->getColorCSS(); ?>"><?= $this->context->getGamePlayerName($player->getGamePlayerUserId(), $Users, $Bots) ?></font></a></td>
 		                  <td>
 		                    <div class="progress progress">
 		                      <div class="progress-bar progress-bar-<?= $statusColor; ?>" style="width: <?= $status; ?>%"><?= $status;?> %</div>

@@ -36,7 +36,7 @@ class MapClass{
 		return $this->mapId;
 	}
 	
-	public function getmapName(){
+	public function getMapName(){
 		return Yii::t('map', $this->mapName);
 	}
 }

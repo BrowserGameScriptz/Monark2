@@ -32,7 +32,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		                    ]); ?>
 		                <?php endif; ?>
 		                <?= $Land[$land_id]->getLandName() ?>
-		                <?php if($Continent[$Land[$land_id]->getLandContinentId()]->getContinentId() != 0): ?>
+		                <?php if(isset($Continent) && $Continent[$Land[$land_id]->getLandContinentId()]->getContinentId() != 0): ?>
 		                	( <?= Yii::t('continent', $Continent[$Land[$land_id]->getLandContinentId()]->getContinentName()); ?> )
 						<?php endif; ?>
 						</font></td>
@@ -67,11 +67,7 @@ $this->registerCssFile("@web/css/ajax.css");
 							<?php if($userLand): ?>
 								<?= Yii::t('ajax', 'Text_Owner_Player'); ?>
 							<?php else: ?>
-							 	<?php if($GameData[$land_id]->getGameDataUserId() >= 0): ?>
-							 		<?= $UsersData[$GameData[$land_id]->getGameDataUserId()]->getUserName(); ?>
-							 	<?php else: ?>
-							 		<?= $BotData[abs($GameData[$land_id]->getGameDataUserId())]->getUserName(); ?>
-							 	<?php endif; ?>
+							 	<?= $this->context->getGamePlayerName($GameData[$land_id]->getGameDataUserId(), $UsersData, $BotData) ?>
 							<?php endif; ?>
 						</font></td>
 					</tr>
