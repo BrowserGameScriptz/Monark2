@@ -273,7 +273,7 @@ class GameController extends \yii\web\Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($model=null)
     {
     	$searchModel = new GameSearch();
     	$showStarted  = true;
@@ -281,6 +281,7 @@ class GameController extends \yii\web\Controller
     	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,], $showStarted, $showEnded);
     	$userGamePlayerData = GamePlayer::findAllUserGameIdToArray(Yii::$app->session['User']->getId());
     	return $this->render('index', [
+    			'model' 				=> $model,
     			'searchModel'   		=> $searchModel,
     			'dataProvider'  		=> $dataProvider,
     			'userGamePlayerData' 	=> $userGamePlayerData,
@@ -535,7 +536,7 @@ class GameController extends \yii\web\Controller
     	$this->setSessionDataNull();
     	Yii::$app->session->setFlash('info', Yii::t('game', 'Notice_Game_Quit'));
 
-    	return $this->actionIndex();
+    	return $this->redirect(Url::to(['game/index']),302);
     }
 
 		/**
@@ -546,9 +547,9 @@ class GameController extends \yii\web\Controller
     {
     	// DB
 		$gamePlayer = new GamePlayer();
-		$userGamesList = $gamePlayer->findAllUserGameIdToArray(Yii::$app->session['User']->getId(), 1);
-		foreach ($userGamesList as $userGame) {
-			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->getGamePlayerGameId());
+		$userGamesList = $gamePlayer->findAllUserGameIdToArray(Yii::$app->session['User']->getId(), 0);
+		foreach ($userGamesList as $game) {
+			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $game->getGamePlayerGameId());
 		}
 		
     	// Session
@@ -585,53 +586,13 @@ class GameController extends \yii\web\Controller
      */
     public function actionJoin()
     {
-    	$urlparams = Yii::$app->request->queryParams;
-    	if (array_key_exists('gid', $urlparams)) {
-			// Game Data
-			$gameData = (new Game())->getGameById($urlparams['gid']);
-
-			if($gameData != null){
-				// Checks
-				$game_player = new GamePlayer();
-				$gameUserList = $game_player->findAllUserGameIdToArray($user_id);
-				
-				// If already enter in this game
-				if(isset($gameUserList[$urlparams['gid']])){
-					$game_player->updateEnterInGame(Yii::$app->session['User']->getId(), $urlparams['gid']);
-					$game_player->userJoinGame($gameData, Yii::$app->session['User']->getId(), true);
-					Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-					return $this->actionLobby();
-					// If never joined in this game
-				}else if(!isset($gameUserList[$urlparams['gid']])){
-					// Max player
-					if($gameData->getGamePlayerMax() < (new Game())->getGameCountPlayer($urlparams['gid'])+1){
-						Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Game_Full'));
-						return $this->actionLobby();
-					}else{
-						// all inputs are valid
-						$model = new GameJoinForm($gameData);
-
-						// Confirm
-						if($model->join())
-							Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-							else
-								Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-						return $this->actionLobby();
-					}
-				// In another game
-				}else{
-					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_User_Already_In_Game'));
-					return $this->redirect(Url::to(['game/index']),302);
-				}
-			}else
-				return $this->actionIndex();
-    	}elseif(isset($model)){
-    		// validation failed: $errors is an array containing error messages
-    		Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-    		$errors = $model->errors;
-    		return $this->redirect(Url::to(['game/index']),302);
-    	}else
-    		return $this->redirect(Url::to(['game/index']),302);
+    	$model = new GameJoinForm();
+    	if ($model->join()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    	}else{
+    		return $this->actionIndex($model);
+    	}
     }
 
     /**
@@ -640,23 +601,13 @@ class GameController extends \yii\web\Controller
      */
     public function actionSpec()
     {
-    	if(false){
-	    	$urlparams = Yii::$app->request->queryParams;
-	    	if(array_key_exists('gid', $urlparams))
-	    		$model = new GameJoinForm((new Game())->getGameById($urlparams['gid']));
-	    		if (isset($model) && $model->joinSpec()) {
-	    			// all inputs are valid
-	    			Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-	    			return $this->actionLobby();
-	    		}elseif(isset($model)){
-	    			// validation failed: $errors is an array containing error messages
-	    			Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-	    			$errors = $model->errors;
-	    			return $this->actionIndex();
-	    		}else
-	    			return $this->actionIndex();
+    	$model = new GameJoinForm();
+    	if ($model->load(Yii::$app->request->post()) && $model->spec()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    	}else{
+    		return $this->actionIndex($model);
     	}
-    	return $this->actionIndex();
     }
 
     /**

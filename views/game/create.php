@@ -47,7 +47,7 @@ $this->title = Yii::t ( 'game', 'Title_Create' );
         <? //$form->field($model, 'game_difficulty_id') ?>-->
         <?= $form->field($model, 'game_pwd')->passwordInput()->label(Yii::t('game', 'Txt_Game_Pwd'))?>
 
-        <div class="form-group">
+    <div class="form-group">
 		<div class="col-lg-offset-3 col-lg-2">
                 <?= Html::submitButton(Yii::t('game', 'Title_Create'), ['class' => 'btn btn-primary', 'name' => 'create-button'])?>
             </div>

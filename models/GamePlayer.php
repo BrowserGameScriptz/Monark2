@@ -208,11 +208,11 @@ class GamePlayer extends \yii\db\ActiveRecord
     }
 
     /**
-     * 
-     * @param unknown $userGamePlayerData
-     * @return NULL
+     * Get the first game id of a joined game by user
+     * @param GamePlayerClass $userGamePlayerData
+     * @return Integer
      */
-    public static function userIsInGameId($userGamePlayerData){
+    public static function userIsInGameId(array $userGamePlayerData) {
     	$userIsInGameId = null;
 		foreach($userGamePlayerData as $game)
 			if($game->getGamePlayerQuit() == 0 && $userIsInGameId === null)

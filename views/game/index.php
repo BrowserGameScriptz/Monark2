@@ -4,6 +4,8 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\web\View;
 use app\assets\AppAsset;
+use app\models\GamePlayer;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('game', 'Title_Loby');
@@ -14,12 +16,7 @@ $this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className
 $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
 ?>
 
-<?php
-$userWasInGameId = null;
-foreach($userGamePlayerData as $game)
-	if($game->getGamePlayerQuit() == 0 && $userWasInGameId === null)
-		$userWasInGameId = $game->getGamePlayerGameId();
-?>
+<?php $userWasInGameId = GamePlayer::userIsInGameId($userGamePlayerData); ?>
 
 <div class="game-index">
 
@@ -33,8 +30,16 @@ foreach($userGamePlayerData as $game)
     <?php else: ?>
     	<br>
     <?php endif; ?>
+    
+    <?php if(isset($model->errors)): ?>
+    	<div class='alert alert-danger'><?= $model->errors["Game"][0] ?></div>
+    <?php endif;?>
+    
     <?= Html::checkbox('agree', true, ['label' => Yii::t('game', 'Txt_Show_Started_Game')]); ?>
     <?= Html::checkbox('agree', true, ['label' => Yii::t('game', 'Txt_Show_Ended_Game')]); ?>
+    
+    <?php $form = ActiveForm::begin (['id' => 'join-form']);?>
+    
     <?php Pjax::begin(['id' => 'list_game']); ?>
     <?= GridView::widget([
         'summary' => '',
@@ -90,16 +95,16 @@ foreach($userGamePlayerData as $game)
             	if($model->game_statut == 0){
             		//if(!isset($player_exist_game) OR $player_exist_game['quit'] <= 1){
             			return "<center><table style='border-collapse: separate;border-spacing: 5px;'><tr>"
-            			."<td>".Html::a(Yii::t('game', 'Buton_Game_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['class'=>'btn btn-success'])."</td>"
-            			."<td>".Html::a(Yii::t('game', 'Button_Game_Spec')." <i class='fa fa-eye'></i>", ['/game/spec', 'gid' => $model->game_id], ['class'=>'btn btn-primary'])."</td>"
+            			."<td>".Html::a(Yii::t('game', 'Buton_Game_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-success'])."</td>"
+            			."<td>".Html::a(Yii::t('game', 'Button_Game_Spec')." <i class='fa fa-eye'></i>", ['/game/spec', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-primary'])."</td>"
             			."</tr></table></center>";
             		/*}else{
             			return "<center><div class='btn btn-danger'>".Yii::t('game', 'Button_Game_Ban')."</div></center>";
             		}*/
             	}elseif($model->game_statut >= 25 && isset($userGamePlayerData[$model->game_id])){
-            		return "<center>".Html::a(Yii::t('game', 'Button_Map_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['class'=>'btn btn-primary'])."</center>";
+            		return "<center>".Html::a(Yii::t('game', 'Button_Map_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-success'])."</center>";
             	}elseif($model->game_statut >= 25){
-            		return "<center>".Html::a(Yii::t('game', 'Button_Game_Spec')." <i class='fa fa-eye'></i>", ['/game/spec', 'gid' => $model->game_id], ['class'=>'btn btn-primary'])."</center>";
+            		return "<center>".Html::a(Yii::t('game', 'Button_Game_Spec')." <i class='fa fa-eye'></i>", ['/game/spec', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-primary'])."</center>";
             	}elseif($model->game_statut > 99){
             		return "<center>".Yii::t('game', 'Button_Game_End')."</center>";
             	}
@@ -108,4 +113,5 @@ foreach($userGamePlayerData as $game)
         ],
     ]); ?>
 	<?php Pjax::end(); ?>
+    <?php ActiveForm::end(); ?>
 </div>
