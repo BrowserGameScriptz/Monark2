@@ -208,6 +208,19 @@ class GamePlayer extends \yii\db\ActiveRecord
     }
 
     /**
+     * 
+     * @param unknown $userGamePlayerData
+     * @return NULL
+     */
+    public static function userIsInGameId($userGamePlayerData){
+    	$userIsInGameId = null;
+		foreach($userGamePlayerData as $game)
+			if($game->getGamePlayerQuit() == 0 && $userIsInGameId === null)
+				$userIsInGameId = $game->getGamePlayerGameId();
+		return $userIsInGameId;
+    }
+    
+    /**
      *
      * @param unknown $gameId
      * @return \app\classes\GameClass
@@ -277,6 +290,20 @@ class GamePlayer extends \yii\db\ActiveRecord
     }
 
     /**
+     * 
+     * @param unknown $user_id
+     * @param unknown $quit
+     * @return \app\classes\GamePlayerClass[]
+     */
+    public static function findAllUserGameIdToArray($user_id, $quit=null){
+    	$data = self::findAllUserGameId($user_id, $quit);
+    	$returned = array();
+    	foreach ($data as $game)
+    		$returned[$game['game_player_game_id']] = new GamePlayerClass($game);
+    	return $returned;
+    }
+    
+    /**
      *
      * @param unknown $colorData
      * @return NULL|\app\classes\ColorClass
@@ -301,19 +328,13 @@ class GamePlayer extends \yii\db\ActiveRecord
     /**
      *
      * @param unknown $user_id
-     * @return \app\queries\GamePlayer|NULL
-     */
-    public static function findUserGameId($user_id){
-    	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => 0])->one();
-    }
-
-    /**
-     *
-     * @param unknown $user_id
      * @return \app\queries\GamePlayer[]
      */
-    public static function findAllUserGameId($user_id){
-    	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => 0])->all();
+    public static function findAllUserGameId($user_id, $quit=null){
+    	if($quit === null)
+    		return self::find()->where(['game_player_user_id' => $user_id])->all();
+    	else
+    		return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => $quit])->all();
     }
 
     /**

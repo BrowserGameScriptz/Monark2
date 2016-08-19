@@ -276,12 +276,14 @@ class GameController extends \yii\web\Controller
     public function actionIndex()
     {
     	$searchModel = new GameSearch();
-    	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,]);
-    	$game_user_in_id = GamePlayer::findUserGameId(Yii::$app->session['User']->getId());
+    	$showStarted  = true;
+    	$showEnded = true;
+    	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,], $showStarted, $showEnded);
+    	$userGamePlayerData = GamePlayer::findAllUserGameIdToArray(Yii::$app->session['User']->getId());
     	return $this->render('index', [
-    			'searchModel'   => $searchModel,
-    			'dataProvider'  => $dataProvider,
-    			'gameInId'		=> $game_user_in_id,
+    			'searchModel'   		=> $searchModel,
+    			'dataProvider'  		=> $dataProvider,
+    			'userGamePlayerData' 	=> $userGamePlayerData,
     	]);
     }
 
@@ -544,9 +546,9 @@ class GameController extends \yii\web\Controller
     {
     	// DB
 		$gamePlayer = new GamePlayer();
-		$userGamesList = $gamePlayer->findAllUserGameId(Yii::$app->session['User']->getId());
+		$userGamesList = $gamePlayer->findAllUserGameIdToArray(Yii::$app->session['User']->getId(), 1);
 		foreach ($userGamesList as $userGame) {
-			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->game_player_game_id);
+			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->getGamePlayerGameId());
 		}
 		
     	// Session
@@ -591,15 +593,16 @@ class GameController extends \yii\web\Controller
 			if($gameData != null){
 				// Checks
 				$game_player = new GamePlayer();
-
+				$gameUserList = $game_player->findAllUserGameIdToArray($user_id);
+				
 				// If already enter in this game
-				if($game_player->findUserGameIdIfExited(Yii::$app->session['User']->getId(), $urlparams['gid']) != null){
+				if(isset($gameUserList[$urlparams['gid']])){
 					$game_player->updateEnterInGame(Yii::$app->session['User']->getId(), $urlparams['gid']);
 					$game_player->userJoinGame($gameData, Yii::$app->session['User']->getId(), true);
 					Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
 					return $this->actionLobby();
 					// If never joined in this game
-				}else if($game_player->findUserGameId(Yii::$app->session['User']->getId()) == null){
+				}else if(!isset($gameUserList[$urlparams['gid']])){
 					// Max player
 					if($gameData->getGamePlayerMax() < (new Game())->getGameCountPlayer($urlparams['gid'])+1){
 						Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Game_Full'));
@@ -629,29 +632,6 @@ class GameController extends \yii\web\Controller
     		return $this->redirect(Url::to(['game/index']),302);
     	}else
     		return $this->redirect(Url::to(['game/index']),302);
-    }
-
-		/**
-     *
-     * @return string
-     */
-    public function actionReturn()
-    {
-    	$urlparams = Yii::$app->request->queryParams;
-			$gamePlayer = new GamePlayer();
-			$game_player = $gamePlayer->findUserGameId(Yii::$app->session['User']->getId());
-			if ($game_player != null) {
-				if ($game_player->game_player_game_id > 0) {
-					//Yii::$app->getSession()->setFlash('info', Yii::t('game', 'Notice_Last_Game_Entered'));
-					return $this->redirect(array('game/join', 'gid' => $game_player->game_player_game_id), 302);
-				} else {
-					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Last_Game_Cant_Join')." n°".$game_player->game_player_game_id);
-					return $this->redirect(Url::to(['game/index']),302);
-				}
-			} else {
-				Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Last_Game_Cant_Join')." n°".$game_player->game_player_game_id);
-				return $this->redirect(Url::to(['game/index']),302);
-			}
     }
 
     /**

@@ -42,6 +42,10 @@ class GamePlayerClass{
 		return $this->gamePlayerUserId;
 	}
 
+	public function getGamePlayerGameId(){
+		return $this->game_player_game_id;
+	}
+	
 	public function getGamePlayerColorId(){
 		return $this->gamePlayerColorId;
 	}

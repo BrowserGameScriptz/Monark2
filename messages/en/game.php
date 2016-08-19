@@ -92,6 +92,8 @@ return [
 	'Txt_Stats_Player_Long_Turn_Title' => 'Player with the longest turn',
 	'Txt_Stats_Player_Long_Turn_Description' => 'Averge turn length',
 	'Txt_Stats_Player_Long_Turn_Warning' => 'Warning incorrect data in case of resumed game',
+	'Txt_Show_Started_Game' => 'Show started games',
+	'Txt_Show_Ended_Game' => 'Show ended games',
 		
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Game name already used',

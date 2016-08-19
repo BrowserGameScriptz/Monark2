@@ -92,6 +92,8 @@ return [
 	'Txt_Stats_Player_Long_Turn_Title' => 'Joueur avec les tours les plus longs',
 	'Txt_Stats_Player_Long_Turn_Description' => 'Temps moyen des tours',
 	'Txt_Stats_Player_Long_Turn_Warning' => 'Attention données inexactes en cas de reprise de partie',
+	'Txt_Show_Started_Game' => 'Montrer les parties en cours',
+	'Txt_Show_Ended_Game' => 'Montrer les parties terminées',
 
 	/* Errors & success */
 	'Error_Name_Already_Use' => 'Nom de partie déjà utilisé',
