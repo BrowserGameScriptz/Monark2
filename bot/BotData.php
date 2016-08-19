@@ -9,10 +9,12 @@ use app\models\GamePlayer;
 use app\models\GameData;
 use app\models\Building;
 use app\models\Frontier;
+use app\models\Game;
 
 class BotData extends \yii\base\Object
 {
 	private $bot;
+	public $game;
 	public $resource;
 	public $currentTurn;
 	public $gamePlayer;
@@ -35,7 +37,10 @@ class BotData extends \yii\base\Object
 			
 		// Current turn
 		$this->currentTurn				= Turn::getLastTurnByGameId($this->bot->game_id);
-															 
+				
+		// Current game
+		$this->game						= Game::getGameById($this->bot->game_id);
+		
 		// Game Player
 		$gamePlayerDataGlobal 			= GamePlayer::findAllGamePlayer($this->bot->game_id);
 		$gamePlayerData 				= GamePlayer::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);

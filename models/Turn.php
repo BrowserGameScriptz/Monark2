@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\classes\TurnClass;
+use app\bot\Bot;
 
 /**
  * This is the model class for table "turn".
