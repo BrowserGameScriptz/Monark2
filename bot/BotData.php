@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\bot;
 
@@ -26,48 +26,97 @@ class BotData extends \yii\base\Object
 	public $frontier;
 	public $botFrontierData;
 	
+	/**
+	 * 
+	 * @param unknown $bot
+	 */
 	public function __construct($bot){
 		$this->bot = $bot;
 		$this->getData();
 	}
 	
+	/**
+	 * 
+	 */
 	private function getData(){
-		// Resources
+		$this->getResourcesData();
+		$this->getTurnData();
+		$this->getGame();
+		$this->getGamePlayerData();
+		$this->getGameData();
+		$this->getBuildingData();
+		$this->getFrontierData();
+		$this->getDifficultyData();
+	}
+	
+	/**
+	 * 
+	 */
+	private function getResourcesData(){
 		if(Yii::$app->session['Resource'] == null){
-			$this->resource 			= Resource::findAllResourcesToArray();}else{
-			$this->resource 			= Yii::$app->session['Resource'];}
-			
-		// Current turn
-		$this->currentTurn				= Turn::getLastTurnByGameId($this->bot->game_id);
-				
-		// Current game
-		$this->game						= Game::getGameById($this->bot->game_id);
+			$this->resource = Resource::findAllResourcesToArray();
+		}else{
+			$this->resource = Yii::$app->session['Resource'];
+		}
+	}	
+
+	/**
+	 * 
+	 */
+	private function getTurnData(){
+		$this->currentTurn = Turn::getLastTurnByGameId($this->bot->game_id);
+	}
+	
+	/**
+	 * 
+	 */
+	private function getGame(){
+		$this->game	= Game::getGameById($this->bot->game_id);
+	}
 		
-		// Game Player
+	/**
+	 * 
+	 */
+	private function getGamePlayerData(){
 		$gamePlayerDataGlobal 			= GamePlayer::findAllGamePlayer($this->bot->game_id);
 		$gamePlayerData 				= GamePlayer::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);
 		$gamePlayerData[0]				= GamePlayer::findPlayerZero();
 		$gamePlayerData[-99]			= GamePlayer::findPlayerUnknown();
 		$this->gamePlayer				= $gamePlayerData;
-														 
-		// Game data
-		// TODO global & botLand use global game data
-		$this->gameData					= GameData::getGameDataByIdToArray($this->bot->game_id);
-		$this->botLand					= GameData::getUserLandId(null, $this->bot->game_id, $this->bot->bot_id);	 
+	}
 		
-		// Building
-		$this->buildingData				= Building::findAllBuildingToArray();
-			
-		// Frontier	 
-		if(Yii::$app->session['Frontier'] == null)
-			Yii::$app->session->set("Frontier", Frontier::findAllFrontier($this->game->getMapId()));
-		$this->frontier 		= Yii::$app->session['Frontier'];
-		$this->botFrontierData	= Frontier::userHaveFrontierLandArray($this->gameData, $this->bot->bot_id, $this->frontier);
-	
-		// Difficulty
-		$this->difficultyData			= Difficulty::findAllDifficulyToArray();
+	/**
+	 * 
+	 */
+	private function getGameData(){
+		// TODO global & botLand use global game data (1 req db)
+		$this->gameData	= GameData::getGameDataByIdToArray($this->bot->game_id);
+		$this->botLand	= GameData::getUserLandId(null, $this->bot->game_id, $this->bot->bot_id);	 
 	}
 	
+	/**
+	 * 
+	 */
+	private function getBuildingData(){
+		$this->buildingData	= Building::findAllBuildingToArray();
+	}
+	
+	/**
+	 * 
+	 */
+	private function getFrontierData(){
+		if (Yii::$app->session ['Frontier'] == null)
+			Yii::$app->session->set ( "Frontier", Frontier::findAllFrontier ($this->game->getMapId () ) );
+		$this->frontier = Yii::$app->session ['Frontier'];
+		$this->botFrontierData = Frontier::userHaveFrontierLandArray ( $this->gameData, $this->bot->bot_id, $this->frontier );
+	}
+	
+	/**
+	 * 
+	 */
+	private function getDifficultyData(){
+		$this->difficultyData			= Difficulty::findAllDifficulyToArray($this->game->getDifficultyId());
+	}
 }
 
 ?>

@@ -16,8 +16,6 @@ class Bot extends \yii\base\Object
 	public $game_id;
 	public $bot_id;
 	public $bot_data;
-	public $pc_build_id;
-	public $frt_build_id;
 
 	// Bot Eval
 	public $bot_eval;
@@ -32,10 +30,11 @@ class Bot extends \yii\base\Object
 	public $def_max_units;
 	public $bonus_fort;
 	public $bonus_camp;
-	public $ressource_gold_point;
-	public $ressource_silver_point;
-	public $ressource_bronze_point;
-
+	public $pc_build_id;
+	public $frt_build_id;
+	public $frt_multiplier;
+	public $pc_multiplier;
+	
 	// Execute action
 	public $bot_action;
 
@@ -64,10 +63,11 @@ class Bot extends \yii\base\Object
 
 		// Set informations
 		$this->units_point 				= 1;
-		$this->ressource_gold_point 	= 3;
-		$this->ressource_silver_point 	= 2;
-		$this->ressource_bronze_point 	= 1;
-
+		$this->pc_build_id				= 2;
+		$this->pc_multiplier			= 1.5;
+		$this->frt_build_id				= 1;
+		$this->frt_multiplier			= 1.5;
+		
 		$this->bot_log->botAddEndAction("Init");
 		
 		/* INIT end */
@@ -97,6 +97,7 @@ class Bot extends \yii\base\Object
 	
 	private function botDoActions(){
 		$this->bot_action			= new BotAction($this);
+		$this->bot_action->BotInitActionLand();
 		$this->bot_action->BotEndTurn();
 	}
 	
