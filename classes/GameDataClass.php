@@ -60,12 +60,23 @@ class GameDataClass{
 		return explode(";", $this->gameDataBuildings);
 	}
 	
+	public function setGameDataBuildings($newBuildingId){
+		if($this->gameDataBuildings == "")
+			$this->gameDataBuildings = $newBuildingId;
+		else
+			$this->gameDataBuildings = $this->gameDataBuildings.";".$newBuildingId;
+	}
+	
 	public function getGameDataCapital(){
 		return $this->gameDataCapital;
 	}
 	
 	public function getGameDataUnits(){
 		return $this->gameDataUnits;
+	}
+	
+	public function setGameDataUnits($newUnits){
+		$this->gameDataUnits = $newUnits;
 	}
 	
 	public function getGameDataBuildingsToBuild($landResourceId, $buildingData){

@@ -24,6 +24,7 @@ class BotData extends \yii\base\Object
 	public $buildingData;
 	public $difficultyData;
 	public $frontier;
+	public $userData;
 	public $botFrontierData;
 	
 	/**
@@ -47,6 +48,7 @@ class BotData extends \yii\base\Object
 		$this->getBuildingData();
 		$this->getFrontierData();
 		$this->getDifficultyData();
+		$this->getUserData();
 	}
 	
 	/**
@@ -115,7 +117,37 @@ class BotData extends \yii\base\Object
 	 * 
 	 */
 	private function getDifficultyData(){
-		$this->difficultyData			= Difficulty::findAllDifficulyToArray($this->game->getDifficultyId());
+		$this->difficultyData			= Difficulty::findAllDifficulyToArray()[$this->game->getDifficultyId()];
+	}
+	
+	private function getUserData(){
+		$this->userData					= GamePlayer::findUserBot($this->bot->bot_id);
+	}
+	
+	/**
+	 * 
+	 * @param number $minus
+	 */
+	public function updateTurnGold(number $minus){
+		$this->currentTurn->setTurnGold($this->currentTurn->getTurnGold() - $minus);
+	}
+	
+	/**
+	 * 
+	 * @param number $minus
+	 * @param number $land_id
+	 */
+	public function updateGameDataUnits(number $minus, number $land_id){
+		$this->gameData[$land_id]->setGameDataUnits($this->gameData[$land_id]->getGameDataUnits() - $minus);
+	}
+	 
+	/**
+	 * 
+	 * @param number $newBuildingId
+	 * @param number $land_id
+	 */
+	public function updateGameDataBuildings(number $newBuildingId, number $land_id){
+		$this->gameData[$land_id]->setGameDataBuildings($newBuildingId);
 	}
 }
 

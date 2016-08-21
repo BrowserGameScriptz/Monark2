@@ -111,8 +111,16 @@ class BotEval extends \yii\base\Object
 		foreach($this->eval_land['ennemy'] as $key => $lands)
 			foreach ($this->eval_land['ennemy'][$key] as $frontier){
 				$this->eval_land['ennemy'][$key] 						= $frontier; 
-				$this->eval_land['ennemy']['threat']['negative'][$key] 	= $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
-				$this->eval_land['ennemy']['threat']['positive'][$key]	= $this->BotEvalEnnemyLandPositiveThreat($frontier);
+				
+				if(isset($this->eval_land['ennemy']['threat']['negative'][$key]))
+					$this->eval_land['ennemy']['threat']['negative'][$key] 	+= $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
+				else 
+					$this->eval_land['ennemy']['threat']['negative'][$key] 	= $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
+				
+				if(isset($this->eval_land['ennemy']['threat']['positive'][$key]))
+					$this->eval_land['ennemy']['threat']['positive'][$key]	+= $this->BotEvalEnnemyLandPositiveThreat($frontier);
+				else
+					$this->eval_land['ennemy']['threat']['positive'][$key]	= $this->BotEvalEnnemyLandPositiveThreat($frontier);
 			}
 	}
 	

@@ -14,7 +14,7 @@ class BotLog extends \yii\base\Object
 	}
 	
 	public function botAddActionBegin($action){
-		$this->result .= time()." : ** Begin Action ::: ".$action." ** <br>";
+		$this->result .= time()." : ** Begin Action	 ::: ".$action." ** <br>";
 	}
 	
 	public function botAddResult($result){
@@ -22,7 +22,7 @@ class BotLog extends \yii\base\Object
 	}
 	
 	public function botAddEndAction($action){
-		$this->result .= time()." : ** End Action ::: ".$action." ** <br>";
+		$this->result .= time()." : -- End Action	 ::: ".$action." -- <br>";
 	}
 	
 	public function botShowLogs(){

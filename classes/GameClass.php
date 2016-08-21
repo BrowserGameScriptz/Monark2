@@ -92,6 +92,13 @@ class GameClass{
 		$this->gameStatut = $statut;
 	}
 
+	public function getDifficultyId(){
+		if($this->gameDifficultyId == 0)
+			return 3;
+		else
+			return $this->gameDifficultyId;
+	}
+	
 	/**
 	 *
 	 * @return number

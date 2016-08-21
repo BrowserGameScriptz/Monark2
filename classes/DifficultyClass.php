@@ -2,8 +2,6 @@
 
 namespace app\classes;
 
-use Yii;
-
 /**
  *
  * @author Paul
@@ -36,5 +34,9 @@ class DifficultyClass{
 
 	public function getDifficultyId(){
 		return $this->difficultyId;
+	}
+	
+	public function getDifficultyBotActionPerTurn(){
+		return $this->difficultyBotActionPerTurn;
 	}
 }
