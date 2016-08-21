@@ -10,6 +10,7 @@ use app\models\GameData;
 use app\models\Building;
 use app\models\Frontier;
 use app\models\Game;
+use app\models\Difficulty;
 
 class BotData extends \yii\base\Object
 {
@@ -21,6 +22,7 @@ class BotData extends \yii\base\Object
 	public $gameData;
 	public $botLand;
 	public $buildingData;
+	public $difficultyData;
 	public $frontier;
 	public $botFrontierData;
 	
@@ -61,6 +63,9 @@ class BotData extends \yii\base\Object
 			Yii::$app->session->set("Frontier", Frontier::findAllFrontier($this->game->getMapId()));
 		$this->frontier 		= Yii::$app->session['Frontier'];
 		$this->botFrontierData	= Frontier::userHaveFrontierLandArray($this->gameData, $this->bot->bot_id, $this->frontier);
+	
+		// Difficulty
+		$this->difficultyData			= Difficulty::findAllDifficulyToArray();
 	}
 	
 }

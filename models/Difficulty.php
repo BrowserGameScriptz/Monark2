@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\classes\DifficultyClass;
 
 /**
  * This is the model class for table "difficulty".
@@ -55,6 +56,26 @@ class Difficulty extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 
+     * @return \app\classes\DifficultyClass[]
+     */
+    public static function findAllDifficulyToArray(){
+    	$data = self::findAllDifficulty();
+    	$returned = array();
+    	foreach($data as $difficulty)
+    		$returned[$difficulty['difficulty_id']] = new DifficultyClass($difficulty);
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @return \app\models\Difficulty[]
+     */
+    public static function findAllDifficulty(){
+    	return self::find()->all();
+    }
+    
     /**
      * @inheritdoc
      * @return \app\queries\DifficultyQuery the active query used by this AR class.

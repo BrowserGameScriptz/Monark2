@@ -1,6 +1,8 @@
 <?php 
 namespace app\bot;
 use app\models\Frontier;
+use app\models\GameData;
+use app\classes\GameDataClass;
 
 class BotEval extends \yii\base\Object
 {
@@ -30,28 +32,34 @@ class BotEval extends \yii\base\Object
 	 * @param  void
 	 * @return object var array eval_land full
 	 */
-	public function BotEvalLand(){
+	public function BotInitEvalLand(){
+		$this->bot->bot_log->botAddActionBegin("Init Eval Land");
 		$this->eval_land_ennemy 		= array();
 		$this->eval_land_owned 			= array();
 		
 		// Search land frontier
 		foreach ($this->bot->bot_data->botLand as $key => $land) {
+			$this->eval_land_owned[$land->getGameDataLandId()] 	= array();
+			$this->eval_land_ennemy[$land->getGameDataLandId()] = array();
 			
 			// Frontier of land 
 			$landFrontier = Frontier::landHaveFrontierLandArray($this->bot->bot_data->frontier, $land->getGameDataLandId());
+			
+			// Add the land
+			$this->eval_land_owned[$land->getGameDataLandId()][$land->getGameDataLandId()] = $this->bot->bot_data->gameData[$land->getGameDataLandId()];
 			
 			// Each frontier land
 			foreach ($landFrontier as $key => $frontier) {	
 				// Ennemy land
 				if($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()]->getGameDataUserId() != $this->bot->bot_id){
-					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_ennemy)){
-						$this->eval_land_ennemy[$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
+					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_ennemy[$land->getGameDataLandId()])){
+						$this->eval_land_ennemy[$land->getGameDataLandId()][$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
 					}
 					
-					/* An Owned bot land */
+				// Owned land
 				}else{
-					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_owned)){
-						$this->eval_land_owned[$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
+					if(!in_array($this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()], $this->eval_land_owned[$land->getGameDataLandId()])){
+						$this->eval_land_owned[$land->getGameDataLandId()][$frontier->getFrontierLandIdTwo()] = $this->bot->bot_data->gameData[$frontier->getFrontierLandIdTwo()];
 					}
 				}
 			}
@@ -60,8 +68,60 @@ class BotEval extends \yii\base\Object
 			'ennemy' => $this->eval_land_ennemy,
 			'owned'	 => $this->eval_land_owned,
 		);
+		
+		$this->bot->bot_log->botAddEndAction("Init Eval Land");
+		
+		// Call method of eval
+		$this->BotEvalLand();
 	}
 
+	/**
+	 * 
+	 */
+	public function BotEvalLand(){
+		$this->bot->bot_log->botAddActionBegin("Eval Land");
+		
+		// Owned
+		foreach($this->eval_land['owned'] as $key => $lands)
+			foreach ($this->eval_land['owned'][$key] as $frontier){
+				$this->bot->bot_log->botAddResult("Eval own land_id : ".$frontier->getGameDataLandId());
+				$this->eval_land['owned'][$key] = array(
+						'eval' => self::BotEvalOwnLand($lands, $frontier),
+						'data' => $frontier,
+				);
+			}
+		
+		// Ennemy
+		foreach($this->eval_land['ennemy'] as $key => $lands)
+			foreach ($this->eval_land['ennemy'][$key] as $frontier){
+				$this->bot->bot_log->botAddResult("Eval ennemy land_id : ".$frontier->getGameDataLandId());
+				$this->eval_land['ennemy'][$key] = array(
+						'eval' => self::BotEvalEnnemyLand($lands, $frontier),
+						'data' => $frontier,
+				);
+			}
+		
+		$this->bot->bot_log->botAddEndAction("Eval Land");
+	}
+	
+	/**
+	 * 
+	 * @param GameDataClass $ownLandData
+	 * @param array $ownFrontierLandData
+	 */
+	public static function BotEvalOwnLand(GameDataClass $ownLandData, GameDataClass $ownFrontierLandData){
+		
+	}
+	
+	/**
+	 * 
+	 * @param GameDataClass $ownLandData
+	 * @param array $ownFrontierLandData
+	 */
+	public static function BotEvalEnnemyLand(GameDataClass $ownLandData, GameDataClass $ownFrontierLandData){
+		
+	}
+	
 	
 	/**
 	 * Eval all the differents per lands --> lvl of necessity
@@ -77,15 +137,15 @@ class BotEval extends \yii\base\Object
 	
 		foreach ($this->allland_owned as $key => $bot_land) {
 				
-			/* Frontier initialisation */
+			// Frontier initialisation
 			$only_own_land_frontier 	= 0;
 			$count_frontier 			= count($bot_land['frontier']);
 			$most_need_def_land_id		= 0;
 			$n = 0;
 	
-			/**** All frontier ****/
+			// All frontier
 			foreach ($bot_land['frontier'] as $key => $bot_land_frontier) {
-				/* Land frontier initialisation */
+				// Land frontier initialisation
 				$land_id_atk 	= $bot_land_frontier['land_frontier_data']['land_id'];
 				$land_id_bot	= $bot_land['land_info']['land_id'];
 	
@@ -93,7 +153,7 @@ class BotEval extends \yii\base\Object
 				if($this->game_data[$land_id_bot]['buildings'] != "")
 					$bot_own_land_buildings	= explode(';', $this->game_data[$land_id_bot]['buildings']);
 	
-					/* Ressource */
+					// Ressource
 					if(isset($this->ressources_data[$this->game_data[$land_id_bot]['ressource_id']]) && !in_array($this->ressources_data[$this->game_data[$land_id_bot]['ressource_id']]['building_id'], $bot_own_land_buildings)){
 						$b_array = array(
 								'cost' 			=> $this->building_data[$this->ressources_data[$this->game_data[$land_id_bot]['ressource_id']]['building_id']]['cost'],
@@ -104,7 +164,7 @@ class BotEval extends \yii\base\Object
 					}
 	
 	
-					/* A not own bot land */
+					//  A not own bot land
 					if($bot_land_frontier['land_frontier_data']['user_id'] != $this->bot_id){
 							
 						/* Eval Atk & Def */

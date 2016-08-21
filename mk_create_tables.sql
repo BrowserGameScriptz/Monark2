@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 19 Août 2016 à 21:48
+-- Généré le :  Ven 19 Août 2016 à 22:42
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -113,14 +113,17 @@ CREATE TABLE IF NOT EXISTS `buy` (
   `buy_build_id` int(11) NOT NULL,
   `buy_time` int(12) NOT NULL,
   PRIMARY KEY (`buy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Contenu de la table `buy`
 --
 
 INSERT INTO `buy` (`buy_id`, `buy_user_id`, `buy_turn_id`, `buy_game_id`, `buy_land_id`, `buy_units_nb`, `buy_build_id`, `buy_time`) VALUES
-(1, 268, 5, 3, 91, 0, 2, 1471630049);
+(1, 268, 5, 3, 91, 0, 2, 1471630049),
+(2, 268, 20, 5, 3, 8, 0, 1471636174),
+(3, 268, 29, 5, 37, 13, 0, 1471636204),
+(4, 268, 35, 5, 30, 12, 0, 1471636222);
 
 -- --------------------------------------------------------
 
@@ -233,19 +236,12 @@ INSERT INTO `continent` (`continent_id`, `continent_name`, `continent_bonus`, `c
 CREATE TABLE IF NOT EXISTS `difficulty` (
   `difficulty_id` int(12) unsigned NOT NULL AUTO_INCREMENT,
   `difficulty_name` varchar(256) NOT NULL,
-  `difficulty_rate_bot_units` int(12) NOT NULL,
-  `difficulty_rate_resources` int(12) NOT NULL,
-  `difficulty_rate_oper` varchar(64) NOT NULL,
-  `difficulty_rate_units_atk` int(12) NOT NULL,
-  `difficulty_rate_units_def` int(12) NOT NULL,
-  `difficulty_rate_atk_frt` int(12) NOT NULL,
-  `difficulty_rate_def_pc` int(12) NOT NULL,
-  `difficulty_rate_exec_atk` int(12) NOT NULL,
-  `difficulty_rate_exec_def` int(12) NOT NULL,
-  `difficulty_rate_exec_build` int(12) NOT NULL,
-  `difficulty_marge_frt` int(12) NOT NULL,
-  `difficulty_marge_pc` int(12) NOT NULL,
-  `difficulty_build_mine` int(12) NOT NULL,
+  `difficulty_rate_resource_freq` varchar(50) NOT NULL,
+  `difficulty_rate_building_cost` varchar(50) NOT NULL,
+  `difficulty_rate_building_icome` varchar(50) NOT NULL,
+  `difficulty_rate_land_base_units` varchar(50) NOT NULL,
+  `difficulty_bot_action_per_turn` varchar(50) NOT NULL,
+  `difficulty_bot_bonus_income` varchar(50) NOT NULL,
   PRIMARY KEY (`difficulty_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
@@ -253,12 +249,12 @@ CREATE TABLE IF NOT EXISTS `difficulty` (
 -- Contenu de la table `difficulty`
 --
 
-INSERT INTO `difficulty` (`difficulty_id`, `difficulty_name`, `difficulty_rate_bot_units`, `difficulty_rate_resources`, `difficulty_rate_oper`, `difficulty_rate_units_atk`, `difficulty_rate_units_def`, `difficulty_rate_atk_frt`, `difficulty_rate_def_pc`, `difficulty_rate_exec_atk`, `difficulty_rate_exec_def`, `difficulty_rate_exec_build`, `difficulty_marge_frt`, `difficulty_marge_pc`, `difficulty_build_mine`) VALUES
-(1, 'Very_easy', 50, 50, '+', 100, 80, 70, 70, 60, 60, 70, 30, 30, 70),
-(2, 'Easy', 30, 30, '+', 90, 70, 60, 60, 70, 70, 80, 35, 35, 75),
-(3, 'Normal', 0, 0, '+', 80, 60, 60, 60, 80, 80, 90, 40, 40, 80),
-(4, 'Hard', 2, 30, '-', 70, 50, 50, 50, 90, 90, 95, 50, 50, 90),
-(5, 'Very_hard', 4, 50, '-', 60, 40, 40, 40, 100, 100, 100, 60, 60, 100);
+INSERT INTO `difficulty` (`difficulty_id`, `difficulty_name`, `difficulty_rate_resource_freq`, `difficulty_rate_building_cost`, `difficulty_rate_building_icome`, `difficulty_rate_land_base_units`, `difficulty_bot_action_per_turn`, `difficulty_bot_bonus_income`) VALUES
+(1, 'Very_easy', '3', '0.5', '2', '0.5', '5', '0.5'),
+(2, 'Easy', '2', '0.5', '1', '0.5', '10', '0.75'),
+(3, 'Normal', '1', '1', '1', '1', '30', '1'),
+(4, 'Hard', '1', '2', '1', '2', '200', '1.25'),
+(5, 'Very_hard', '0.5', '2', '0.5', '2', '10000', '1.5');
 
 -- --------------------------------------------------------
 
@@ -285,7 +281,17 @@ CREATE TABLE IF NOT EXISTS `fight` (
   `fight_turn_id` int(12) NOT NULL,
   `fight_conquest` int(12) NOT NULL,
   PRIMARY KEY (`fight_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `fight`
+--
+
+INSERT INTO `fight` (`fight_id`, `fight_game_id`, `fight_atk_user_id`, `fight_def_user_id`, `fight_atk_land_id`, `fight_def_land_id`, `fight_atk_nb_units`, `fight_def_nb_units`, `fight_atk_lost_unit`, `fight_def_lost_unit`, `fight_atk_units`, `fight_def_units`, `fight_thimble_atk`, `fight_thimble_def`, `fight_time`, `fight_turn_id`, `fight_conquest`) VALUES
+(1, 5, 268, 0, 3, 7, 12, 3, 2, 3, '/12/12/11/10/10', '/3/1/1/1/0', '/6;4;2;/6;5;1;/4;3;2;/5;4;1;', '/2;2;/6;/5;/3;', 1471636180, 20, 1),
+(2, 5, 268, -2, 7, 37, 9, 4, 7, 4, '/9/7/4/3/2/2', '/4/3/3/1/1/0', '/4;3;2;/3;2;1;/5;5;5;/2;2;1;/4;4;', '/6;4;1;/3;2;1;/6;4;4;/5;/3;', 1471636190, 23, 1),
+(3, 5, 268, 0, 37, 30, 14, 3, 5, 3, '/14/14/13/12/11/10/9/9', '/3/1/1/1/1/1/1/0', '/6;5;4;/3;2;1;/1;1;1;/3;2;1;/6;5;5;/4;3;1;/4;3;2;', '/5;2;/5;/4;/3;/6;/5;/3;', 1471636210, 29, 1),
+(4, 5, 268, -1, 30, 32, 20, 4, 4, 4, '/20/17/16/16', '/4/4/2/0', '/5;2;2;/6;4;3;/4;4;2;', '/5;4;2;/5;4;2;/3;1;', 1471636228, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -712,7 +718,7 @@ CREATE TABLE IF NOT EXISTS `game` (
   `game_pwd` varchar(512) NOT NULL,
   `game_key` varchar(256) NOT NULL,
   PRIMARY KEY (`game_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Contenu de la table `game`
@@ -723,7 +729,8 @@ INSERT INTO `game` (`game_id`, `game_name`, `game_owner_id`, `game_max_player`, 
 (2, 'FONdawqHav0XpW2YjPo/8rMv+o7xjhy7+byZs8DMlic=', 268, 3, 1471612929, 100, 1, 0, 0, 0, 0, 0, 0, 'IknHb6Yk2lr3NCKRu8Ie8E/nCHE8bgl2mfJuyCuWpR/Pi7rS2b6jx/p0sR+30M8ymDw3iZb65okcXBOhuM6eSBfaBHiXSES6RouTohi0z0ZT/PKgw3LqiIm0utPXjAXp|9TDyy0GOhBaqcoSMKPjQ/ip67Wdr/1Vs4Cnf9JhSxpo=', '0'),
 (3, 'EJWxvJaVGm6kgg/4D7MOSW/UjMI3UmdBzUfV63wxtoM=', 268, 2, 1471613451, 50, 2, 0, 0, 0, 0, 0, 0, 'gmLmQNYJ669jpwAuDjV/qRx+SiRh0gegSKjUXrrvaXIYuK7P9zzwtv1yTOXz71K4yCDiCtlGDQ5vpAArSk8iUWwcW+LnIXw9pdnYjmdKIAjzV91w0Hl/CDWjaKABN+8H|kL7leYhGTj0EaIZX/RZAUbHZPrssDuRHSIeLUHN1Hfw=', '0'),
 (4, 'J6ghkity9EFOP2IQ05O9FJk1XX+nln1jbG8qunvCocc=', 268, 2, 1471634615, 50, 2, 0, 0, 0, 0, 0, 0, 'qOYnt+CDiFpcextcWZT2NQAtBC1iOIRlfay0xi3BwkO0wDnDeH4XDRVC3Xa6UNeF68qsih8TC43rzKkr+oE3PtkzxHcdewl/ASsxUR8gBI1Vi5cP+9EC31X2u63uNvKW|rmV5KJkUI6pJJuWibm//hHlR3gZkdwrHMNZUfk1pNn0=', '0'),
-(5, 'jXAh/0rHbBRCx93r9oawnDHsx0Lhijt6BkX90dyRmfU=', 268, 3, 1471635213, 50, 1, 0, 0, 0, 0, 0, 0, 'F6UTrkbLW71AnJCSaTyAXQ1VokenuM+cfgt4CVihw9VGJHNZ3zFlfSjR5HFFoK+T6P+BYTWnw4CEDRuAVnASv4scFInpWozOlxYG4FyJ5Q9n2N+D4rUPIiQ7+OZDZ9gz|uYi4a7/oNLgPOijEFGldtznNQDMgCw6DHJt2CWEP7qU=', '0');
+(5, 'jXAh/0rHbBRCx93r9oawnDHsx0Lhijt6BkX90dyRmfU=', 268, 3, 1471635213, 100, 1, 0, 0, 0, 0, 0, 0, 'F6UTrkbLW71AnJCSaTyAXQ1VokenuM+cfgt4CVihw9VGJHNZ3zFlfSjR5HFFoK+T6P+BYTWnw4CEDRuAVnASv4scFInpWozOlxYG4FyJ5Q9n2N+D4rUPIiQ7+OZDZ9gz|uYi4a7/oNLgPOijEFGldtznNQDMgCw6DHJt2CWEP7qU=', '0'),
+(6, 'jAyZs52vc1INiHYc/4cDjgFwA4jEhnQgJ/9tlInyqQM=', 268, 5, 1471636273, 50, 1, 0, 0, 0, 0, 0, 0, 'xrlNSbDnhuYS+vm/GV0QVwx3ZKokLjq/Hjo+IC6DZb5+OU7Mv6FPNe2Sy0gghBtou8tikLG08uY0d24/ZMlwTxZhYic6SVOImEMfmwyJDgbrUtIJbkAIgT/stEQf+XbT|RYmzAvimhfeLGdotRbkBQT9vwQ0SETsA9bq0rlv2Ti0=', '0');
 
 -- --------------------------------------------------------
 
@@ -742,7 +749,7 @@ CREATE TABLE IF NOT EXISTS `game_data` (
   `game_data_resource_id` int(12) NOT NULL,
   `game_data_buildings` varchar(128) NOT NULL,
   PRIMARY KEY (`game_data_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=238 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=332 ;
 
 --
 -- Contenu de la table `game_data`
@@ -941,11 +948,11 @@ INSERT INTO `game_data` (`game_data_id`, `game_data_game_id`, `game_data_user_id
 (190, 4, 0, 0, 95, 3, 0, 0, ''),
 (191, 5, 0, 0, 1, 3, 0, 0, ''),
 (192, 5, 0, 0, 2, 3, 0, 3, ''),
-(193, 5, 268, 268, 3, 5, 268, 0, '6;1;'),
+(193, 5, 268, 268, 3, 1, 268, 0, '6;1;'),
 (194, 5, 0, 0, 4, 3, 0, 0, ''),
 (195, 5, 0, 0, 5, 4, 0, 2, ''),
 (196, 5, 0, 0, 6, 4, 0, 0, ''),
-(197, 5, 0, 0, 7, 3, 0, 0, ''),
+(197, 5, 268, 0, 7, 1, 0, 0, ''),
 (198, 5, 0, 0, 8, 4, 0, 0, ''),
 (199, 5, 0, 0, 9, 3, 0, 3, ''),
 (200, 5, 0, 0, 10, 3, 0, 0, ''),
@@ -968,14 +975,14 @@ INSERT INTO `game_data` (`game_data_id`, `game_data_game_id`, `game_data_user_id
 (217, 5, 0, 0, 27, 3, 0, 0, ''),
 (218, 5, 0, 0, 28, 4, 0, 1, ''),
 (219, 5, 0, 0, 29, 3, 0, 2, ''),
-(220, 5, 0, 0, 30, 3, 0, 0, ''),
+(220, 5, 268, 0, 30, 1, 0, 0, ''),
 (221, 5, 0, 0, 31, 3, 0, 0, ''),
-(222, 5, -1, -1, 32, 4, -1, 0, '6;1;'),
+(222, 5, 268, -1, 32, 16, -1, 0, '6;1;'),
 (223, 5, 0, 0, 33, 4, 0, 2, ''),
 (224, 5, 0, 0, 34, 3, 0, 0, ''),
 (225, 5, 0, 0, 35, 3, 0, 0, ''),
 (226, 5, 0, 0, 36, 3, 0, 1, ''),
-(227, 5, -2, -2, 37, 4, -2, 1, '6;1;'),
+(227, 5, 268, -2, 37, 1, -2, 1, '6;1;'),
 (228, 5, 0, 0, 38, 3, 0, 0, ''),
 (229, 5, 0, 0, 39, 3, 0, 3, ''),
 (230, 5, 0, 0, 40, 3, 0, 3, ''),
@@ -985,7 +992,101 @@ INSERT INTO `game_data` (`game_data_id`, `game_data_game_id`, `game_data_user_id
 (234, 5, 0, 0, 44, 3, 0, 0, ''),
 (235, 5, 0, 0, 45, 3, 0, 1, ''),
 (236, 5, 0, 0, 46, 3, 0, 1, ''),
-(237, 5, 0, 0, 47, 3, 0, 0, '');
+(237, 5, 0, 0, 47, 3, 0, 0, ''),
+(238, 6, 0, 0, 1, 3, 0, 3, ''),
+(239, 6, 268, 268, 2, 4, 268, 2, '6;1;'),
+(240, 6, 0, 0, 3, 4, 0, 0, ''),
+(241, 6, 0, 0, 4, 3, 0, 0, ''),
+(242, 6, 0, 0, 5, 4, 0, 0, ''),
+(243, 6, 0, 0, 6, 4, 0, 0, ''),
+(244, 6, 0, 0, 7, 3, 0, 0, ''),
+(245, 6, -1, -1, 8, 5, -1, 0, '6;1;'),
+(246, 6, 0, 0, 9, 3, 0, 0, ''),
+(247, 6, 0, 0, 10, 3, 0, 3, ''),
+(248, 6, 0, 0, 11, 4, 0, 0, ''),
+(249, 6, 0, 0, 12, 3, 0, 0, ''),
+(250, 6, 0, 0, 13, 3, 0, 1, ''),
+(251, 6, 0, 0, 14, 3, 0, 0, ''),
+(252, 6, 0, 0, 15, 4, 0, 1, ''),
+(253, 6, 0, 0, 16, 3, 0, 0, ''),
+(254, 6, 0, 0, 17, 4, 0, 0, ''),
+(255, 6, 0, 0, 18, 4, 0, 0, ''),
+(256, 6, 0, 0, 19, 4, 0, 0, ''),
+(257, 6, 0, 0, 20, 3, 0, 0, ''),
+(258, 6, -3, -3, 21, 4, -3, 0, '6;1;'),
+(259, 6, 0, 0, 22, 3, 0, 3, ''),
+(260, 6, 0, 0, 23, 3, 0, 0, ''),
+(261, 6, 0, 0, 24, 3, 0, 0, ''),
+(262, 6, 0, 0, 25, 3, 0, 0, ''),
+(263, 6, 0, 0, 26, 4, 0, 0, ''),
+(264, 6, 0, 0, 27, 3, 0, 0, ''),
+(265, 6, 0, 0, 28, 4, 0, 3, ''),
+(266, 6, 0, 0, 29, 3, 0, 0, ''),
+(267, 6, -4, -4, 30, 4, -4, 0, '6;1;'),
+(268, 6, 0, 0, 31, 3, 0, 0, ''),
+(269, 6, 0, 0, 32, 3, 0, 0, ''),
+(270, 6, 0, 0, 33, 4, 0, 0, ''),
+(271, 6, 0, 0, 34, 3, 0, 0, ''),
+(272, 6, 0, 0, 35, 3, 0, 1, ''),
+(273, 6, 0, 0, 36, 3, 0, 0, ''),
+(274, 6, 0, 0, 37, 3, 0, 0, ''),
+(275, 6, 0, 0, 38, 3, 0, 2, ''),
+(276, 6, 0, 0, 39, 3, 0, 0, ''),
+(277, 6, 0, 0, 40, 3, 0, 0, ''),
+(278, 6, -2, -2, 41, 4, -2, 0, '6;1;'),
+(279, 6, 0, 0, 42, 3, 0, 0, ''),
+(280, 6, 0, 0, 43, 3, 0, 0, ''),
+(281, 6, 0, 0, 44, 3, 0, 0, ''),
+(282, 6, 0, 0, 45, 3, 0, 0, ''),
+(283, 6, 0, 0, 46, 3, 0, 0, ''),
+(284, 6, 0, 0, 47, 3, 0, 0, ''),
+(285, 6, 0, 0, 1, 3, 0, 0, ''),
+(286, 6, 0, 0, 2, 3, 0, 0, ''),
+(287, 6, 0, 0, 3, 4, 0, 0, ''),
+(288, 6, 0, 0, 4, 3, 0, 0, ''),
+(289, 6, 0, 0, 5, 4, 0, 0, ''),
+(290, 6, 0, 0, 6, 4, 0, 0, ''),
+(291, 6, 268, 268, 7, 4, 268, 0, '6;1;'),
+(292, 6, 0, 0, 8, 4, 0, 0, ''),
+(293, 6, 0, 0, 9, 3, 0, 3, ''),
+(294, 6, 0, 0, 10, 3, 0, 3, ''),
+(295, 6, 0, 0, 11, 4, 0, 3, ''),
+(296, 6, -1, -1, 12, 4, -1, 0, '6;1;'),
+(297, 6, 0, 0, 13, 3, 0, 0, ''),
+(298, 6, 0, 0, 14, 3, 0, 0, ''),
+(299, 6, 0, 0, 15, 4, 0, 3, ''),
+(300, 6, 0, 0, 16, 3, 0, 0, ''),
+(301, 6, 0, 0, 17, 4, 0, 0, ''),
+(302, 6, 0, 0, 18, 4, 0, 0, ''),
+(303, 6, 0, 0, 19, 4, 0, 3, ''),
+(304, 6, 0, 0, 20, 3, 0, 3, ''),
+(305, 6, 0, 0, 21, 3, 0, 0, ''),
+(306, 6, 0, 0, 22, 3, 0, 0, ''),
+(307, 6, -3, -3, 23, 4, -3, 1, '6;1;'),
+(308, 6, 0, 0, 24, 3, 0, 0, ''),
+(309, 6, 0, 0, 25, 3, 0, 3, ''),
+(310, 6, 0, 0, 26, 4, 0, 1, ''),
+(311, 6, 0, 0, 27, 3, 0, 0, ''),
+(312, 6, 0, 0, 28, 4, 0, 0, ''),
+(313, 6, -4, -4, 29, 4, -4, 3, '6;1;'),
+(314, 6, 0, 0, 30, 3, 0, 0, ''),
+(315, 6, 0, 0, 31, 3, 0, 1, ''),
+(316, 6, 0, 0, 32, 3, 0, 0, ''),
+(317, 6, 0, 0, 33, 4, 0, 0, ''),
+(318, 6, 0, 0, 34, 3, 0, 0, ''),
+(319, 6, 0, 0, 35, 3, 0, 0, ''),
+(320, 6, 0, 0, 36, 3, 0, 0, ''),
+(321, 6, 0, 0, 37, 3, 0, 0, ''),
+(322, 6, 0, 0, 38, 3, 0, 2, ''),
+(323, 6, 0, 0, 39, 3, 0, 0, ''),
+(324, 6, 0, 0, 40, 3, 0, 0, ''),
+(325, 6, 0, 0, 41, 3, 0, 0, ''),
+(326, 6, 0, 0, 42, 3, 0, 0, ''),
+(327, 6, 0, 0, 43, 3, 0, 0, ''),
+(328, 6, 0, 0, 44, 3, 0, 0, ''),
+(329, 6, -2, -2, 45, 4, -2, 0, '6;1;'),
+(330, 6, 0, 0, 46, 3, 0, 0, ''),
+(331, 6, 0, 0, 47, 3, 0, 0, '');
 
 -- --------------------------------------------------------
 
@@ -1006,7 +1107,7 @@ CREATE TABLE IF NOT EXISTS `game_player` (
   `game_player_bot` int(12) NOT NULL,
   `game_player_quit` int(12) NOT NULL,
   PRIMARY KEY (`game_player_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Contenu de la table `game_player`
@@ -1020,9 +1121,14 @@ INSERT INTO `game_player` (`game_player_id`, `game_player_region_id`, `game_play
 (10, 1, 1, 1, 3, 268, 7, 1471628635, 2, 0, 1),
 (11, 1, 1, 1, 4, 268, 9, 1471634618, 2, 0, 1),
 (12, 1, 1, 1, 4, -1, 2, 1471634620, 1, 1, 0),
-(13, 1, 1, 1, 5, 268, 2, 1471635217, 3, 0, 0),
+(13, 1, 1, 1, 5, 268, 2, 1471635217, 3, 0, 1),
 (14, 4, 1, 1, 5, -1, 4, 1471635219, 1, 1, 0),
-(15, 5, 1, 1, 5, -2, 7, 1471635221, 2, 2, 0);
+(15, 5, 1, 1, 5, -2, 7, 1471635221, 2, 2, 0),
+(16, 1, 1, 1, 6, 268, 2, 1471636275, 4, 0, 0),
+(17, 2, 1, 1, 6, -1, 5, 1471636277, 5, 1, 0),
+(18, 6, 1, 1, 6, -2, 7, 1471636278, 1, 2, 0),
+(19, 3, 1, 1, 6, -3, 10, 1471636279, 2, 3, 0),
+(20, 4, 1, 1, 6, -4, 11, 1471636281, 3, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -1472,7 +1578,7 @@ CREATE TABLE IF NOT EXISTS `turn` (
   `turn_gold_base` int(12) NOT NULL,
   `turn_income` int(12) NOT NULL,
   PRIMARY KEY (`turn_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
 
 --
 -- Contenu de la table `turn`
@@ -1492,7 +1598,40 @@ INSERT INTO `turn` (`turn_id`, `turn_game_id`, `turn_user_id`, `turn_time`, `tur
 (11, 5, 268, 1471635341, 1471635234, 2, 2, 2),
 (12, 5, -1, 1471635436, 1471635341, 2, 2, 2),
 (13, 5, -2, 1471635856, 1471635436, 2, 2, 2),
-(14, 5, 268, 1471635900, 1471635856, 4, 4, 2);
+(14, 5, 268, 1471635900, 1471635856, 4, 4, 2),
+(15, 5, -1, 1471636161, 1471635900, 4, 4, 2),
+(16, 5, -2, 1471636161, 1471636161, 4, 4, 2),
+(17, 5, 268, 1471636161, 1471636161, 6, 6, 2),
+(18, 5, -1, 1471636164, 1471636161, 6, 6, 2),
+(19, 5, -2, 1471636164, 1471636164, 6, 6, 2),
+(20, 5, 268, 1471636164, 1471636164, 0, 8, 2),
+(21, 5, -1, 1471636185, 1471636164, 8, 8, 2),
+(22, 5, -2, 1471636185, 1471636185, 8, 8, 2),
+(23, 5, 268, 1471636185, 1471636185, 3, 3, 3),
+(24, 5, -1, 1471636195, 1471636185, 10, 10, 2),
+(25, 5, -2, 1471636195, 1471636195, 8, 8, 0),
+(26, 5, 268, 1471636195, 1471636195, 8, 8, 5),
+(27, 5, -1, 1471636197, 1471636195, 12, 12, 2),
+(28, 5, -2, 1471636197, 1471636197, 8, 8, 0),
+(29, 5, 268, 1471636198, 1471636197, 0, 13, 5),
+(30, 5, -1, 1471636213, 1471636198, 14, 14, 2),
+(31, 5, -2, 1471636213, 1471636213, 8, 8, 0),
+(32, 5, 268, 1471636213, 1471636213, 6, 6, 6),
+(33, 5, -1, 1471636216, 1471636213, 16, 16, 2),
+(34, 5, -2, 1471636216, 1471636216, 8, 8, 0),
+(35, 5, 268, 1471636216, 1471636216, 0, 12, 6),
+(36, 6, -4, 1471636301, 1471636301, 2, 2, 2),
+(37, 6, 268, 1471636409, 1471636301, 2, 2, 2),
+(38, 6, -1, 1471636811, 1471636409, 2, 2, 2),
+(39, 6, -2, 1471636811, 1471636811, 2, 2, 2),
+(40, 6, -3, 1471636811, 1471636811, 2, 2, 2),
+(41, 6, -4, 1471636811, 1471636811, 4, 4, 2),
+(42, 6, 268, 1471636811, 1471636811, 4, 4, 2),
+(43, 6, -1, 1471637043, 1471636811, 4, 4, 2),
+(44, 6, -2, 1471637043, 1471637043, 4, 4, 2),
+(45, 6, -3, 1471637043, 1471637043, 4, 4, 2),
+(46, 6, -4, 1471637043, 1471637043, 6, 6, 2),
+(47, 6, 268, 1471637043, 1471637043, 6, 6, 2);
 
 -- --------------------------------------------------------
 

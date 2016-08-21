@@ -21,14 +21,10 @@ $this->title = 'Test Bot';
     $bot_id = -1;
     ?>
 
-    <?= "<center><font size='6'>Simulation de BOT ".$bot_id."</font><br>" ?>
-    <?= "<font size='5'>Partie id : ".$game_id."</font></center><font size='6'>Réponse : </font><br><br>" ?>
+    <?= "<center><font size='6'>Simulation de BOT ".abs($bot_id)."</font><br>" ?>
+    <?= "<font size='5'>Partie id : ".$game_id."</font></center><font size='6'>Resultat : </font><br><br>" ?>
 
-    <div class='alert alert-danger'>
-
-    <?php $Bot = new Bot($game_id, $bot_id, 1); ?>
-
-    </div>
+    <?php $Bot = new Bot($game_id, $bot_id, true); ?>
 
 
 </div>

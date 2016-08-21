@@ -4,8 +4,6 @@ namespace app\bot;
 
 use Yii;
 use app\models\Fight;
-use yii\base\Object;
-use app\models\Turn;
 
 /**
  * This is the model class for bot gestion.
@@ -37,18 +35,13 @@ class Bot extends \yii\base\Object
 	public $ressource_gold_point;
 	public $ressource_silver_point;
 	public $ressource_bronze_point;
-	public $marge_frt;
-	public $marge_pc;
-	public $build_mine;
 
 	// Execute action
-	public $bot_need_units_atk_percent;
-	public $bot_need_units_def_percent;
-	public $bot_atk_percent;
-	public $bot_def_percent;
-	public $bot_build_percent;
+	public $bot_action;
 
-
+	// test
+	public $bot_log;
+	
 	/**
      * Call all the BOT function and get the required informations
      *
@@ -57,14 +50,17 @@ class Bot extends \yii\base\Object
      */
 	public function __construct($game_id, $bot_id, $test=null){
 		/* INIT */
+		$this->bot_log 					= new BotLog($this, $test);
+		$this->bot_log->botAddActionBegin("Init");
+		
 		// GET Info
-		$this->game_id 				= $game_id;
-		$this->bot_id 				= $bot_id;
+		$this->game_id 					= $game_id;
+		$this->bot_id 					= $bot_id;
 
-		$this->atk_max_units		= Fight::$AttakerMaxUnits;
-		$this->def_max_units		= Fight::$DefenderMaxUnits;
-		$this->bonus_fort			= Fight::$FortBonusUnits;
-		$this->bonus_camp			= Fight::$CampBonusUnits;
+		$this->atk_max_units			= Fight::$AttakerMaxUnits;
+		$this->def_max_units			= Fight::$DefenderMaxUnits;
+		$this->bonus_fort				= Fight::$FortBonusUnits;
+		$this->bonus_camp				= Fight::$CampBonusUnits;
 
 		// Set informations
 		$this->units_point 				= 1;
@@ -72,53 +68,39 @@ class Bot extends \yii\base\Object
 		$this->ressource_silver_point 	= 2;
 		$this->ressource_bronze_point 	= 1;
 
+		$this->bot_log->botAddEndAction("Init");
+		
 		/* INIT end */
 		
-		// DATA
-		$this->bot_data 		= new BotData($this); 
-		
-		// Set Configuration
-		/*$this->ftrs_point 					= $this->bot_difficulty_data['rate_atk_frt'];
-		$this->pc_point 					= $this->bot_difficulty_data['rate_def_pc'];
-		$this->bot_need_units_atk_percent 	= $this->bot_difficulty_data['rate_units_atk'];
-		$this->bot_need_units_def_percent 	= $this->bot_difficulty_data['rate_units_def'];	
-		$this->marge_frt 					= $this->bot_difficulty_data['marge_frt'];
-		$this->marge_pc 					= $this->bot_difficulty_data['marge_pc'];
-		$this->build_mine 					= $this->bot_difficulty_data['build_mine'];
-		$this->bot_atk_percent 				= $this->bot_difficulty_data['rate_exec_atk'];
-		$this->bot_def_percent 				= $this->bot_difficulty_data['rate_exec_def'];
-		$this->bot_build_percent 			= $this->bot_difficulty_data['rate_exec_build'];*/
+		$this->botGetData();
 
-		// Evaluations
-		$this->bot_eval 			= new BotEval($this);
-		$this->bot_eval->BotEvalPlayer();
-		$this->bot_eval->BotEvalLand();
-		$this->bot_eval_player		= $this->bot_eval->eval_player;
-		$this->bot_eval_land		= $this->bot_eval->eval_land;
+		$this->botGetEvaluations();
 		
-		Turn::NewTurn($game_id, $bot_id, $this->bot_data->gameData);
+		$this->botDoActions();
+		
+		$this->botEnd();
 	}
 	
+	// Date
+	private function botGetData(){
+		$this->bot_data 		= new BotData($this);
+	}
 	
-	// Players
-	//$this->BotEvalPlayer();
-	// Lands
-	//$this->BotEvalLand();
+	// Evaluations
+	private function botGetEvaluations(){
+		$this->bot_eval 			= new BotEval($this);
+		$this->bot_eval->BotEvalPlayer();
+		$this->bot_eval->BotInitEvalLand();
+		$this->bot_eval_player		= $this->bot_eval->eval_player;
+		$this->bot_eval_land		= $this->bot_eval->eval_land;
+	}
 	
-	/* Actions */
-	// Execute actions
-	//$this->BotEvalAction();
+	private function botDoActions(){
+		$this->bot_action			= new BotAction($this);
+		$this->bot_action->BotEndTurn();
+	}
 	
-	/*print "<pre>";
-	 print_r($this->allland_owned);
-	 print "</pre>";*/
-	
-	//print $this->turn_data['id'];
-	
-	/* TURN END */
-	//if($test == null){
-	//$this->BotEndTurn();
-	//}
-
-	
+	private function botEnd(){
+		print $this->bot_log->botShowLogs();
+	}
 }

@@ -11,27 +11,27 @@ use Yii;
  */
 class DifficultyClass{
 
-	 private $difficulty_id;
-	 private $difficulty_name;
-	 private $difficulty_rate_resource_freq;
-	 private $difficulty_rate_building_cost;
-	 private $difficulty_rate_building_icome;
-	 private $difficulty_rate_land_base_units;
-	 private $difficulty_bot_action_per_turn;
-	 private $difficulty_bot_bonus_income;
+	 private $difficultyId;
+	 private $difficultyName;
+	 private $difficultyRateResourceFreq;
+	 private $difficultyRateBuildingCost;
+	 private $difficultyRateBuildingIcome;
+	 private $difficultyRateLandBaseUnits;
+	 private $difficultyBotActionPerTurn;
+	 private $difficultyBotBonusIncome;
 
 	/**
 	 *
 	 */
 	public function __construct($difficultyData) {
 		$this->difficultyId 					= $difficultyData['difficulty_id'];
-		$this->difficultyId 					= $difficultyData['$difficulty_name'];
-		$this->difficultyId 					= $difficultyData['$difficulty_rate_resource_freq'];
-		$this->difficultyId 					= $difficultyData['$difficulty_rate_building_cost'];
-		$this->difficultyId 					= $difficultyData['$difficulty_rate_building_icome'];
-		$this->difficultyId 					= $difficultyData['$difficulty_rate_land_base_units'];
-		$this->difficultyId 					= $difficultyData['$difficulty_bot_action_per_turn'];
-		$this->difficultyId 					= $difficultyData['$difficulty_bot_bonus_income'];
+		$this->difficultyName 					= $difficultyData['difficulty_name'];
+		$this->difficultyRateResourceFreq 		= $difficultyData['difficulty_rate_resource_freq'];
+		$this->difficultyRateBuildingCost 		= $difficultyData['difficulty_rate_building_cost'];
+		$this->difficultyRateBuildingIcome 		= $difficultyData['difficulty_rate_building_icome'];
+		$this->difficultyRateLandBaseUnits 		= $difficultyData['difficulty_rate_land_base_units'];
+		$this->difficultyBotActionPerTurn 		= $difficultyData['difficulty_bot_action_per_turn'];
+		$this->difficultyBotBonusIncome 		= $difficultyData['difficulty_bot_bonus_income'];
 	}
 
 	public function getDifficultyId(){
