@@ -260,7 +260,15 @@ class BotAction extends \yii\base\Object
 	 * 
 	 */
 	private function BotOwnLandAction(){
-		
+		foreach($this->bot->bot_eval_land['owned'] as $land){
+			// Building ressource
+			$to_build = $this->bot->bot_data->gameData[$land->getGameDataLandId()]->getGameDataBuildingsToBuild($this->bot->bot_data->gameData[$land->getGameDataLandId()]->getGameDataResourceId(), $this->bot->bot_data->buildingData);
+			foreach($to_build as $build){
+				if(isset($this->bot->bot_data->buildingData[$build->getBuildingId()]) && $this->bot->bot_data->buildingData[$build->getBuildingId()]->getBuildingGoldIncome() > 0){
+					$this->BotOwnLandBuild($land->getGameDataLandId(), $build->getBuildingId());
+				}
+			}
+		}
 	}
 	
 	/**
