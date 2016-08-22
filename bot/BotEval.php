@@ -110,18 +110,29 @@ class BotEval extends \yii\base\Object
 	private function BotEvalEnnemyLands(){
 		foreach($this->eval_land['ennemy'] as $key => $lands)
 			foreach ($this->eval_land['ennemy'][$key] as $frontier){
-				$this->eval_land['ennemy'][$key] 						= $frontier; 
+				$this->eval_land['ennemy'][$key] = $frontier; 
 				
-				if(isset($this->eval_land['ennemy']['threat']['negative'][$key]))
-					$this->eval_land['ennemy']['threat']['negative'][$key] 	+= $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
-				else 
-					$this->eval_land['ennemy']['threat']['negative'][$key] 	= $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
+				$degree_negative = $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
+				$degree_positive = $this->BotEvalEnnemyLandPositiveThreat($frontier);
 				
-				if(isset($this->eval_land['ennemy']['threat']['positive'][$key]))
-					$this->eval_land['ennemy']['threat']['positive'][$key]	+= $this->BotEvalEnnemyLandPositiveThreat($frontier);
+				// Negative degree
+				if(isset($this->eval_land['ennemy']['threat']['negative'][$key]['degree']))
+					$this->eval_land['ennemy']['threat']['negative'][$key]['degree'] += $degree_negative;
 				else
-					$this->eval_land['ennemy']['threat']['positive'][$key]	= $this->BotEvalEnnemyLandPositiveThreat($frontier);
-			}
+					$this->eval_land['ennemy']['threat']['negative'][$key]['degree'] =  $degree_negative;
+				
+				$this->eval_land['ennemy']['threat']['negative'][$key]['own_land_data'] = $this->bot->bot_data->gameData[$key];
+				$this->eval_land['ennemy']['threat']['negative'][$key]['ennemy_lands'][$frontier->getGameDataLandId()] = array(
+						'ennemy_land_data' 	=> $frontier,
+						'degree'			=> $degree_negative,
+				);
+					
+				// Positive degree
+				if(isset($this->eval_land['ennemy']['threat']['positive'][$key]['degree']))
+					$this->eval_land['ennemy']['threat']['positive'][$key]['degree'] += $degree_positive;
+				else
+					$this->eval_land['ennemy']['threat']['positive'][$key] = array('degree' =>  $degree_positive);
+		}
 	}
 	
 	/**
