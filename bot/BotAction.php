@@ -21,8 +21,13 @@ class BotAction extends \yii\base\Object
 		$this->ennemyLandSortedByThreatNegative = $this->bot->bot_eval_land['ennemy']['threat']['negative'];
 		$this->ennemyLandSortedByThreatPositive = $this->bot->bot_eval_land['ennemy']['threat']['positive'];
 		$this->maxActionByDifficulty			= $this->bot->bot_data->difficultyData->getDifficultyBotActionPerTurn();
+		
 		$this->currentActionExecuted			= 0;
 		$this->boughtInTurn					= array();
+		
+		/*print "<pre>";
+		print_r($this->ennemyLandSortedByThreatNegative);
+		print "</pre>";*/
 	}
 	
 	/**
@@ -81,14 +86,12 @@ class BotAction extends \yii\base\Object
 		$buyError = $buy->BuyCheck();
 	
 		$this->bot->bot_log->botAddResult("Achat de : ".$cost, $land_id, $this->bot->bot_data->currentTurn->getTurnGold());
-		// TODO DELETE IT
-		$this->updateBuyInTurn($land_id, $cost);
 		if($buyError === true){
-			//$buy->BuyExec();
+			$buy->BuyExec();
 			$this->bot->bot_data->updateTurnGold($cost);
 			$this->currentActionExecuted++;
 			$this->bot->bot_data->updateGameDataUnits($cost, $land_id);
-			//$this->updateBuyInTurn($land_id, $cost);
+			$this->updateBuyInTurn($land_id, $cost);
 			return $cost;
 		}else{
 			$this->bot->bot_log->botAddResult("Erreur : ".$buyError);
@@ -109,7 +112,7 @@ class BotAction extends \yii\base\Object
 			
 			$this->bot->bot_log->botAddResult("Construction de : ".$building_id, $land_id, $this->bot->bot_data->currentTurn->getTurnGold());
 			if($buildError === true){
-				//$build->BuildExec();
+				$build->BuildExec();
 				$this->bot->bot_data->updateTurnGold($this->bot->bot_data->buildingData[$building_id]->getBuildingCost());
 				$this->currentActionExecuted++;
 			}else
@@ -149,7 +152,7 @@ class BotAction extends \yii\base\Object
 			$fightError = $fight->FightCheck();
 			$attack_result = array();
 			if($fightError === true){
-				//$attack_result = $fight->FightExec();
+				$attack_result = $fight->FightExec();
 				
 				// Update data
 				$this->bot->bot_data->getGameData();
@@ -206,9 +209,9 @@ class BotAction extends \yii\base\Object
 		}
 		
 		// Attack
-		//if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
-			$this->BotAttackLand($land_atk_id, $land_def_id, $this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits());
-		//}
+		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
+			$this->BotAttackLand($land_atk_id, $land_def_id, round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2));
+		}
 		
 	}
 	

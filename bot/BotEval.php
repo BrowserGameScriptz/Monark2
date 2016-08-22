@@ -108,14 +108,13 @@ class BotEval extends \yii\base\Object
 	 * - $this->eval_land['ennemy'][land_id]['evalThreat]
 	 */
 	private function BotEvalEnnemyLands(){
-		foreach($this->eval_land['ennemy'] as $key => $lands)
+		foreach($this->eval_land['ennemy'] as $key => $lands){
+			if(!isset($this->eval_land['ennemy']['threat']['negative'])){
+				$this->eval_land['ennemy']['threat']['negative'] = array();
+				$this->eval_land['ennemy']['threat']['positive'] = array();
+			}
 			foreach ($this->eval_land['ennemy'][$key] as $frontier){
-				
-				// Init
-				$this->eval_land['ennemy'][$key] 					= $frontier; 
-				$this->eval_land['ennemy']['threat']['negative'] 	= array();
-				$this->eval_land['ennemy']['threat']['positive'] 	= array();
-				
+				$this->eval_land['ennemy'][$key] = $frontier;
 				$degree_negative = $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
 				$degree_positive = $this->BotEvalEnnemyLandPositiveThreat($frontier);
 				
@@ -130,12 +129,13 @@ class BotEval extends \yii\base\Object
 						'ennemy_land_data' 	=> $frontier,
 						'degree'			=> $degree_negative,
 				);
-					
+				
 				// Positive degree
 				if(isset($this->eval_land['ennemy']['threat']['positive'][$key]['degree']))
 					$this->eval_land['ennemy']['threat']['positive'][$key]['degree'] += $degree_positive;
 				else
 					$this->eval_land['ennemy']['threat']['positive'][$key] = array('degree' =>  $degree_positive);
+			}
 		}
 	}
 	
