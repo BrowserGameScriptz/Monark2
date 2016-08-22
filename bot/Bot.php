@@ -102,6 +102,7 @@ class Bot extends \yii\base\Object
 	}
 	
 	private function botEnd(){
-		print $this->bot_log->botShowLogs();
+		if($test)
+			print $this->bot_log->botShowLogs();
 	}
 }

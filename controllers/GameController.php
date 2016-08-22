@@ -111,6 +111,7 @@ class GameController extends \yii\web\Controller
 	 */
 	public function checkStarted()
 	{
+		Yii::$app->session['Game'] = Game::getGameById(Yii::$app->session['Game']->getGameId());
 		if(Yii::$app->session['Game']->getGameStatut() >= 50)
 			return true;
 		else
