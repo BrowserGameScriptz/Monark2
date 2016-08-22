@@ -23,7 +23,7 @@ return [
         "Siam" => "Siam",
         "Siberia" => "Sibérie",
         "Urals" => "Oural",
-        "Yakut" => "Yakut",
+        "Yakutia" => "Yakutie",
         "Alaska" => "Alaska",
         "Alberta" => "Alberta",
         "Central America" => "Amérique centrale",

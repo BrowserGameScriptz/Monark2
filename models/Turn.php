@@ -205,16 +205,16 @@ class Turn extends \yii\db\ActiveRecord
     				'turn_begin' 	=> $new_turn_begin,
     		));
     		
+    		// If a user loose OR user quit the game
+    		if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
+    			return self::NewTurn($game_id, $next_user_id, $gameData);
+    		}
+    		
     		// If bot
     		if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0){
     			$Bot = new Bot($game_id, $next_user_id);
     			return true;
     			//return $Bot->BotStartTurn($gameid, $next_user_id, $next_gold);
-    		}
-    		
-    		// If a user loose OR user quit the game
-    		if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
-    			return self::NewTurn($game_id, $next_user_id, $gameData);
     		}
     	}
     }

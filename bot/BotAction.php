@@ -44,23 +44,25 @@ class BotAction extends \yii\base\Object
 	 * @param $units
 	 */
 	private function BotOwnLandBuy($land_id, $units){
-		if($units > 0){
-			$buy = new Buy();
-			
-			if($this->bot->bot_data->currentTurn->getTurnGold() > $units)
-				$cost = $units;
-			else
-				$cost = $this->bot->bot_data->currentTurn->getTurnGold();
-			$buy->BuyInit($land_id, $this->bot->bot_data->userData, $this->bot->bot_data->game, $this->bot->bot_data->gameData, $this->bot->bot_data->currentTurn, $cost);
-			$buyError = $buy->BuyCheck();
+		$units = abs($units);
+		$buy = new Buy();
 		
-			$this->bot->bot_log->botAddResult("Achat de : ".$units);
-			if($buyError === true){
-				$buy->BuyExec();
-				$this->bot->bot_data->updateTurnGold($cost);
-				$this->currentActionExecuted++;
-			}else
-				$this->bot->bot_log->botAddResult("Erreur : ".$buyError);
+		if($this->bot->bot_data->currentTurn->getTurnGold() > $units)
+			$cost = $units;
+		else
+			$cost = $this->bot->bot_data->currentTurn->getTurnGold();
+		$buy->BuyInit($land_id, $this->bot->bot_data->userData, $this->bot->bot_data->game, $this->bot->bot_data->gameData, $this->bot->bot_data->currentTurn, $cost);
+		$buyError = $buy->BuyCheck();
+	
+		$this->bot->bot_log->botAddResult("Achat de : ".$units);
+		if($buyError === true){
+			$buy->BuyExec();
+			$this->bot->bot_data->updateTurnGold($cost);
+			$this->currentActionExecuted++;
+			return $cost;
+		}else{
+			$this->bot->bot_log->botAddResult("Erreur : ".$buyError);
+			return 0;
 		}
 	}
 	
@@ -106,7 +108,11 @@ class BotAction extends \yii\base\Object
 	 * @param $units
 	 */
 	private function BotAttackLand($land_id_atk, $land_id_def, $units){
-		if($this->bot->bot_data->gameData[$land_id_atk]->getGameDataUserId() != $this->bot->bot_data->gameData[$land_id_def]->getGameDataUserId()){
+		
+		if($units == $this->bot->bot_data->gameData[$land_id_atk]->getGameDataUnits())
+			$units--;
+		
+		if($this->bot->bot_data->gameData[$land_id_atk]->getGameDataUnits() > 0 && $this->bot->bot_data->gameData[$land_id_atk]->getGameDataUserId() != $this->bot->bot_data->gameData[$land_id_def]->getGameDataUserId()){
 			$this->bot->bot_log->botAddResult("Attack de : ".$land_id_def." Depuis ".$land_id_atk." Avec : ".$units);
 			$fight = new Fight();
 			$fight->FightInit($land_id_def, $this->bot->bot_data->userData, $this->bot->bot_data->game, $this->bot->bot_data->gameData, $this->bot->bot_data->currentTurn, $land_id_atk, $units, $this->bot->bot_data->frontier);
@@ -127,7 +133,7 @@ class BotAction extends \yii\base\Object
 	 */
 	private function BotOwnLandDefend($land_id, $degree){
 		if($degree > 10){
-			if($this->bot->bot_data->currentTurn->getTurnGold()/3 >= $this->bot->bot_data->buildingData[$this->bot->frt_build_id]->getBuildingCost()){
+			if($this->bot->bot_data->currentTurn->getTurnGold()/2 >= $this->bot->bot_data->buildingData[$this->bot->frt_build_id]->getBuildingCost()){
 				$this->BotOwnLandBuild($land_id, $this->bot->frt_build_id);
 			}
 		}
@@ -141,6 +147,7 @@ class BotAction extends \yii\base\Object
 	 * @param unknown $degree
 	 */
 	private function BotLandAttack($land_atk_id, $land_def_id, $degree){
+		$units_add = 0;
 		if($degree > 0){
 			if($degree > 10){
 				if($this->bot->bot_data->currentTurn->getTurnGold()/3 >= $this->bot->bot_data->buildingData[$this->bot->frt_build_id]->getBuildingCost()){
@@ -148,15 +155,13 @@ class BotAction extends \yii\base\Object
 			 		$degree -= $this->bot->bot_data->buildingData[$this->bot->frt_build_id]->getBuildingCost();
 			 	}
 			}
-			$units_add = round(abs($degree)*1.1);
-		 	$this->BotOwnLandBuy($land_atk_id, $units_add);
-		 }else{
-		 	$units_add = round(abs($degree)*1.2);
-		 	$this->BotOwnLandBuy($land_atk_id, $units_add);
-		 } 
+			$units_add = $this->BotOwnLandBuy($land_atk_id, round(abs($degree)*1.1));
+		}elseif($degree > -10) {
+			$units_add = $this->BotOwnLandBuy($land_atk_id, round(abs($degree)*1.2));
+		}
 		 
 		 if(round(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add) / 2) > $this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()){
-		 	$this->BotAttackLand($land_atk_id, $land_def_id, round(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add) / 2));
+		 	$this->BotAttackLand($land_atk_id, $land_def_id, round(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) / 2) + $units_add);
 		 }else{
 		 	$this->BotAttackLand($land_atk_id, $land_def_id, $this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add);
 		 }
@@ -175,7 +180,7 @@ class BotAction extends \yii\base\Object
 						$this->BotOwnLandDefend($landArray['own_land_data']->getGameDataLandId(), $landArray['degree']);
 					
 					// To attack	
-					else
+					else if($landArray['degree'] < 0)
 						$this->BotLandAttack($landArray['own_land_data']->getGameDataLandId(), $ennemy_land_id, $landArray['degree']);
 					
 					/*
