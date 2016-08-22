@@ -17,7 +17,11 @@ class BotLog extends \yii\base\Object
 		$this->result .= time()." : ** Begin Action	 ::: ".$action." ** <br>";
 	}
 	
-	public function botAddResult($result){
+	public function botAddResult($result, $land_id=null, $gold=null){
+		if($land_id != null)
+			$this->result .= "Land = ".$land_id." ";
+		if($gold != null)
+			$this->result .= "Gold = ".$gold." ";
 		$this->result .= $result."<br>";
 	}
 	

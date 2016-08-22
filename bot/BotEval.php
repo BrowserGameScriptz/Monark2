@@ -14,8 +14,6 @@ class BotEval extends \yii\base\Object
 	
 	public function __construct($bot){
 		$this->bot = $bot;
-		$this->eval_land['ennemy']['threat']['negative'] = array();
-		$this->eval_land['ennemy']['threat']['positive'] = array();
 	}
 	
 	/**
@@ -112,7 +110,11 @@ class BotEval extends \yii\base\Object
 	private function BotEvalEnnemyLands(){
 		foreach($this->eval_land['ennemy'] as $key => $lands)
 			foreach ($this->eval_land['ennemy'][$key] as $frontier){
-				$this->eval_land['ennemy'][$key] = $frontier; 
+				
+				// Init
+				$this->eval_land['ennemy'][$key] 					= $frontier; 
+				$this->eval_land['ennemy']['threat']['negative'] 	= array();
+				$this->eval_land['ennemy']['threat']['positive'] 	= array();
 				
 				$degree_negative = $this->BotEvalEnnemyLandNegativeThreat($this->bot->bot_data->gameData[$key], $frontier);
 				$degree_positive = $this->BotEvalEnnemyLandPositiveThreat($frontier);
