@@ -121,14 +121,14 @@ class BotData extends \yii\base\Object
 	}
 	
 	private function getUserData(){
-		$this->userData					= GamePlayer::findUserBot($this->bot->bot_id);
+		$this->userData					= GamePlayer::findUserBot(abs($this->bot->bot_id));
 	}
 	
 	/**
 	 * 
 	 * @param number $minus
 	 */
-	public function updateTurnGold(number $minus){
+	public function updateTurnGold($minus){
 		$this->currentTurn->setTurnGold($this->currentTurn->getTurnGold() - $minus);
 	}
 	
@@ -137,7 +137,7 @@ class BotData extends \yii\base\Object
 	 * @param number $minus
 	 * @param number $land_id
 	 */
-	public function updateGameDataUnits(number $minus, number $land_id){
+	public function updateGameDataUnits($minus, $land_id){
 		$this->gameData[$land_id]->setGameDataUnits($this->gameData[$land_id]->getGameDataUnits() - $minus);
 	}
 	 
@@ -146,7 +146,7 @@ class BotData extends \yii\base\Object
 	 * @param number $newBuildingId
 	 * @param number $land_id
 	 */
-	public function updateGameDataBuildings(number $newBuildingId, number $land_id){
+	public function updateGameDataBuildings($newBuildingId, $land_id){
 		$this->gameData[$land_id]->setGameDataBuildings($newBuildingId);
 	}
 }

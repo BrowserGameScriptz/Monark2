@@ -98,7 +98,7 @@ class Bot extends \yii\base\Object
 	private function botDoActions(){
 		$this->bot_action			= new BotAction($this);
 		$this->bot_action->BotInitActionLand();
-		//$this->bot_action->BotEndTurn();
+		$this->bot_action->BotEndTurn();
 	}
 	
 	private function botEnd(){

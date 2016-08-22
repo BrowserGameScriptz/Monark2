@@ -26,11 +26,11 @@ class BotLog extends \yii\base\Object
 	}
 	
 	public function botShowLogs(){
-		if($this->print){
+		//if($this->print){
 			$this->result .= "</pre>";
 			return $this->result;
-		}
-		return "";
+		/*}
+		return "";*/
 	}
 }
 ?>
