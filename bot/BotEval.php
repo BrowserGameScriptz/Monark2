@@ -14,6 +14,8 @@ class BotEval extends \yii\base\Object
 	
 	public function __construct($bot){
 		$this->bot = $bot;
+		$this->eval_land['ennemy']['threat']['negative'] = array();
+		$this->eval_land['ennemy']['threat']['positive'] = array();
 	}
 	
 	/**

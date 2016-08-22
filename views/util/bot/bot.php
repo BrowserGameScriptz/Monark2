@@ -18,7 +18,7 @@ $this->title = 'Test Bot';
 
     <?php 
     $game_id = Yii::$app->session['Game']->getGameId();
-    $bot_id = -3;
+    $bot_id = -8;
     ?>
 
     <?= "<center><font size='6'>Simulation de BOT ".abs($bot_id)."</font><br>" ?>

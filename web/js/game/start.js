@@ -55,7 +55,7 @@ $("document").ready(
 		var progress_name 			= 'game_load';
 		
 		// Prepare header
-		//reloadHeader();
+		reloadHeader();
 		
     	// Interval beginning
 		var IntervalId = setInterval(

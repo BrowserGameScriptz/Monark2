@@ -90,7 +90,7 @@ class BotData extends \yii\base\Object
 	/**
 	 * 
 	 */
-	private function getGameData(){
+	public function getGameData(){
 		// TODO global & botLand use global game data (1 req db)
 		$this->gameData	= GameData::getGameDataByIdToArray($this->bot->game_id);
 		$this->botLand	= GameData::getUserLandId(null, $this->bot->game_id, $this->bot->bot_id);	 
@@ -137,8 +137,17 @@ class BotData extends \yii\base\Object
 	 * @param number $minus
 	 * @param number $land_id
 	 */
-	public function updateGameDataUnits($minus, $land_id){
-		$this->gameData[$land_id]->setGameDataUnits($this->gameData[$land_id]->getGameDataUnits() - $minus);
+	public function updateGameDataUnits($add, $land_id){
+		$this->gameData[$land_id]->setGameDataUnits($this->gameData[$land_id]->getGameDataUnits() + $add);
+	}
+	
+	/**
+	 *
+	 * @param number $minus
+	 * @param number $land_id
+	 */
+	public function updateGameDataUserId($new_user, $land_id){
+		$this->gameData[$land_id]->setGameDataUserId($new_user);
 	}
 	 
 	/**

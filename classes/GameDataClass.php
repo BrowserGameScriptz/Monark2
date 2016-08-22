@@ -40,6 +40,10 @@ class GameDataClass{
 		return $this->gameDataUserId;
 	}
 	
+	public function setGameDataUserId($newUserId){
+		$this->gameDataUserId = $newUserId;
+	}
+	
 	public function getGameDataGameId(){
 		return $this->gameDataGameId;
 	}
