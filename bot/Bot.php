@@ -40,6 +40,7 @@ class Bot extends \yii\base\Object
 
 	// test
 	public $bot_log;
+	public $test;
 	
 	/**
      * Call all the BOT function and get the required informations
@@ -50,6 +51,7 @@ class Bot extends \yii\base\Object
 	public function __construct($game_id, $bot_id, $test=null){
 		/* INIT */
 		$this->bot_log 					= new BotLog($this, $test);
+		$this->test						= $test;
 		$this->bot_log->botAddActionBegin("Init");
 		
 		// GET Info
@@ -102,7 +104,7 @@ class Bot extends \yii\base\Object
 	}
 	
 	private function botEnd(){
-		if($test)
+		if($this->test)
 			print $this->bot_log->botShowLogs();
 	}
 }

@@ -25,9 +25,9 @@ class BotAction extends \yii\base\Object
 		$this->currentActionExecuted			= 0;
 		$this->boughtInTurn					= array();
 		
-		/*print "<pre>";
+		print "<pre>";
 		print_r($this->ennemyLandSortedByThreatNegative);
-		print "</pre>";*/
+		print "</pre>";
 	}
 	
 	/**
@@ -227,6 +227,9 @@ class BotAction extends \yii\base\Object
 			
 		// Attack
 		$this->BotLandActionEnnemyAttack();
+		
+		// Rest
+		$this->BotOwnLandRestAction();
 	}
 	
 	/**
@@ -266,6 +269,21 @@ class BotAction extends \yii\base\Object
 			foreach($to_build as $build){
 				if(isset($this->bot->bot_data->buildingData[$build->getBuildingId()]) && $this->bot->bot_data->buildingData[$build->getBuildingId()]->getBuildingGoldIncome() > 0){
 					$this->BotOwnLandBuild($land->getGameDataLandId(), $build->getBuildingId());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private function BotOwnLandRestAction(){
+		$owned_land_count 	= count($this->bot->bot_eval_land['owned']);
+		if($owned_land_count > 0){
+			$gold_per_land 		= round($this->bot->bot_data->currentTurn->getTurnGold() / $owned_land_count);
+			foreach($this->bot->bot_eval_land['owned'] as $land){
+				if($this->checkAction()){
+					$this->BotOwnLandBuy($land->getGameDataLandId(), $gold_per_land);
 				}
 			}
 		}
