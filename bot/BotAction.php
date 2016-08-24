@@ -90,7 +90,8 @@ class BotAction extends \yii\base\Object
 			$buy->BuyExec();
 			$this->bot->bot_data->updateTurnGold($cost);
 			$this->currentActionExecuted++;
-			$this->bot->bot_data->updateGameDataUnits($cost, $land_id);
+			//$this->bot->bot_data->updateGameDataUnits($cost, $land_id);
+			$this->bot->bot_data->getGameData();
 			$this->updateBuyInTurn($land_id, $cost);
 			return $cost;
 		}else{
@@ -173,7 +174,7 @@ class BotAction extends \yii\base\Object
 		// Not neutral
 		if($this->bot->bot_data->gameData[$ennemy_land_id]->getGameDataUserId() != 0){
 			// If need construction
-			if($degree > 5){
+			if($degree > 6){
 				if($this->bot->bot_data->currentTurn->getTurnGold()/2 >= $this->bot->bot_data->buildingData[$this->bot->frt_build_id]->getBuildingCost()){
 					$this->BotOwnLandBuild($land_id, $this->bot->frt_build_id);
 				}
@@ -195,7 +196,7 @@ class BotAction extends \yii\base\Object
 		if($degree > 0){
 			
 			// If need construction
-			if($degree > 5){
+			if($degree > 6){
 				if($this->bot->bot_data->currentTurn->getTurnGold()/2 >= $this->bot->bot_data->buildingData[$this->bot->pc_build_id]->getBuildingCost()){
 					$this->BotOwnLandBuild($land_atk_id, $this->bot->pc_build_id);
 					$degree -= $this->bot->bot_data->buildingData[$this->bot->pc_build_id]->getBuildingCost();
@@ -205,11 +206,11 @@ class BotAction extends \yii\base\Object
 			
 		// Buy units
 		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) < round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
-			$units_add = $this->BotOwnLandBuy($land_atk_id, abs(round($degree*1.2) - $this->getBuyInTurn($land_atk_id)));
+			$this->BotOwnLandBuy($land_atk_id, abs(round($degree*1.2) - $this->getBuyInTurn($land_atk_id)));
 		}
 		
 		// Attack
-		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits() + $units_add) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
+		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
 			$this->BotAttackLand($land_atk_id, $land_def_id, round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2));
 		}
 		

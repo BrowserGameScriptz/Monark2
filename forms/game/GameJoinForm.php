@@ -22,9 +22,10 @@ class gameJoinForm extends Model
 	private $_game = false;
 	private $_validation;
 
-    public function __construct(){
+    public function __construct($game_id=null){
     	$this->_game_player = new GamePlayer();
     	$this->user_id 		= Yii::$app->session['User']->getId();
+    	$this->game_id 		= $game_id;
     }
     
 	/**
@@ -54,10 +55,11 @@ class gameJoinForm extends Model
     public function validateGameId(){
     	$urlparams 			= Yii::$app->request->queryParams;
     	if(array_key_exists('gid', $urlparams)){
-    		$this->game_id 		= $urlparams['gid'];
-    		$this->_validation 	= new ValidateClass($this->user_id, $this->game_id);
-    	}else
+    		$this->game_id = $urlparams['gid'];
+    	}else if($this->game_id != null)
     		$this->addError("Game", "error_game_id");
+    	
+    	$this->_validation 	= new ValidateClass($this->user_id, $this->game_id);
     }
     
     /**
@@ -65,12 +67,13 @@ class gameJoinForm extends Model
      */
     public function validateGameData()
     {
-    	if (!$this->hasErrors())
+    	if (!$this->hasErrors()){
     		$result = $this->_validation->validateGameExist();
     		if($result['result'])
     			$this->_game = $result['game'];
     		else
     			$this->addError("Game", "error_game_data");
+    	}
     }
     
     /**

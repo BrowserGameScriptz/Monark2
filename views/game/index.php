@@ -51,8 +51,18 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
             //['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => Yii::t('game', 'Tab_Game_Name'),
-                'value'     => function ($model, $key, $index, $column) {
-                    return $model->decryptGameName($model->game_name);
+            	'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($DifficultyData){
+                    $returned 	= $model->decryptGameName($model->game_name);
+                    $stars 		= "";
+                    for($i=0; $i < $model->game_difficulty_id; $i++)
+                    	$stars .= " <i class='fa fa-star'></i>";
+                    return $returned.Html::tag('span', $stars, [
+                    		'title'=> $DifficultyData[$model->game_difficulty_id]->getDifficultyName(),
+                    		'data-toggle'=>'tooltip',
+                    		'data-placement' => 'auto',
+                    		'style'=>'text-decoration: none; cursor:pointer;'
+                    ]);;
                 },
             ],
             [
@@ -91,7 +101,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
             	if($model->game_statut == 0){
             		//if(!isset($player_exist_game) OR $player_exist_game['quit'] <= 1){
             			return "<center><table style='border-collapse: separate;border-spacing: 5px;'><tr>"
-            			."<td>".Html::a(Yii::t('game', 'Buton_Game_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-success'])."</td>"
+            			."<td>".Html::a(Yii::t('game', 'Button_Game_Enter')." <i class='fa fa-sign-in'></i>", ['/game/join', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-success'])."</td>"
             			."<td>".Html::a(Yii::t('game', 'Button_Game_Spec')." <i class='fa fa-eye'></i>", ['/game/spec', 'gid' => $model->game_id], ['data-method' => 'post','data-params' => 'myParam=anyValue','class'=>'btn btn-primary'])."</td>"
             			."</tr></table></center>";
             		/*}else{

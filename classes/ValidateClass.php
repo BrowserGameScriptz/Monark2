@@ -2,7 +2,6 @@
 
 namespace app\classes;
 
-use Yii;
 use app\models\Game;
 use app\models\User;
 
@@ -63,6 +62,17 @@ class ValidateClass
 		if($this->_game->getGamePlayerMax() < Game::getGameCountPlayer($this->game_id)+1)
 			return false;
 		return true;
+	}
+	
+	/**
+	 * 
+	 * @return boolean
+	 */
+	public function validateGameOwner(){
+		if($this->_game->getGameOwnerID() == $this->user_id){
+	    	return true;
+	    }
+	    return false;
 	}
 }
 

@@ -136,7 +136,7 @@ class Game extends \yii\db\ActiveRecord
      * @param String $game_pwd
      * @param Integer $game_max_player
      */
-    public static function createGame($game_name, $game_pwd, $game_max_player, $game_map_id){
+    public static function createGame($game_name, $game_pwd, $game_max_player, $game_map_id, $game_difficulty_id){
     	Yii::$app->db->createCommand()->insert("game", [
     			'game_name' => $game_name,
     			'game_pwd' => $game_pwd,
@@ -148,7 +148,7 @@ class Game extends \yii\db\ActiveRecord
     			'game_map_cont' => 0,
     			'game_mod_id' => 0,
     			'game_turn_time' => 0,
-    			'game_difficulty_id' => 0,
+    			'game_difficulty_id' => $game_difficulty_id,
     			'game_won_user_id' => 0,
     			'game_won_time' => 0,
     			'game_key' => 0,

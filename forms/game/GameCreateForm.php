@@ -7,6 +7,7 @@ use yii\base\Model;
 use app\models\Game;
 use app\classes\Crypt;
 use app\models\Map;
+use app\models\Difficulty;
 
 /**
  * LoginForm is the model behind the login form.
@@ -17,6 +18,7 @@ class gameCreateForm extends Model
     public $game_pwd;
     public $game_max_player;
     public $game_map_id;
+    public $game_difficulty_id;
 
     private $_game;
 
@@ -31,7 +33,7 @@ class gameCreateForm extends Model
     {
         return [
             // gamename and password are both required
-            [['game_name', 'game_max_player', 'game_map_id'], 'required'],
+            [['game_name', 'game_max_player', 'game_map_id', 'game_difficulty_id'], 'required'],
         	['game_pwd', 'string'],
         	// password is validated by validatePassword()
         	['game_name', 'validateGameName'],
@@ -40,7 +42,9 @@ class gameCreateForm extends Model
         	// player_max is validated by validatePlayerMax()
         	['game_max_player', 'validatePlayerMax'],
         	// map id valid
-        	['game_map_id', 'validateMapId']
+        	['game_map_id', 'validateMapId'],
+        	// difficulty id valid
+        	['game_difficulty_id', 'validateDifficultyId']
         ];
     }
 
@@ -85,7 +89,18 @@ class gameCreateForm extends Model
     		$this->addError($attribute, Yii::t('game', 'Error_Incorrect_Map'));
     }
     
-    
+    /**
+     * Validates the difficulty.
+     * This method serves as the inline validation for difficulty.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateDifficultyId($attribute, $params)
+    {
+    	if(Difficulty::findDifficultyByIdToArray($this->game_difficulty_id) == null)
+    		$this->addError($attribute, Yii::t('game', 'Error_Incorrect_Difficulty'));
+    }
     
     /**
      * Validates the mail.
@@ -115,9 +130,12 @@ class gameCreateForm extends Model
 	    	$game_name = (new Crypt($this->game_name))->s_crypt();
 	    	// password
 	    	$game_pwd = (new Crypt($this->game_pwd))->crypt();
-	    	 
+	    	
+	    	// session
+	    	Yii::$app->session['GameCreatedName'] = $game_name;
+	    	
 	    	// Create in db
-	        $this->_game->createGame($game_name, $game_pwd, $this->game_max_player, $this->game_map_id);
+	        $this->_game->createGame($game_name, $game_pwd, $this->game_max_player, $this->game_map_id, $this->game_difficulty_id);
 	        return true;
 	    }
 	    return false;

@@ -42,9 +42,20 @@ $this->title = Yii::t ( 'game', 'Title_Create' );
                 ),
                 [
                 	'class'		=> 'selectpicker',
-               ]);?>
-        <!--<? //$form->field($model, 'game_mod_id') ?>
-        <? //$form->field($model, 'game_difficulty_id') ?>-->
+               ])->label(Yii::t('game', 'Tab_Map'));?>
+        <!--<? //$form->field($model, 'game_mod_id') ?>-->
+        <?=$form->field ($model, 'game_difficulty_id')->dropDownList ( 
+        		ArrayHelper::map($DifficultyData,
+                function($model, $defaultValue) {
+                	return $model->getDifficultyId();
+                },
+                function($model, $defaultValue) {
+                	return $model->getDifficultyName();
+                }
+                ),
+                [
+                	'class'		=> 'selectpicker',
+               ])->label(Yii::t('game', 'Tab_Difficulty'));?>
         <?= $form->field($model, 'game_pwd')->passwordInput()->label(Yii::t('game', 'Txt_Game_Pwd'))?>
 
     <div class="form-group">

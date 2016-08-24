@@ -2,6 +2,8 @@
 
 namespace app\classes;
 
+use Yii;
+
 /**
  *
  * @author Paul
@@ -17,6 +19,7 @@ class DifficultyClass{
 	 private $difficultyRateLandBaseUnits;
 	 private $difficultyBotActionPerTurn;
 	 private $difficultyBotBonusIncome;
+	 private $difficultyHide;
 
 	/**
 	 *
@@ -30,6 +33,7 @@ class DifficultyClass{
 		$this->difficultyRateLandBaseUnits 		= $difficultyData['difficulty_rate_land_base_units'];
 		$this->difficultyBotActionPerTurn 		= $difficultyData['difficulty_bot_action_per_turn'];
 		$this->difficultyBotBonusIncome 		= $difficultyData['difficulty_bot_bonus_income'];
+		$this->difficultyHide					= $difficultyData['difficulty_hide'];
 	}
 
 	public function getDifficultyId(){
@@ -38,5 +42,9 @@ class DifficultyClass{
 	
 	public function getDifficultyBotActionPerTurn(){
 		return $this->difficultyBotActionPerTurn;
+	}
+	
+	public function getDifficultyName(){
+		return Yii::t('difficulty', $this->difficultyName);
 	}
 }

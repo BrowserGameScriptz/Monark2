@@ -43,6 +43,10 @@ $this->registerJs(
 		<div class="alert alert-info"><?= Yii::t('game', 'Info_Game_Lobby_Antartic') ?></div>
 	<?php endif; ?>
 	
+	<?php if(isset($model->errors["Game"])): ?>
+    	<div class='alert alert-danger'><?= $model->errors["Game"][0] ?></div>
+    <?php endif;?>
+	
     <!-- Top Buttons -->
     <div style="margin: 0 auto;"><table style="border-spacing: 4px;border-collapse: separate;"><tr>
     <!-- Classic -->
