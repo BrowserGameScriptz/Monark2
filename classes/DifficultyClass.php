@@ -47,4 +47,16 @@ class DifficultyClass{
 	public function getDifficultyName(){
 		return Yii::t('difficulty', $this->difficultyName);
 	}
+	
+	public function getDifficultyRateResourceFreq(){
+		return $this->difficultyRateResourceFreq;
+	}
+	
+	public function getDifficultyRateLandBaseUnits(){
+		return $this->difficultyRateLandBaseUnits;
+	}
+	
+	public function getDifficultyBotBonusIncome(){
+		return $this->difficultyBotBonusIncome;
+	}
 }

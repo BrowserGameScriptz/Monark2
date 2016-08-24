@@ -145,8 +145,8 @@ class Turn extends \yii\db\ActiveRecord
      * @param unknown $game_id
      * @param unknown $user_id
      */
-    public static function createGameFirstTurn($game_id, $user_id, $gameData){
-    	self::NewTurn($game_id, $user_id, $gameData);
+    public static function createGameFirstTurn($game_id, $user_id, $gameData, $difficultyData){
+    	self::NewTurn($game_id, $user_id, $gameData, $difficultyData);
     }
     
     /**
@@ -154,10 +154,11 @@ class Turn extends \yii\db\ActiveRecord
      * @param unknown $game_id
      * @param unknown $user_id
      */
-    public static function NewTurn($game_id, $user_id, $gameData)
+    public static function NewTurn($game_id, $user_id, $gameData, $difficultyData, $gameInfo=null)
     {
     	// Turn Data
-    	$previousTurnData 			= self::getLastTurnByGameId($game_id);
+    	$previousTurnData 				= self::getLastTurnByGameId($game_id);
+    	if($gameInfo == null)$gameInfo 	= Game::getGameById($game_id);
     	
     	// Game Player
     	$game_player 				= new GamePlayer();
@@ -185,7 +186,11 @@ class Turn extends \yii\db\ActiveRecord
     	$count_land = GameData::CountLandByUserId($gameData, $game_id, $next_user_id);
     	$count_gold = GameData::GoldGameDataUser($gameData, $game_id, $next_user_id, $count_land);
     	$next_gold 	= $previousUserTurnData->getTurnGold() + $count_gold;
-      	
+    	
+    	// If bot bonus income
+    	if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0)
+    		$next_gold = round($next_gold * $difficultyData[$gameInfo->getDifficultyId()]->getDifficultyBotBonusIncome());
+    		
     	if($previousTurnData->getTurnTime() == null)
     		$new_turn_begin = time();
     	else

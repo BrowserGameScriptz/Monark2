@@ -28,6 +28,7 @@ use app\models\Fight;
 use app\models\Chat;
 use app\models\ChatRead;
 use app\models\Mail;
+use app\models\Difficulty;
 
 /**
  * AjaxController implements the CRUD actions for Ajax model.
@@ -107,6 +108,10 @@ class AjaxController extends Controller
     		$returned['resource'] 			= Resource::findAllResourcesToArray();}else{
     		$returned['resource'] 			= Yii::$app->session['Resource'];}
     		
+    	if(Yii::$app->session['Difficulty'] == null && isset($dataList['Difficulty'])){
+    		$returned['difficulty'] 		= Difficulty::findAllDifficulyToArray();}else{
+    		$returned['difficulty'] 		= Yii::$app->session['Difficulty'];}
+    		
     	if(Yii::$app->session['Color'] == null && isset($dataList['Color'])){
     		$returned['color'] 				= Color::findAllColorToArray();}else{
     		$returned['color'] 				= Yii::$app->session['Color'];}
@@ -174,9 +179,10 @@ class AjaxController extends Controller
 	    			'game_id' => true,
 	    			'user_id' => true,
 	    			'GameData' => true,
+	    			'Difficulty' => true,
 	    	));
 		
-		Turn::NewTurn($data['game']->getGameId(), $data['user']->getUserId(), $data['gameData']);
+		Turn::NewTurn($data['game']->getGameId(), $data['user']->getUserId(), $data['gameData'], $data['difficulty']);
 	}
 	
 	/**

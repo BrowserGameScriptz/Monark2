@@ -178,15 +178,16 @@ class GameController extends \yii\web\Controller
      *
      */
     public function setSessionDataNull(){
-    	Yii::$app->session['Contient'] = null;
-    	Yii::$app->session['Land'] = null;
-    	Yii::$app->session['Resource'] = null;
-    	Yii::$app->session['Map'] = null;
-    	Yii::$app->session['Color'] = null;
-    	Yii::$app->session['Frontier'] = null;
-    	Yii::$app->session['Building'] = null;
-    	Yii::$app->session['MapData'] = null;
-    	Yii::$app->session['Game'] = null;
+    	Yii::$app->session['Contient'] 	= null;
+    	Yii::$app->session['Land'] 		= null;
+    	Yii::$app->session['Resource'] 	= null;
+    	Yii::$app->session['Map']		= null;
+    	Yii::$app->session['Color'] 	= null;
+    	Yii::$app->session['Frontier'] 	= null;
+    	Yii::$app->session['Building'] 	= null;
+    	Yii::$app->session['MapData'] 	= null;
+    	Yii::$app->session['Game'] 		= null;
+    	Yii::$app->session['Difficulty']= null;
     }
 
     /**
@@ -202,6 +203,7 @@ class GameController extends \yii\web\Controller
     	if(Yii::$app->session['Color'] == null)		Yii::$app->session->set("Color", Color::findAllColorToArray());
     	if(Yii::$app->session['Frontier'] == null)	Yii::$app->session->set("Frontier", Frontier::findAllFrontier($game_current->getMapId()));
     	if(Yii::$app->session['Building'] == null)	Yii::$app->session->set("Building", Building::findAllBuildingToArray());
+    	if(Yii::$app->session['Difficulty'] == null)Yii::$app->session->set("Difficulty", Difficulty::findAllDifficulyToArray());
     }
 
     /**
@@ -671,8 +673,9 @@ class GameController extends \yii\web\Controller
 		    		$res		 	= new Resource();
 		    		$game_data		= new GameData();
 		    		$turn			= new Turn();
-		    		$continentData	= (new Continent())->findAllContinentToArray($game_current->getMapId());
-		    		$mapData		= (new Map())->findMapById($game_current->getMapId());
+		    		$continentData	= Continent::findAllContinentToArray($game_current->getMapId());
+		    		$mapData		= Map::findMapById($game_current->getMapId());
+		    		$difficultyData	= Difficulty::findAllDifficulyToArray();
 
 		    		// Datas
 		    		$resourceData 	= $res->findAllResourcesToArray();
@@ -689,16 +692,16 @@ class GameController extends \yii\web\Controller
 			    				$assignedLands 		= $land->assignLandsToArray($gamePlayerData, $game_current, $continentData, $mapData);
 
 			    				// Assign Resources
-			    				$assignedResources 	= $res->assignResourcesToArray($landData, $resourceData);
+			    				$assignedResources 	= $res->assignResourcesToArray($landData, $resourceData, $difficultyData[$game_current->getDifficultyId()]);
 
 			    				// Create Game Data
-			    				$gameData 			= $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current);
+			    				$gameData 			= $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current, $difficultyData[$game_current->getDifficultyId()]);
 
 						    	// Create turn order
 						    	$gameTurnOrder 		= $game_player->updateUserTurnOrder($game_current->getGameId());
 						    	
 						    	// Create first turn
-						    	$turn->createGameFirstTurn($game_current->getGameId() , array_values($gameTurnOrder)[0]->getUserID(), $gameData);
+						    	$turn->createGameFirstTurn($game_current->getGameId(), array_values($gameTurnOrder)[0]->getUserID(), $gameData, $difficultyData);
 
 						    	// Update Game statut
 						    	Game::updateGameStatut($game_current->getGameId(), 50);

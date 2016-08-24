@@ -34,7 +34,7 @@ return [
 
 	/* Tabs */
 	'Tab_Game_Name' => 'Nom de la partie',
-	'Tab_Owner_Name' => "Propriétaire",
+	'Tab_Owner_Name' => "Auteur",
 	'Tab_Max_Player' => "Nombre de joueurs",
 	'Tab_Difficulty' => "Difficulté",
 	'Tab_Map' => "Carte",

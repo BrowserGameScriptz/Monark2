@@ -315,7 +315,7 @@ class BotAction extends \yii\base\Object
 		//sleep(2);
 		$this->bot->bot_log->botAddActionBegin("End of turn");
 		/* Next turn */
-		Turn::NewTurn($this->bot->game_id, $this->bot->bot_id, $this->bot->bot_data->gameData);
+		Turn::NewTurn($this->bot->game_id, $this->bot->bot_id, $this->bot->bot_data->gameData, $this->bot->bot_data->difficultyGlobalData);
 		$this->bot->bot_log->botAddEndAction("End of turn");
 	}
 }

@@ -171,7 +171,7 @@ class GameData extends \yii\db\ActiveRecord
      * @param unknown $gameData
      * @return boolean
      */
-    public static function createGameData($assignedLands, $assignedResources, $landData, $gameData){
+    public static function createGameData($assignedLands, $assignedResources, $landData, $gameData, $difficultyData){
     	$default_units_user_add = 1;
     	$returned = array();
     	foreach($landData as $land){
@@ -180,7 +180,7 @@ class GameData extends \yii\db\ActiveRecord
     				'game_data_user_id'       => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_user_id_base'  => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_land_id'       => $land->getLandId(),
-    				'game_data_units'         => (array_key_exists($land->getLandId(), $assignedLands) ? ($land->getLandBaseUnits() + $default_units_user_add) : $land->getLandBaseUnits()),
+    				'game_data_units'         => (array_key_exists($land->getLandId(), $assignedLands) ? ($land->getLandBaseUnits() + $default_units_user_add) : round($land->getLandBaseUnits() * $difficultyData->getDifficultyRateLandBaseUnits())),
     				'game_data_capital'       => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_resource_id'   => $assignedResources[$land->getLandId()],
     				'game_data_buildings'     => (array_key_exists($land->getLandId(), $assignedLands) ? "6;1;" : ""),

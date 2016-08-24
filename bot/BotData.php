@@ -22,6 +22,7 @@ class BotData extends \yii\base\Object
 	public $gameData;
 	public $botLand;
 	public $buildingData;
+	public $difficultyGlobalData;
 	public $difficultyData;
 	public $frontier;
 	public $userData;
@@ -117,7 +118,8 @@ class BotData extends \yii\base\Object
 	 * 
 	 */
 	private function getDifficultyData(){
-		$this->difficultyData			= Difficulty::findAllDifficulyToArray()[$this->game->getDifficultyId()];
+		$this->difficultyGlobalData		= Difficulty::findAllDifficulyToArray();
+		$this->difficultyData			= $this->difficultyGlobalData[$this->game->getDifficultyId()];
 	}
 	
 	private function getUserData(){
