@@ -17,17 +17,23 @@ class BotAction extends \yii\base\Object
 	private $boughtInTurn;
 	
 	public function __construct($bot){
-		$this->bot								= $bot;
-		$this->ennemyLandSortedByThreatNegative = $this->bot->bot_eval_land['ennemy']['threat']['negative'];
-		$this->ennemyLandSortedByThreatPositive = $this->bot->bot_eval_land['ennemy']['threat']['positive'];
+		$this->bot								= $bot;		
 		$this->maxActionByDifficulty			= $this->bot->bot_data->difficultyData->getDifficultyBotActionPerTurn();
 		
 		$this->currentActionExecuted			= 0;
-		$this->boughtInTurn					= array();
+		$this->boughtInTurn						= array();
 		
-		print "<pre>";
+		/*print "<pre>";
 		print_r($this->ennemyLandSortedByThreatNegative);
-		print "</pre>";
+		print "</pre>";*/
+		
+		if(isset($this->bot->bot_eval_land['ennemy']['threat'])){
+			$this->ennemyLandSortedByThreatNegative = $this->bot->bot_eval_land['ennemy']['threat']['negative'];
+			$this->ennemyLandSortedByThreatPositive = $this->bot->bot_eval_land['ennemy']['threat']['positive'];
+		}else{
+			$this->ennemyLandSortedByThreatNegative = array();
+			$this->ennemyLandSortedByThreatPositive = array();
+		}
 	}
 	
 	/**
@@ -82,22 +88,25 @@ class BotAction extends \yii\base\Object
 		else
 			$cost = $this->bot->bot_data->currentTurn->getTurnGold();
 		
-		$buy->BuyInit($land_id, $this->bot->bot_data->userData, $this->bot->bot_data->game, $this->bot->bot_data->gameData, $this->bot->bot_data->currentTurn, $cost);
-		$buyError = $buy->BuyCheck();
-	
-		$this->bot->bot_log->botAddResult("Achat de : ".$cost, $land_id, $this->bot->bot_data->currentTurn->getTurnGold());
-		if($buyError === true){
-			$buy->BuyExec();
-			$this->bot->bot_data->updateTurnGold($cost);
-			$this->currentActionExecuted++;
-			//$this->bot->bot_data->updateGameDataUnits($cost, $land_id);
-			$this->bot->bot_data->getGameData();
-			$this->updateBuyInTurn($land_id, $cost);
-			return $cost;
-		}else{
-			$this->bot->bot_log->botAddResult("Erreur : ".$buyError);
-			return 0;
+		if($cost > 0){
+			$buy->BuyInit($land_id, $this->bot->bot_data->userData, $this->bot->bot_data->game, $this->bot->bot_data->gameData, $this->bot->bot_data->currentTurn, $cost);
+			$buyError = $buy->BuyCheck();
+		
+			$this->bot->bot_log->botAddResult("Achat de : ".$cost, $land_id, $this->bot->bot_data->currentTurn->getTurnGold());
+			if($buyError === true){
+				$buy->BuyExec();
+				$this->bot->bot_data->updateTurnGold($cost);
+				$this->currentActionExecuted++;
+				//$this->bot->bot_data->updateGameDataUnits($cost, $land_id);
+				$this->bot->bot_data->getGameData();
+				$this->updateBuyInTurn($land_id, $cost);
+				return $cost;
+			}else{
+				$this->bot->bot_log->botAddResult("Erreur : ".$buyError);
+				return 0;
+			}
 		}
+		return 0;
 	}
 	
 	/**
@@ -196,7 +205,7 @@ class BotAction extends \yii\base\Object
 		if($degree > 0){
 			
 			// If need construction
-			if($degree > 6){
+			if($degree > 5){
 				if($this->bot->bot_data->currentTurn->getTurnGold()/2 >= $this->bot->bot_data->buildingData[$this->bot->pc_build_id]->getBuildingCost()){
 					$this->BotOwnLandBuild($land_atk_id, $this->bot->pc_build_id);
 					$degree -= $this->bot->bot_data->buildingData[$this->bot->pc_build_id]->getBuildingCost();

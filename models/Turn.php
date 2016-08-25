@@ -188,7 +188,7 @@ class Turn extends \yii\db\ActiveRecord
     	$next_gold 	= $previousUserTurnData->getTurnGold() + $count_gold;
     	
     	// If bot bonus income
-    	if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0)
+    	if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0 && $next_gold > 0)
     		$next_gold = round($next_gold * $difficultyData[$gameInfo->getDifficultyId()]->getDifficultyBotBonusIncome());
     		
     	if($previousTurnData->getTurnTime() == null)
@@ -212,14 +212,13 @@ class Turn extends \yii\db\ActiveRecord
     		
     		// If a user loose OR user quit the game
     		if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
-    			return self::NewTurn($game_id, $next_user_id, $gameData);
+    			return self::NewTurn($game_id, $next_user_id, $gameData, $difficultyData);
     		}
     		
     		// If bot
     		if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0){
     			$Bot = new Bot($game_id, $next_user_id);
     			return true;
-    			//return $Bot->BotStartTurn($gameid, $next_user_id, $next_gold);
     		}
     	}
     }

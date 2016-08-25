@@ -23,6 +23,7 @@ return [
     'normal' 		=> 'Standard',
     'hard' 			=> 'Difficile',
     'very_hard' 	=> 'Très difficile',
+	'extrem' 		=> 'Extrème',
     'impossible' 	=> 'Impossible',
 ];
 ?>
