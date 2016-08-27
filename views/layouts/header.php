@@ -24,15 +24,13 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
            		<ul class="nav navbar-nav">
            			<li class="dropdown user user-menu">
            			<?php if(isset(Yii::$app->session['Game']) && Yii::$app->session['MapData'] != null && !Yii::$app->session['GameSpec']): ?>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background: #<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorCss()?>">
-                        	<span class="hidden-xs"><font size='4' color='<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorFontChat()?>'>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;background: #<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorCss()?>">
+                        	<font size='4' color='<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorFontChat()?>'>
             					<?= Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerUserId()]->getUserName()?>
-            				</font></span>
+            				</font>
             			</a>
                     <?php else: ?>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    	<span class="hidden-xs"><font size='3' color="black"><?= Yii::$app->session['User']->getUsername() ?></font></span>
-                    </a>
+					<a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown" style="text-decoration:none;background: #00acd6;"><font size='3' color="white"><?= Yii::$app->session['User']->getUsername() ?></font></a>
                     <?php endif; ?>
                     <ul class="dropdown-menu">
                         <!-- User image -->
