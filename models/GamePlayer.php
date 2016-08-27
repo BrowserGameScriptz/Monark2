@@ -22,6 +22,7 @@ use app\classes\Crypt;
  * @property integer $game_player_order
  * @property integer $game_player_bot
  * @property integer $game_player_quit
+ * @property integer $game_player_spec
  */
 class GamePlayer extends \yii\db\ActiveRecord
 {
@@ -39,8 +40,8 @@ class GamePlayer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['game_player_region_id', 'game_player_game_id', 'game_player_user_id', 'game_player_color_id', 'game_player_enter_time', 'game_player_order', 'game_player_bot', 'game_player_quit'], 'required'],
-            [['game_player_region_id', 'game_player_difficulty_id', 'game_player_statut', 'game_player_game_id', 'game_player_user_id', 'game_player_color_id', 'game_player_enter_time', 'game_player_order', 'game_player_bot', 'game_player_quit'], 'integer']
+            [['game_player_region_id', 'game_player_game_id', 'game_player_user_id', 'game_player_color_id', 'game_player_enter_time', 'game_player_order', 'game_player_bot', 'game_player_quit', 'game_player_spec'], 'required'],
+            [['game_player_region_id', 'game_player_difficulty_id', 'game_player_statut', 'game_player_game_id', 'game_player_user_id', 'game_player_color_id', 'game_player_enter_time', 'game_player_order', 'game_player_bot', 'game_player_quit', 'game_player_spec'], 'integer']
         ];
     }
 
@@ -61,6 +62,7 @@ class GamePlayer extends \yii\db\ActiveRecord
             'game_player_order' => 'Game Player Order',
             'game_player_bot' => 'Game Player Bot',
             'game_player_quit' => 'Game Player Quit',
+        	'game_player_spec' => 'Game Player Spec',
         ];
     }
 
@@ -112,7 +114,8 @@ class GamePlayer extends \yii\db\ActiveRecord
     			'game_player_enter_time' => 0,
     			'game_player_order' => 0,
     			'game_player_bot' => 0,
-    			'game_player_quit' => 0,)
+    			'game_player_quit' => 0,
+    			'game_player_spec' => 0,)
     			);
     }
 
@@ -221,19 +224,35 @@ class GamePlayer extends \yii\db\ActiveRecord
     }
     
     /**
-     *
-     * @param unknown $gameId
-     * @return \app\classes\GameClass
+     * 
+     * @param unknown $game
+     * @param unknown $user_id
+     * @param string $userReq
      */
     public static function userJoinGame($game, $user_id, $userReq=false){
     	// set Session Var
     	Yii::$app->session->set("Game", $game);
+    	Yii::$app->session->set("GameSpec", false);
 
     	// Insert in BD
     	if(!$userReq)
-    		self::userInsertJoinGame($game->getGameId(), $user_id);
+    		self::userInsertJoinGame($game->getGameId(), $user_id, 0);
     }
 
+    /**
+     * 
+     * @param unknown $game
+     * @param unknown $user_id
+     */
+    public static function userJoinSpecGame($game, $user_id){
+    	// set Session Var
+    	Yii::$app->session->set("Game", $game);
+    	Yii::$app->session->set("GameSpec", true);
+    	
+    	// Insert in BD
+    	self::userInsertJoinGame($game->getGameId(), $user_id, 0, 0, 1);
+    }
+    
     /**
      *
      * @param unknown $game_id
@@ -258,7 +277,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @return number
      */
     public static function gameCountPlayer($game_Id){
-    	return self::find()->where(['game_player_game_id' => $game_Id])->andWhere(['game_player_quit' => 0])->count();
+    	return self::find()->where(['game_player_game_id' => $game_Id])->andWhere(['game_player_quit' => 0])->andWhere(['game_player_spec' => 0])->count();
     }
 
     /**
@@ -277,7 +296,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @return \app\classes\GamePlayerClass
      */
     public static function findGamePlayerById($player_id){
-    	return new GamePlayerClass(self::find()->where(['game_player_user_id' => $player_id])->one());
+    	return new GamePlayerClass(self::find()->where(['game_player_user_id' => $player_id])->andWhere(['game_player_spec' => 0])->one());
     }
     
     /**
@@ -332,9 +351,9 @@ class GamePlayer extends \yii\db\ActiveRecord
      */
     public static function findAllUserGameId($user_id, $quit=null){
     	if($quit === null)
-    		return self::find()->where(['game_player_user_id' => $user_id])->all();
+    		return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_spec' => 0])->all();
     	else
-    		return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_quit' => $quit])->all();
+    		return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_spec' => 0])->andWhere(['game_player_quit' => $quit])->all();
     }
 
     /**
@@ -344,7 +363,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @return \app\queries\GamePlayer|NULL
      */
     public static function findUserGameIdIfExited($user_id, $game_id){
-    	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_game_id' => $game_id])->one();
+    	return self::find()->where(['game_player_user_id' => $user_id])->andWhere(['game_player_game_id' => $game_id])->andWhere(['game_player_spec' => 0])->one();
     }
 
     /**
@@ -353,7 +372,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @return \app\queries\GamePlayer[]
      */
     public static function findAllGamePlayer($game_id){
-    	return self::find()->where(['game_player_game_id' => $game_id])->all();
+    	return self::find()->where(['game_player_game_id' => $game_id])->andWhere(['game_player_spec' => 0])->all();
     }
 
     
@@ -476,7 +495,7 @@ class GamePlayer extends \yii\db\ActiveRecord
      * @param unknown $gameId
      * @return \app\classes\GameClass
      */
-    public static function userInsertJoinGame($game_id, $user_id, $bot_id=0, $statut=0){
+    public static function userInsertJoinGame($game_id, $user_id, $bot_id=0, $statut=0, $spec=0){
     	Yii::$app->db->createCommand()->insert(self::tableName(),[
     			'game_player_region_id' => 1,
     			'game_player_difficulty_id' => 1,
@@ -488,6 +507,7 @@ class GamePlayer extends \yii\db\ActiveRecord
     			'game_player_order'	=> 0,
     			'game_player_bot' => $bot_id,
     			'game_player_quit' => 0,
+    			'game_player_spec' => $spec,
     	])->execute();
     }
 

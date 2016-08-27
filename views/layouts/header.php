@@ -23,7 +23,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
         <div id='navbar-menu-global' class="navbar-custom-menu">
            		<ul class="nav navbar-nav">
            			<li class="dropdown user user-menu">
-           			<?php if(isset(Yii::$app->session['Game']) && Yii::$app->session['MapData'] != null): ?>
+           			<?php if(isset(Yii::$app->session['Game']) && Yii::$app->session['MapData'] != null && !Yii::$app->session['GameSpec']): ?>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background: #<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorCss()?>">
                         	<span class="hidden-xs"><font size='4' color='<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorFontChat()?>'>
             					<?= Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerUserId()]->getUserName()?>
@@ -136,6 +136,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 	            				</a>
 						        <?php endif; ?>
 		                	</li>
+		                	<?php if(!Yii::$app->session['GameSpec']): ?>
 		                	<li id='current_gold_content' class="dropdown tasks-menu">
 		                		<a href="#" id='current_gold_link' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 					          		<font size='3'><?= Yii::t('header', 'Text_Gold') ?>  : <i class="fa fa-usd"> <?= Yii::$app->session['MapData']['LastTurnData']->getTurnGold() ?> </i></font>
@@ -205,7 +206,15 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game']) ?>">View all</a></li>
 					            </ul>
 		                	</li>
-	                	
+		                	<?php else: ?>
+		                	<li id='spec' class="header_game_content">
+		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:9px;padding:0px;">
+						        	&nbsp;&nbsp;<span class="btn btn-warning">	
+					          			<?= Yii::t('header', 'Text_Spectator') ?>
+					          		</span>
+	            				</a>
+	            			</li>
+	                		<?php endif; ?>
 	                		<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
                 	</ul>
                 	<?php Pjax::end(); ?>

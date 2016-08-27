@@ -131,7 +131,7 @@ class gameJoinForm extends Model
     {
     	if ($this->validate()) {
     		// Create in db
-    		//$this->_game_player->userJoinGame($this->_game, true, 0);
+    		$this->_game_player->userJoinSpecGame($this->_game, $this->user_id);
     		return true;
     	}
     	return false;

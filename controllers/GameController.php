@@ -629,7 +629,7 @@ class GameController extends \yii\web\Controller
     public function actionSpec()
     {
     	$model = new GameJoinForm();
-    	if ($model->load(Yii::$app->request->post()) && $model->spec()) {
+    	if ($model->spec()) {
     		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
     		return $this->redirect(Url::to(['game/lobby']),302);
     	}else{

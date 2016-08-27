@@ -53,7 +53,6 @@ $(document).on("click", ".move_action_link", function (){
 	showMoveAction(land_id, land_id_to, units);
 });
 
-
 // ATK
 // begin
 $(document).on("click", ".atk_link", function(){

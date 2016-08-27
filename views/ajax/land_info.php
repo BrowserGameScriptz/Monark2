@@ -10,7 +10,7 @@ $this->registerCssFile("@web/css/ajax.css");
 ?>
 <div class="landinfo-view-ajax">
 	<?php $land 		= $Land[$land_id]; ?>
-	<?php $visible 		= Frontier::userHaveFrontierLand($UserFrontierData, $land_id);?>
+	<?php $visible 		= Frontier::userHaveFrontierLand($UserFrontierData, $land_id) || Yii::$app->session['GameSpec'];?>
 	<?php $userTurn 	= $CurrentTurnData->getTurnUserId() == $User->getId();?>
 	<?php $buttonDisable = ($userTurn)? "" : " disabled"; ?>
 	<?php $userLand 	= $GameData[$land_id]->getGameDataUserId() == $User->getId(); ?>

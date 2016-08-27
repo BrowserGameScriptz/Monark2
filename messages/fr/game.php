@@ -117,6 +117,7 @@ return [
 	'Success_User_Enter_Game_{params}' => 'Vous avez rejoint la partie : {params}.',
 	'Success_Game_Created' => 'Partie créée.',
 	'Success_Game_Join' => 'Partie rejointe.',
+	'Success_Game_Join_Spec' => 'Partie rejointe en tant que spectateur.',
 	'Notice_Game_Quit' => 'Partie quittée.',
 	'Notice_Games_Quit' => 'Toutes les parties en cours sont désormais quittées.',
 	'Notice_Last_Game_Entered' => 'Dernière partie rejointe',

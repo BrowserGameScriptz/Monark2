@@ -117,6 +117,7 @@ return [
   	'Success_User_Enter_Game_{params}' => 'You have join the game : {params}.',
 	'Success_Game_Created' => 'Game created.',
 	'Success_Game_Join' => 'Game joined.',
+	'Success_Game_Join_Spec' => 'Game joined as spectator.',
 	'Notice_Game_Quit' => 'Game exited.',
 	'Notice_Games_Quit' => 'All open games are now exited.',
 	'Notice_Last_Game_Entered' => 'Last game joined',
@@ -126,7 +127,7 @@ return [
     /* Buttons */
     'Button_Send' => 'Send',
     'Button_Game_Create' => 'Create a game',
-	'Buton_Game_Enter' => 'Join the game',
+	'Button_Game_Enter' => 'Join the game',
 	'Button_Map_Enter' => 'Join the map',
 	'Button_Last_Game_Enter' => 'Return to last game',
     'Button_Game_Return' => 'Return to game',
