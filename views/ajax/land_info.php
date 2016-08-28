@@ -10,7 +10,7 @@ $this->registerCssFile("@web/css/ajax.css");
 ?>
 <div class="landinfo-view-ajax">
 	<?php $land 		= $Land[$land_id]; ?>
-	<?php $visible 		= Frontier::userHaveFrontierLand($UserFrontierData, $land_id);?>
+	<?php $visible 		= Frontier::userHaveFrontierLand($UserFrontierData, $land_id) || Yii::$app->session['GameSpec'];?>
 	<?php $userTurn 	= $CurrentTurnData->getTurnUserId() == $User->getId();?>
 	<?php $buttonDisable = ($userTurn)? "" : " disabled"; ?>
 	<?php $userLand 	= $GameData[$land_id]->getGameDataUserId() == $User->getId(); ?>
@@ -23,7 +23,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		        	<!-- region info -->
 					<tr>
 						<td style="padding: 4px;text-align:center;"><font size='3' color="black">
-						<?php if($GameData[$land_id]->getGameDataCapital() > 0): ?>
+						<?php if($GameData[$land_id]->getGameDataCapital() != 0): ?>
 							<?= Html::tag('span', "<img src='img/game/star.png' height='20px' width='20px'>", [
 		                        'title'=>"Capitale du joueur. ",
 		                        'data-toggle'=>'tooltip',
@@ -32,7 +32,7 @@ $this->registerCssFile("@web/css/ajax.css");
 		                    ]); ?>
 		                <?php endif; ?>
 		                <?= $Land[$land_id]->getLandName() ?>
-		                <?php if($Continent[$Land[$land_id]->getLandContinentId()]->getContinentId() != 0): ?>
+		                <?php if(isset($Continent) && $Continent[$Land[$land_id]->getLandContinentId()]->getContinentId() != 0): ?>
 		                	( <?= Yii::t('continent', $Continent[$Land[$land_id]->getLandContinentId()]->getContinentName()); ?> )
 						<?php endif; ?>
 						</font></td>
@@ -67,7 +67,7 @@ $this->registerCssFile("@web/css/ajax.css");
 							<?php if($userLand): ?>
 								<?= Yii::t('ajax', 'Text_Owner_Player'); ?>
 							<?php else: ?>
-							 	<?= $UsersData[$GameData[$land_id]->getGameDataUserId()]->getUserName(); ?>
+							 	<?= $this->context->getGamePlayerName($GameData[$land_id]->getGameDataUserId(), $UsersData, $BotData) ?>
 							<?php endif; ?>
 						</font></td>
 					</tr>

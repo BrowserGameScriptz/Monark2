@@ -40,11 +40,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 	                <div class="direct-chat-msg right">
 	                  <div class="direct-chat-info clearfix">
 	                    <span class="direct-chat-name pull-left">
-	                    	<?php if(isset($Users[$chat->getChatUserId()])): ?>
-	                    		<?= $Users[$chat->getChatUserId()]->getUserName(); ?>
-	                    	<?php else: ?>
-	                    		<?= $Users[-1]->getUserName(); ?>
-	                    	<?php endif; ?>
+	                    	<?= $this->context->getGamePlayerName($chat->getChatUserId(), $Users, $Bots) ?>
 	                    </span>
 	                    <span class="direct-chat-timestamp pull-right"><?= date("d/m/Y, H:i:s", $chat->getChatTime()); ?></span>
 	                  </div>
@@ -65,18 +61,16 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
               <div class="direct-chat-contacts">
                 <ul class="contacts-list">
                   <li>
-                    <a href="#">
                       <div class="contacts-list-info">
                             <table>
                             <?php foreach($GamePlayer as $player): ?>
 								<?php if($player->getGamePlayerUserId() > 0 && $player->getGamePlayerBot() == 0): ?>
-									<tr><td><font color="white"><?= $Users[$player->getGamePlayerUserId()]->getUserName(); ?></font></td></tr>
+									<tr><td><font color="white"><?= $this->context->getGamePlayerName($player->getGamePlayerUserId(), $Users, $Bots) ?></font></td></tr>
 								<?php endif; ?>
 							<?php endforeach; ?>
 							</table>
                       </div>
                       <!-- /.contacts-list-info -->
-                    </a>
                   </li>
                   <!-- End Contact Item -->
                 </ul>

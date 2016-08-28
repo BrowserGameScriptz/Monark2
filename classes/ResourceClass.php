@@ -54,4 +54,8 @@ class ResourceClass{
 		return 'img/game/'.$this->getResourceImage().'.png';
 	}
 	
+	public function getResourceBuildingId(){
+		return $this->resourceBuildingId;
+	}
+	
 }

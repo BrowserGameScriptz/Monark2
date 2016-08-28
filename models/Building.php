@@ -112,7 +112,7 @@ class Building extends \yii\db\ActiveRecord
     		if($this->turn->getTurnUserId() == $this->user->getUserID()){
     			// Building check
     			if(isset($this->buildingData[$this->building_id]) 
-    				&& !$this->buildingAlreadyBuild($this->gameData, $this->building_id, $this->building_id)
+    				&& !$this->buildingAlreadyBuild($this->gameData, $this->land_id, $this->building_id)
     				&& in_array($this->building_id, $this->getBuildingsToBuildId($this->gameData[$this->land_id]->getGameDataBuildings(), $this->gameData[$this->land_id]->getGameDataResourceId(), $this->buildingData))){
     				return true;
     			}else{

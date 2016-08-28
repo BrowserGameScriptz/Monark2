@@ -63,6 +63,49 @@ class GameData extends \yii\db\ActiveRecord
     }
 
     /**
+     * 
+     * @param unknown $gameData
+     * @param unknown $game_id
+     * @return number[]
+     */
+    public static function countLandUserArray($gameData, $game_id){
+    	$returned = array();
+    	foreach ($gameData as $data)
+    		if(!isset($returned[$data->getGameDataUserId()]))
+    			$returned[$data->getGameDataUserId()] = self::CountLandByUserId($gameData, $game_id, $data->getGameDataUserId());
+    			 
+    	return $returned;
+    }
+    
+    /**
+     *
+     * @param unknown $gameData
+     * @param unknown $game_id
+     * @param unknown $user_id
+     * @return number
+     */
+    public static function CountLandByUserId($gameData, $game_id, $user_id)
+    {
+    	return count(self::getUserLandId($gameData, $game_id, $user_id));
+    }
+    
+    /**
+     * 
+     * @param unknown $user_id
+     * @param unknown $game_id
+     * @param unknown $gameData
+     * @return boolean
+     */
+    public static function checkGameEnd($user_id, $game_id=null, $gameData=null){
+    	if($gameData === null)
+    		$gameData = self::getGameDataByIdToArray($game_id);
+    	foreach($gameData as $land)
+    		if($land->getGameDataUserId() != 0 && $land->getGameDataUserId() != $user_id)
+				return false;
+    	return true;
+    }
+    
+    /**
      *
      * @param unknown $gameId
      * @return \app\classes\GameClass
@@ -88,19 +131,18 @@ class GameData extends \yii\db\ActiveRecord
      * @param unknown $gameData
      * @param unknown $game_id
      * @param unknown $user_id
-     * @return number
+     * @return \app\classes\GameClass[]
      */
-    public static function CountLandByUserId($gameData, $game_id, $user_id)
-    {
+    public static function getUserLandId($gameData, $game_id, $user_id){
     	if($gameData == null)
     		$gameData = self::getGameDataByIdToArray($game_id);
-    	
-    	$n = 0;
+    		 
+    	$returned = array();
     	foreach ($gameData as $data)
     		if($data->getGameDataUserId() == $user_id)
-    			$n++;
-    		
-    	return $n;
+    			$returned[$data->getGameDataLandId()] = $data;
+    	
+    	return $returned;
     }
     
     /**
@@ -129,7 +171,7 @@ class GameData extends \yii\db\ActiveRecord
      * @param unknown $gameData
      * @return boolean
      */
-    public static function createGameData($assignedLands, $assignedResources, $landData, $gameData){
+    public static function createGameData($assignedLands, $assignedResources, $landData, $gameData, $difficultyData){
     	$default_units_user_add = 1;
     	$returned = array();
     	foreach($landData as $land){
@@ -138,7 +180,7 @@ class GameData extends \yii\db\ActiveRecord
     				'game_data_user_id'       => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_user_id_base'  => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_land_id'       => $land->getLandId(),
-    				'game_data_units'         => (array_key_exists($land->getLandId(), $assignedLands) ? ($land->getLandBaseUnits() + $default_units_user_add) : $land->getLandBaseUnits()),
+    				'game_data_units'         => (array_key_exists($land->getLandId(), $assignedLands) ? ($land->getLandBaseUnits() + $default_units_user_add) : round($land->getLandBaseUnits() * $difficultyData->getDifficultyRateLandBaseUnits())),
     				'game_data_capital'       => (array_key_exists($land->getLandId(), $assignedLands) ? $assignedLands[$land->getLandId()]['game_player_user_id'] : 0),
     				'game_data_resource_id'   => $assignedResources[$land->getLandId()],
     				'game_data_buildings'     => (array_key_exists($land->getLandId(), $assignedLands) ? "6;1;" : ""),

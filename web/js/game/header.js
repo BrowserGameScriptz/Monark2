@@ -34,3 +34,8 @@ $(document).on("click", "#gold_per_turn_link", function(){
 $(document).on("click", "#last_chat_link", function(){
 	CallAjaxMethodHeader("lastchat", new Array(), {'id': "#last_chat_content"});
 });
+
+//last Mail
+$(document).on("click", "#last_mail_link", function(){
+	CallAjaxMethodHeader("lastmail", new Array(), {'id': "#last_mail_content"});
+});

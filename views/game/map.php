@@ -5,7 +5,7 @@ use yii\web\View;
 use app\models\Land;
 use app\controllers\AjaxController;
 use app\assets\AppAsset;
-
+use app\models\Frontier;
 
 /* @var $this yii\web\View */
 $this->title = Yii::t('game', 'Title_Map');
@@ -32,7 +32,7 @@ $this->registerCssFile("@web/css/map.css");
 	<?php Pjax::begin(['id' => 'map_content']); ?>
 	<div id='map_content'>
 		<?php $user_units = 0; ?>
-		
+		<?php $max_show_units = 40; ?>
 		<?php foreach ($GameData as $data): ?>
 			
 			<?php $land = $Land[$data->getGameDataLandId()]; ?>  
@@ -60,30 +60,24 @@ $this->registerCssFile("@web/css/map.css");
                             <?php if($data->getGameDataResourceId() > 0 && $Resource[$data->getGameDataResourceId()]->getResourceImage() != ""): ?>
                                 <?= "<img src='".$Resource[$data->getGameDataResourceId()]->getResourceImageUrl()."' height='20px' width='20px'>"; ?>
                             <?php endif; ?>
-                         	<?php if(\app\models\Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId())): ?>
+                         	<?php if(Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId()) || Yii::$app->session['GameSpec']): ?>
 	                            <!-- Buildings -->
 	                            <?php foreach($GameData[$land->getLandId()]->getGameDataBuildings() as $building): ?>
-									<?php if($building != null && $Building[$building]->getBuildingId() > 0 && $Building[$building]->getBuildingNeed() <= 0): ?>
+									<?php if($building != null && isset($Building[$building]) && $Building[$building]->getBuildingNeed() <= 0 && $Building[$building]->getBuildingId() > 0): ?>
 										<?= $Building[$building]->getBuildingImg() ?>
 						            <?php endif; ?>
 						        <?php endforeach; ?>
                         		<!-- Units -->
-		                     	<?php $land_units = Land::LandCountUnitsToArray($data->getGameDataUnits());?>
-		                     	<?php for($i=1; $i <= $land_units['canon']; $i++): ?>
-		                       		<img src='img/game/canon.png' class='land_canon'>
-		                   		<?php endfor; ?>
-		                    	<?php for($i=1; $i <= $land_units['horseman']; $i++): ?>
-		                        	<img src='img/game/horseman.png' class='land_horseman'>
-		                    	<?php endfor; ?>
-		                    	<?php for($i=1; $i <= $land_units['soldier']; $i++): ?>
-		                    		<img src='img/game/soldier.png' class='land_soldier'>
-		                  		<?php endfor; ?>
+                        		<?php if($data->getGameDataUnits() <= $max_show_units): ?>
+			                     	<?= Land::LandCountUnitsToArrayShow($data->getGameDataUnits());?>
+		                  		<?php else: ?>
+		                  			<?= $data->getGameDataUnits(); ?>
+		                  		<?php endif; ?>
 	                  		<?php endif; ?>
 	                  	</font>	
                   </div>
 	        </div>
 		<?php endforeach; ?>
-	
 	</div>
 	<?php Pjax::end(); ?>
 	 <nav id="context-menu" class="context-menu">

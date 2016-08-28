@@ -53,6 +53,7 @@ return [
 	'Text_Lost_Connection'=>  'Connection lost with the server',
 	'Text_View_All'	=>  'View all',
 	'Text_No_Unread_Chat' => 'No unread posts',
+	'Text_Spectator' => 'You are in spectate mode',
     
 ];
 ?>

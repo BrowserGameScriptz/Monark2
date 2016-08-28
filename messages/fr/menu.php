@@ -32,6 +32,7 @@ return [
 	'Title_Game_Chat' 		=> 'Chat de la partie',
 	'Title_Game_News' 		=> 'Actualités',
 	'Title_Game_Diplomacy' 	=> 'Diplomatie',
+	'Title_Game_History'	=> 'Histoire de la partie',
 		
 		
     'Title_GlobalDashboard' => 'Tableau de bord g�n�ral',

@@ -53,6 +53,6 @@ return [
 	'Text_Lost_Connection'=>  'Connexion perdue avec le serveur',
 	'Text_View_All'	=>  'Voir tout',
 	'Text_No_Unread_Chat' => 'Aucun message non lu',
-		
+	'Text_Spectator' => 'You are in spectate mode',
 ];
 ?>

@@ -23,16 +23,14 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
         <div id='navbar-menu-global' class="navbar-custom-menu">
            		<ul class="nav navbar-nav">
            			<li class="dropdown user user-menu">
-           			<?php if(isset(Yii::$app->session['Game']) && Yii::$app->session['MapData'] != null): ?>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background: #<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorCss()?>">
-                        	<span class="hidden-xs"><font size='4' color='<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorFontChat()?>'>
+           			<?php if(isset(Yii::$app->session['Game']) && Yii::$app->session['MapData'] != null && !Yii::$app->session['GameSpec']): ?>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;background: #<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorCss()?>">
+                        	<font size='4' color='<?= Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerColorId()]->getColorFontChat()?>'>
             					<?= Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['User']->getUserID()]->getGamePlayerUserId()]->getUserName()?>
-            				</font></span>
+            				</font>
             			</a>
                     <?php else: ?>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    	<span class="hidden-xs"><font size='3' color="black"><?= Yii::$app->session['User']->getUsername() ?></font></span>
-                    </a>
+					<a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown" style="text-decoration:none;background: #00acd6;"><font size='3' color="white"><?= Yii::$app->session['User']->getUsername() ?></font></a>
                     <?php endif; ?>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -109,7 +107,7 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 		                		<?php if(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId() == Yii::$app->session['User']->getUserID()): ?>
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:6px;padding:0px;">	
 					          		<span class="btn btn-info">	
-					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?> : <span id="turn_length"><?= $turn_length ?></span> 
+					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?>&nbsp;:&nbsp;<span id="turn_length"><?= $turn_length ?></span> 
 					          		</span>&nbsp;&nbsp;
 					          		<span class="btn btn-success">
 					          			<font size="4"><?= Yii::t('header', 'Text_Your_turn') ?></font>
@@ -117,20 +115,26 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					          		<span id='end_of_turn_link' class="btn btn-success">	
 					          			<?= Yii::t('header', 'Button_Turn_Own') ?> 
 					          		</span>
+					          	</a>
 						        <?php else: ?>
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:6px;padding:0px;">
 						        	<span class="btn btn-info">	
-					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?> : <span id="turn_length"><?= $turn_length ?></span> 
+					          			<?= Yii::t('header', 'Text_Turn_Lenght') ?>&nbsp;:&nbsp;<span id="turn_length"><?= $turn_length ?></span> 
 					          		</span>&nbsp;&nbsp;
 						        	<span class="btn btn-info">
 						        		<font size="4">&nbsp;&nbsp;<?= Yii::t('header', 'Text_Turn_Other') ?></font>
 	    								<font size='4' color='#<?=Yii::$app->session['Color'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerColorId()]->getColorCss()?>'>
-	            							<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['GamePlayer'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getGamePlayerUserId()]->getUserName()?>
+	            							<?php if(isset(Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())])): ?>
+	            								<?= Yii::$app->session['MapData']['BotData'][abs(Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId())]->getUserName()?>
+	            							<?php else: ?>
+	            								<?=Yii::$app->session['MapData']['UserData'][Yii::$app->session['MapData']['CurrentTurnData']->getTurnUserId()]->getUserName()?>
+	            							<?php endif; ?>
 	            						</font>
 	            					</span>
+	            				</a>
 						        <?php endif; ?>
-						        </a>
 		                	</li>
+		                	<?php if(!Yii::$app->session['GameSpec']): ?>
 		                	<li id='current_gold_content' class="dropdown tasks-menu">
 		                		<a href="#" id='current_gold_link' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 					          		<font size='3'><?= Yii::t('header', 'Text_Gold') ?>  : <i class="fa fa-usd"> <?= Yii::$app->session['MapData']['LastTurnData']->getTurnGold() ?> </i></font>
@@ -162,20 +166,15 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					          		<font size='3'><?= Yii::t('header', 'Text_Units') ?>  : <?= $count_units ?> </font>
 					          	</a>
 		                	</li>
-		                	<li class="dropdown tasks-menu">
-					            <a href="#" id='header_messages' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">  
-						            <i class="fa fa-envelope-o"></i>
-						            <span class="label label-success">4</span>
+		                	<li id='last_mail_content' class="dropdown tasks-menu">
+					            <a href="#" id='last_mail_link' id='header_messages' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">  
+						            <i class="fa fa-envelope-o"></i> 
+						            <span class="label label-success"><?= Yii::$app->session['MapData']['UserUnReadMail'] ?></span>
 					            </a>
 					            <ul class="dropdown-menu" style="width:100%">
-					              <!--<li class="header">You have 10 notifications</li>-->
-					              <li>
-					                <!-- inner menu: contains the actual data -->
-					                <ul class="menu">
-					                  
-					                </ul>
-					              </li>
-					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game/mail']) ?>">View all</a></li>
+					              <li class="header"><?= Yii::t('header', 'Title_Last_Mail') ?> </li>
+					              <li><ul class="menu"></ul></li>
+					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game/mail']) ?>"><?= Yii::t('header', 'Text_View_All') ?></a></li>
 					            </ul>
 		                	</li>
 		                	<li id='last_chat_content' class="dropdown tasks-menu">
@@ -205,7 +204,15 @@ $refresh_time = Yii::$app->session['MapData']['RefreshTime'];
 					              <li class="footer"><a href="<?= Yii::$app->urlManager->createUrl(['game']) ?>">View all</a></li>
 					            </ul>
 		                	</li>
-	                	
+		                	<?php else: ?>
+		                	<li id='spec' class="header_game_content">
+		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration:none;top:9px;padding:0px;">
+						        	&nbsp;&nbsp;<span class="btn btn-warning">	
+					          			<?= Yii::t('header', 'Text_Spectator') ?>
+					          		</span>
+	            				</a>
+	            			</li>
+	                		<?php endif; ?>
 	                		<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
                 	</ul>
                 	<?php Pjax::end(); ?>

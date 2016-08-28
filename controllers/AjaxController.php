@@ -27,6 +27,8 @@ use yii\web\View;
 use app\models\Fight;
 use app\models\Chat;
 use app\models\ChatRead;
+use app\models\Mail;
+use app\models\Difficulty;
 
 /**
  * AjaxController implements the CRUD actions for Ajax model.
@@ -46,7 +48,7 @@ class AjaxController extends Controller
 										'attackbegin', 'attackaction',
 										'movebegin', 'moveaction', 
 										'lastgold', 'income',
-										'lastchat'],
+										'lastchat', 'lastmail'],
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
@@ -106,6 +108,10 @@ class AjaxController extends Controller
     		$returned['resource'] 			= Resource::findAllResourcesToArray();}else{
     		$returned['resource'] 			= Yii::$app->session['Resource'];}
     		
+    	if(Yii::$app->session['Difficulty'] == null && isset($dataList['Difficulty'])){
+    		$returned['difficulty'] 		= Difficulty::findAllDifficulyToArray();}else{
+    		$returned['difficulty'] 		= Yii::$app->session['Difficulty'];}
+    		
     	if(Yii::$app->session['Color'] == null && isset($dataList['Color'])){
     		$returned['color'] 				= Color::findAllColorToArray();}else{
     		$returned['color'] 				= Yii::$app->session['Color'];}
@@ -132,7 +138,7 @@ class AjaxController extends Controller
     		$gamePlayerDataGlobal 			= GamePlayer::findAllGamePlayer($returned['game']->getGameId());
     		$gamePlayerData 				= GamePlayer::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);
     		$gamePlayerData[0]				= GamePlayer::findPlayerZero();
-    		$gamePlayerData[-1]				= GamePlayer::findPlayerUnknown();
+    		$gamePlayerData[-99]			= GamePlayer::findPlayerUnknown();
     		$returned['gamePlayer']			= $gamePlayerData;
     	}
     		 
@@ -144,9 +150,11 @@ class AjaxController extends Controller
     	
     	if(isset($dataList['UsersData'])){
     		$usersData 						= GamePlayer::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
+    		$usersBot						= GamePlayer::botToUserGamePlayer($gamePlayerDataGlobal);
     		$usersData[0]					= GamePlayer::findUserZero();
     		$usersData[-1]					= GamePlayer::findUserUnknown();
     		$returned['usersData'] 			= $usersData;
+    		$returned['usersBot']			= $usersBot;
     	}
     	
     	if(isset($dataList['Frontier'])){
@@ -171,9 +179,10 @@ class AjaxController extends Controller
 	    			'game_id' => true,
 	    			'user_id' => true,
 	    			'GameData' => true,
+	    			'Difficulty' => true,
 	    	));
 		
-		Turn::NewTurn($data['game']->getGameId(), $data['user']->getUserId(), $data['gameData']);
+		Turn::NewTurn($data['game']->getGameId(), $data['user']->getUserId(), $data['gameData'], $data['difficulty']);
 	}
 	
 	/**
@@ -181,6 +190,16 @@ class AjaxController extends Controller
 	 */
 	public function actionHeader(){
 		(new GameController(null, null))->addDataToSession(Yii::$app->session['Game']);
+	}
+	
+	/**
+	 * 
+	 * @param unknown $id
+	 * @param unknown $users
+	 * @param unknown $bots
+	 */
+	public function getGamePlayerName($id, $users, $bots){
+		return (new GameController(null, null))->getGamePlayerName($id, $users, $bots);
 	}
 	
 	/**
@@ -243,6 +262,7 @@ class AjaxController extends Controller
 	    			'CurrentTurnData'	=> $data['currentTurnData'],
 	    			'GamePlayer'		=> $data['gamePlayer'],
 	    			'UsersData'			=> $data['usersData'],
+	    			'BotData'			=> $data['usersBot'],
 	    			'BuildingData'		=> $data['buildingData'],
 	    			'FrontierData'		=> $data['frontierData'],
 	    			'UserFrontierData'	=> $data['userFrontierData'],
@@ -605,9 +625,14 @@ class AjaxController extends Controller
 		return $this->renderAjax('last_chat', [
 				'lastChat'			=> $lastChat,
 				'UsersData'			=> $data['usersData'],
+				'BotData'			=> $data['usersBot'],
 		]);
 	}
 	
+	/**
+	 * 
+	 * @return string
+	 */
 	public function actionSendchat(){
 		$urlArgsArray = $this->getJson(array('message'));
 		if($urlArgsArray != null){
@@ -627,5 +652,27 @@ class AjaxController extends Controller
 			]);
 		}
 		return $this->returnError();
+	}
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function actionLastmail(){
+		// Load data
+		$data = $this->getData(array(
+				'game_id' => true,
+				'user_id' => true,
+				'UsersData'	=> true,
+				'GamePlayer' => true,
+		));
+	
+		$lastMail = Mail::getUserGameMailUnReadToArray($data['game']->getGameId(), $data['user']->getUserID(), 4);
+	
+		return $this->renderAjax('last_mail', [
+				'lastMail'			=> $lastMail,
+				'UsersData'			=> $data['usersData'],
+				'BotData'			=> $data['usersBot'],
+		]);
 	}
 }

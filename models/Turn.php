@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\classes\TurnClass;
+use app\bot\Bot;
 
 /**
  * This is the model class for table "turn".
@@ -58,6 +59,62 @@ class Turn extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
+     * @return number[]
+     */
+    public static function getRankUserLongTurn($game_id){
+    	$timeArray = self::getUserLongTurnTimeArray($game_id);
+    	$rankArray = array();
+    	foreach($timeArray as $user){
+    		$turnTimeSum = 0;
+    		foreach($user['turn'] as $turn)
+    			$turnTimeSum += ($turn->getTurnTime() - $turn->getTurnTimeBegin()); 
+    		if(isset($user['count']) && $user['count'] > 0)
+    			$rankArray[$user['user_id']] = $turnTimeSum / $user['count'];
+    		else
+    			$rankArray[$user['user_id']] = 0;
+    	}
+    	arsort($rankArray);
+    	return $rankArray; 
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return number|NULL[]
+     */
+    public static function getUserLongTurnTimeArray($game_id){
+    	$data = self::getAllGameTurnToArray($game_id);
+    	$returned = array();
+    	foreach($data as $turn){
+    		if(isset($returned[$turn->getTurnUserId()])){
+    			array_push($returned[$turn->getTurnUserId()]['turn'], $turn);
+    			$returned[$turn->getTurnUserId()]['count']++;
+    		}else{
+    			$returned[$turn->getTurnUserId()]['turn'] = array();
+    			array_push($returned[$turn->getTurnUserId()]['turn'], $turn);
+    			$returned[$turn->getTurnUserId()]['count'] = 1;
+    			$returned[$turn->getTurnUserId()]['user_id'] = $turn->getTurnUserId();
+    		}
+    	}
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @return \app\classes\TurnClass[]
+     */
+    public static function getAllGameTurnToArray($game_id){
+    	$data = self::getAllGameTurn($game_id);
+    	$returned = array();
+    	foreach($data as $turn)
+    		$returned[$turn['turn_id']] = new TurnClass($turn);
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
      * @return \app\classes\TurnClass
      */
     public static function getLastTurnByGameId($game_id){
@@ -77,10 +134,10 @@ class Turn extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $game_id
-     * @param unknown $user_id
+     * @return \app\models\Turn[]
      */
-    public static function createGameFirstTurn($game_id, $user_id, $gameData){
-    	self::NewTurn($game_id, $user_id, $gameData);
+    public static function getAllGameTurn($game_id){
+    	return self::find()->where(['turn_game_id' => $game_id])->all();
     }
     
     /**
@@ -88,12 +145,20 @@ class Turn extends \yii\db\ActiveRecord
      * @param unknown $game_id
      * @param unknown $user_id
      */
-    public static function NewTurn($game_id, $user_id, $gameData)
+    public static function createGameFirstTurn($game_id, $user_id, $gameData, $difficultyData){
+    	self::NewTurn($game_id, $user_id, $gameData, $difficultyData);
+    }
+    
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $user_id
+     */
+    public static function NewTurn($game_id, $user_id, $gameData, $difficultyData, $gameInfo=null)
     {
     	// Turn Data
-    	$previousTurnData 			= self::getLastTurnByGameId($game_id);
-    	
-    	
+    	$previousTurnData 				= self::getLastTurnByGameId($game_id);
+    	if($gameInfo == null)$gameInfo 	= Game::getGameById($game_id);
     	
     	// Game Player
     	$game_player 				= new GamePlayer();
@@ -121,17 +186,21 @@ class Turn extends \yii\db\ActiveRecord
     	$count_land = GameData::CountLandByUserId($gameData, $game_id, $next_user_id);
     	$count_gold = GameData::GoldGameDataUser($gameData, $game_id, $next_user_id, $count_land);
     	$next_gold 	= $previousUserTurnData->getTurnGold() + $count_gold;
-    
-    	$previous_turn_begin        = $previousUserTurnData->getTurnTimeBegin();
-    	$previous_turn_game_time    = $previousUserTurnData->getTurnTime();
-    	if($previous_turn_game_time != null)
-    		$turn_time              = 0;
+    	
+    	// If bot bonus income
+    	if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0 && $next_gold > 0)
+    		$next_gold = round($next_gold * $difficultyData[$gameInfo->getDifficultyId()]->getDifficultyBotBonusIncome());
+    		
+    	if($previousTurnData->getTurnTime() == null)
+    		$new_turn_begin = time();
     	else
-    		$turn_time              = time() - $previous_turn_game_time;
+    		$new_turn_begin = $previousTurnData->getTurnTime();
     	
-    	$new_turn_begin             = $previous_turn_begin + $turn_time;
+    	// If end
+    	if(GameData::checkGameEnd($user_id, $game_id, $gameData))
+    		return Game::updateGameStatut($game_id, 100);
     	
-    	// TO CHECK
+    	// New turn	
     	if($previousTurnData->getTurnUserId() == $user_id || $previousUserTurnData->getTurnUserId() == null){
     		self::createNewTurn(array(
     				'user_id' 		=> $next_user_id,
@@ -140,22 +209,18 @@ class Turn extends \yii\db\ActiveRecord
     				'count_gold' 	=> $count_gold,
     				'turn_begin' 	=> $new_turn_begin,
     		));
+    		
+    		// If a user loose OR user quit the game
+    		if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
+    			return self::NewTurn($game_id, $next_user_id, $gameData, $difficultyData);
+    		}
+    		
+    		// If bot
+    		if($gamePlayerData[$next_user_id]->getGamePlayerBot() != 0){
+    			$Bot = new Bot($game_id, $next_user_id);
+    			return true;
+    		}
     	}
-    
-    	// If end
-    	//Game::GameEnd($gameid);
-    
-    	// If a user loose OR user quit the game
-    	if($count_land == 0 OR $gamePlayerData[$next_user_id]->getGamePlayerQuit() > 0){
-    		return self::NewTurn($game_id, $next_user_id, $gameData);
-    	}
-    
-    	// If bot user
-    	/*if($allgameplayerorder[$next_order]['bot'] > 0 AND $next_user_info['type'] == 2){
-    		$Bot = new Bot();
-    		return $Bot->BotStartTurn($gameid, $next_user_id, $next_gold);
-    	}*/
-    
     }
     
     /**

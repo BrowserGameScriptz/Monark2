@@ -65,6 +65,6 @@ $("document").ready(
 				else
 					clearInterval(IntervalId);
 			}
-            , 500); 
+            , 100); 
 		}
 	);

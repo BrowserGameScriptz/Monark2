@@ -2,11 +2,9 @@
 
 namespace app\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Game;
-use app\classes\GameClass;
 
 /**
  * GameSearch represents the model behind the search form about `app\models\Game`.
@@ -40,10 +38,10 @@ class GameSearch extends Game
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $showStarted, $showEnded)
     {
         $query = Game::find();
-        $query->where('game_statut < 50');
+        //$query->where('game_statut < 50');
         $dataProvider = new ActiveDataProvider([
         		'query' => $query,
         		'pagination' => ['pageSize' => 9,],

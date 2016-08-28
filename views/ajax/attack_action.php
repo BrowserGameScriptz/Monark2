@@ -35,7 +35,7 @@ use app\assets\AppAsset;
 				</tr>
 			</table>
 		</div>
-		<script>
+		<!--<script>
 		// Show a round
 					function showRound(i, percent, total_time, progress_name, fight_die_atk_array, fight_die_def_array, fight_units_atk_array, fight_units_def_array){					
     				// Round information
@@ -131,7 +131,7 @@ use app\assets\AppAsset;
                 		, 1000); 
 				    }
 				);
-		</script>		
+		</script>  -->		
 	<?php else: ?>
 		<div class="alert alert-danger" style="text-align:center;">
 			<font size='3'>
