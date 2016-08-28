@@ -51,7 +51,11 @@ class ResourceClass{
 	}
 	
 	public function getResourceImageUrl(){
-		return 'img/game/'.$this->getResourceImage().'.png';
+		if (strpos($this->resourceImage, '.png') === false)
+			return "<i class='".$this->resourceImage."'></i>";
+		else
+			return "<img src='img/game/".$this->resourceImage."' height='20px' width='20px'>";
+		
 	}
 	
 	public function getResourceBuildingId(){

@@ -33,7 +33,7 @@ class gameJoinForm extends Model
 	 * {@inheritDoc}
 	 * @see \yii\base\Model::validate()
 	 */
-    public function validate($attributeNames = NULL, $clearErrors = true){
+    public function validateJoin($attributeNames = NULL, $clearErrors = true){
     	// Game validation
     	$this->validateGameId();
     	$this->validateGameData();
@@ -47,6 +47,26 @@ class gameJoinForm extends Model
     		return false;
     	else 
     		return true;
+    }
+    
+    /**
+     * Overwrite
+     * {@inheritDoc}
+     * @see \yii\base\Model::validate()
+     */
+    public function validateSpec($attributeNames = NULL, $clearErrors = true){
+    	// Game validation
+    	$this->validateGameId();
+    	$this->validateGameData();
+    	$this->validateUserStatut();
+    	 
+    	// Game Password validation
+    	$this->validateGamePassword();
+    	 
+    	if($this->hasErrors())
+    		return false;
+    		else
+    			return true;
     }
     	
     /**
@@ -116,7 +136,7 @@ class gameJoinForm extends Model
      */
     public function join()
     {  	
-    	if ($this->validate()) {
+    	if ($this->validateJoin()) {
     		// update
     		if($this->userInsert)
     			$this->_game_player->updateEnterInGame($this->user_id, $this->game_id);
@@ -129,7 +149,7 @@ class gameJoinForm extends Model
     
     public function spec()
     {
-    	if ($this->validate()) {
+    	if ($this->validateSpec()) {
     		// Create in db
     		$this->_game_player->userJoinSpecGame($this->_game, $this->user_id);
     		return true;

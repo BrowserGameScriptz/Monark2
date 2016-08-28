@@ -58,7 +58,7 @@ $this->registerCssFile("@web/css/map.css");
 	                        <?php endif; ?>
 	                        <!-- Land data -->   
                             <?php if($data->getGameDataResourceId() > 0 && $Resource[$data->getGameDataResourceId()]->getResourceImage() != ""): ?>
-                                <?= "<img src='".$Resource[$data->getGameDataResourceId()]->getResourceImageUrl()."' height='20px' width='20px'>"; ?>
+                                <?= $Resource[$data->getGameDataResourceId()]->getResourceImageUrl(); ?>
                             <?php endif; ?>
                          	<?php if(Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId()) || Yii::$app->session['GameSpec']): ?>
 	                            <!-- Buildings -->
