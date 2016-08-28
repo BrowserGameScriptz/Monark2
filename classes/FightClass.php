@@ -2,7 +2,6 @@
 
 namespace app\classes;
 
-use Yii;
 use app\models\Building;
 use app\models\Fight;
 
@@ -98,8 +97,6 @@ class FightClass
     	$this->def_fighting_units	= 0;
     	$this->atk_thimble_form		.= "/";
     	$this->def_thimble_form		.= "/";
-    	$this->atk_units_form		.= "/";
-    	$this->def_units_form		.= "/";
     }
     
     private function setAtkFightingUnits(){
@@ -152,12 +149,20 @@ class FightClass
     	}
     }
     
+    private function updateUnitsForm(){
+    	$this->atk_units_form	.= "/";
+    	$this->def_units_form	.= "/";
+    	$this->atk_units_form	.= $this->atk_current_units;
+    	$this->def_units_form	.= $this->def_current_units;
+    }
+    
     private function setWin(){
     	if($this->def_current_units == 0){
     		$this->conquest = 1;
     	}else{
     		$this->conquest = 0;
     	}
+    	$this->updateUnitsForm();
     }
     
     /**
@@ -199,8 +204,7 @@ class FightClass
 			 * Set forms
 			 */
 			// Reg units
-			$this->atk_units_form	.= $this->atk_current_units;
-			$this->def_units_form	.= $this->def_current_units;
+			$this->updateUnitsForm();
 
 			// Reg thimbles
 		    $this->atk_thimble_form = $this->setThimbleForm($this->atk_thimble_array, $this->atk_thimble_form);

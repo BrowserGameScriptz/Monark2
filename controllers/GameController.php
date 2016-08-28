@@ -29,6 +29,11 @@ use app\models\Frontier;
 use app\models\Building;
 use app\models\Chat;
 use app\models\ChatRead;
+use app\models\Fight;
+use app\models\Mail;
+use app\forms\game\gameSendMailForm;
+use app\forms\game\GameAddBotForm;
+use app\models\Difficulty;
 
 class GameController extends \yii\web\Controller
 {
@@ -42,11 +47,11 @@ class GameController extends \yii\web\Controller
 						'class' => AccessControl::className(),
 						'rules' => [
 								[
-										'actions' => ['map', 'diplomacy', 'news', 'stats'],
-										'allow' => Access::UserIsInStartedGame(), // Into a started game
+										'actions' => ['map', 'diplomacy', 'news', 'stats', 'history', 'fight', 'rank', 'end'],
+										'allow' => Access::UserIsInStartedGame() || Access::UserIsInEndedGame(), // Into a started || ended game
 								],
 								[
-										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'addbot'],
+										'actions' => ['quit', 'lobby', 'start', 'chat', 'mail', 'newmail', 'addbot'],
 										'allow' => Access::UserIsInGame(), // Into a game
 								],
 								[
@@ -106,12 +111,26 @@ class GameController extends \yii\web\Controller
 	 * @param unknown $game_id
 	 * @return boolean
 	 */
-	public function checkStarted($game_id)
+	public function checkStarted()
 	{
-		if((new Game)->getGameById($game_id)->getGameStatut() >= 50)
+		Yii::$app->session['Game'] = Game::getGameById(Yii::$app->session['Game']->getGameId());
+		if(Yii::$app->session['Game']->getGameStatut() >= 50)
 			return true;
 		else
 			return false;
+	}
+	
+	/**
+	 *
+	 * @param unknown $game_id
+	 * @return boolean
+	 */
+	public function checkEnded()
+	{
+		if(Yii::$app->session['Game']->getGameStatut() > 99)
+			return false;
+		else
+			return true;
 	}
 
 	/**
@@ -159,15 +178,16 @@ class GameController extends \yii\web\Controller
      *
      */
     public function setSessionDataNull(){
-    	Yii::$app->session['Contient'] = null;
-    	Yii::$app->session['Land'] = null;
-    	Yii::$app->session['Resource'] = null;
-    	Yii::$app->session['Map'] = null;
-    	Yii::$app->session['Color'] = null;
-    	Yii::$app->session['Frontier'] = null;
-    	Yii::$app->session['Building'] = null;
-    	Yii::$app->session['MapData'] = null;
-    	Yii::$app->session['Game'] = null;
+    	Yii::$app->session['Contient'] 	= null;
+    	Yii::$app->session['Land'] 		= null;
+    	Yii::$app->session['Resource'] 	= null;
+    	Yii::$app->session['Map']		= null;
+    	Yii::$app->session['Color'] 	= null;
+    	Yii::$app->session['Frontier'] 	= null;
+    	Yii::$app->session['Building'] 	= null;
+    	Yii::$app->session['MapData'] 	= null;
+    	Yii::$app->session['Game'] 		= null;
+    	Yii::$app->session['Difficulty']= null;
     }
 
     /**
@@ -183,6 +203,7 @@ class GameController extends \yii\web\Controller
     	if(Yii::$app->session['Color'] == null)		Yii::$app->session->set("Color", Color::findAllColorToArray());
     	if(Yii::$app->session['Frontier'] == null)	Yii::$app->session->set("Frontier", Frontier::findAllFrontier($game_current->getMapId()));
     	if(Yii::$app->session['Building'] == null)	Yii::$app->session->set("Building", Building::findAllBuildingToArray());
+    	if(Yii::$app->session['Difficulty'] == null)Yii::$app->session->set("Difficulty", Difficulty::findAllDifficulyToArray());
     }
 
     /**
@@ -193,8 +214,9 @@ class GameController extends \yii\web\Controller
     	$this->updateSessionData($game_current);
     	$data = $this->getGameData();
     	$user_unread_chat = Chat::countUserUnReadChat($game_current->getGameId(), Yii::$app->session['User']->getUserID());
-
-    	// Add header info to session
+    	$user_unread_mail = Mail::countUserGameMailUnread($game_current->getGameId(), Yii::$app->session['User']->getUserID());
+    	
+    	// Add header info to session 
     	Yii::$app->session['MapData'] = array(
     			'RefreshTime'		=> $this->refreshTime,
     			'GamePlayer'		=> $data['GamePlayer'],
@@ -205,6 +227,7 @@ class GameController extends \yii\web\Controller
     			'BotData'			=> $data['BotData'],
     			'RefreshTime'		=> $this->refreshTime,
     			'UserUnReadChat'	=> $user_unread_chat,
+    			'UserUnReadMail'	=> $user_unread_mail,
     	);
     }
 
@@ -224,7 +247,7 @@ class GameController extends \yii\web\Controller
     	$gamePlayerDataGlobal 	= $game_player::findAllGamePlayer($game_current->getGameId());
     	$gamePlayerData 		= $game_player::findAllGamePlayerToArrayWithData($gamePlayerDataGlobal);
     	$gamePlayerData[0]		= $game_player::findPlayerZero();
-    	$gamePlayerData[-1]		= $game_player::findPlayerUnknown();
+    	$gamePlayerData[-99]	= $game_player::findPlayerUnknown();
     	$gameData				= $game_data::getGameDataByIdToArray($game_current->getGameId());
     	$turnData				= $turn_data::getLastTurnByGameId($game_current->getGameId());
     	$userData 				= $game_player::findAllGamePlayerToListUserId($gamePlayerDataGlobal);
@@ -246,18 +269,44 @@ class GameController extends \yii\web\Controller
     }
 
     /**
+     * 
+     * @param unknown $id
+     * @param unknown $user
+     * @param unknown $bot
+     * @return unknown
+     */
+    public static function getGamePlayerName($id, $user, $bot){    	
+    	if(isset($user[$id]) || isset($bot[abs($id)])){
+	    	if($id >= 0)
+	    		$returned = $user[$id]->getUserName();
+	    	else 
+	    		$returned = $bot[abs($id)]->getUserName();
+    	}else{
+    		$returned = $user[-1]->getUserName();
+    	}
+    	return $returned;
+    }
+    
+    /**
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($model=null)
     {
     	$searchModel = new GameSearch();
-    	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,]);
-    	$game_user_in_id = GamePlayer::findUserGameId(Yii::$app->session['User']->getId());
+    	$showStarted  = true;
+    	$showEnded = true;
+    	$dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,], $showStarted, $showEnded);
+    	$userGamePlayerData = GamePlayer::findAllUserGameIdToArray(Yii::$app->session['User']->getId());
+    	$mapData			= Map::findAllMapToArray();
+    	$difficultyData		= Difficulty::findAllDifficulyToArray();
     	return $this->render('index', [
-    			'searchModel'   => $searchModel,
-    			'dataProvider'  => $dataProvider,
-    			'gameInId'		=> $game_user_in_id,
+    			'model' 				=> $model,
+    			'searchModel'   		=> $searchModel,
+    			'dataProvider'  		=> $dataProvider,
+    			'userGamePlayerData' 	=> $userGamePlayerData,
+    			'mapData'				=> $mapData,
+    			'DifficultyData' 		=> $difficultyData,
     	]);
     }
 
@@ -294,7 +343,62 @@ class GameController extends \yii\web\Controller
      */
     public function actionMail()
     {
-    	return $this->render('mail');
+    	$mailData = Mail::getUserGameMailToArray(Yii::$app->session['Game']->getGameId(), Yii::$app->session['User']->getUserID());
+    	
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	 
+    	return $this->render('mail', [
+    			'MailData' 		=> $mailData,
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionNewmail() {
+    	$model = new GameSendMailForm();
+    	if ($model->load(Yii::$app->request->post()) && $model->send()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Mail_Send'));
+    		return $this->redirect(Url::to(['game/mail']),302);
+    	}else{
+    		$errors = $model->errors;
+			$urlparams = Yii::$app->request->queryParams;
+			if (array_key_exists ( 'mi', $urlparams )) {
+				$mailData = Mail::getMailDataToArray(Yii::$app->session['Game']->getGameId(), Yii::$app->session['User']->getUserID(), $urlparams['mi']);
+				
+				if ($mailData != null) {
+	    			// Get data
+	    			$dataArray = $this->getGameData();
+	
+	    			return $this->render('newmail', [
+	    					'model' 		=> $model,
+	    					'errors'		=> $errors,
+	    					'MailData' 		=> $mailData,
+	    					'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    					'Users'			=> $dataArray['UserData'],
+	    					'Bots'			=> $dataArray['BotData'],
+	    					'Color'			=> Yii::$app->session['Color'],
+	    			]);
+	    		}
+	    	}
+	    	// Get data
+	    	$dataArray = $this->getGameData();
+	    			 
+	    	return $this->render('newmail', [
+	    		'model' 		=> $model,
+	    		'errors'		=> $errors,
+	    		'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    		'Users'			=> $dataArray['UserData'],
+	    		'Bots'			=> $dataArray['BotData'],
+	    		'Color'			=> Yii::$app->session['Color'],
+	    	]);
+    	}
     }
 
     /**
@@ -302,8 +406,54 @@ class GameController extends \yii\web\Controller
      * @return string
      */
     public function actionNews()
-    {
+    { 
     	return $this->render('news');
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function actionHistory(){
+    	$fightData = Fight::fightDataAllToArray(Yii::$app->session['Game']->getGameId(), 200);
+    	
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	return $this->render('history', [
+    			'FightData' 	=> $fightData,
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Land'			=> Yii::$app->session['Land'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionFight(){
+    	$urlparams = Yii::$app->request->queryParams;
+    	if (array_key_exists('fi', $urlparams)) {
+    		$fightData = Fight::fightDataByIdToArray(Yii::$app->session['Game']->getGameId(), $urlparams['fi']);
+    		
+    		if($fightData != null){
+	    		// Get data
+	    		$dataArray = $this->getGameData();
+	    		
+	    		return $this->render('fight', [
+	    				'FightData' 	=> $fightData,
+	    				'GamePlayer' 	=> $dataArray['GamePlayer'],
+	    				'Land'			=> Yii::$app->session['Land'],
+	    				'Users'			=> $dataArray['UserData'],
+	    				'Bots'			=> $dataArray['BotData'],
+	    				'Color'			=> Yii::$app->session['Color'],
+	    		]);
+    		}
+    	}
+    	return $this->redirect(Url::to(['game/history']),302);
     }
 
     /**
@@ -312,7 +462,26 @@ class GameController extends \yii\web\Controller
      */
     public function actionStats()
     {
-    	return $this->render('stats');
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	// Get stats
+    	$mostAttackedLandArray = Fight::getRankAttackedLandArray(Yii::$app->session['Game']->getGameId());
+    	$playerWinRateArray = Fight::getWinRateRankArray(Yii::$app->session['Game']->getGameId());
+    	$landOwnedArray = GameData::countLandUserArray($dataArray['GameData'], Yii::$app->session['Game']->getGameId());
+    	$playerLongTurnArray = Turn::getRankUserLongTurn(Yii::$app->session['Game']->getGameId());
+    	
+    	return $this->render('stats', [
+    			'GamePlayer' 		=> $dataArray['GamePlayer'],
+    			'Users'				=> $dataArray['UserData'],
+    			'Bots'				=> $dataArray['BotData'],
+    			'Land'				=> Yii::$app->session['Land'],
+    			'Color'				=> Yii::$app->session['Color'],
+    			'MostAttackedLand'	=> $mostAttackedLandArray,
+    			'PlayerWinRate'		=> $playerWinRateArray,
+    			'LandOwned'			=> $landOwnedArray,
+    			'PlayerLongTurn'	=> $playerLongTurnArray,
+		]);
     }
 
     /**
@@ -321,14 +490,22 @@ class GameController extends \yii\web\Controller
      */
     public function actionDiplomacy()
     {
-    	return $this->render('diplomacy');
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	return $this->render('diplomacy', [
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    	]);
     }
 
     /**
      *
      * @return string
      */
-    public function actionLobby(){
+    public function actionLobby($model=null){
     	if(isset(Yii::$app->session['Game'])){
     		if(!$this->checkStarted(Yii::$app->session['Game']->getGameId())){
 		    	// Continent
@@ -353,6 +530,7 @@ class GameController extends \yii\web\Controller
 		    	$searchModel = new GamePlayerSearch(Yii::$app->session['Game']->getGameId());
 		        $dataProvider = $searchModel->search(['query' => Yii::$app->request->queryParams,]);
 		        return $this->render('lobby', [
+		        	'model' 		=> $model,
 		            'searchModel'   => $searchModel,
 		            'dataProvider'  => $dataProvider,
 		        	'userList'		=> $usersArray,
@@ -363,9 +541,9 @@ class GameController extends \yii\web\Controller
 		        	'continentSQl'	=> $continentsSQL,
 		        ]);
     		}else
-    			return $this->actionStart();
+    			return $this->redirect(Url::to(['game/start']),302);
     	}else
-    		return $this->actionIndex();
+    		return $this->redirect(Url::to(['game/index']),302);
     }
 
 		/**
@@ -381,7 +559,7 @@ class GameController extends \yii\web\Controller
     	$this->setSessionDataNull();
     	Yii::$app->session->setFlash('info', Yii::t('game', 'Notice_Game_Quit'));
 
-    	return $this->actionIndex();
+    	return $this->redirect(Url::to(['game/index']),302);
     }
 
 		/**
@@ -391,16 +569,17 @@ class GameController extends \yii\web\Controller
     public function actionClean()
     {
     	// DB
-			$gamePlayer = new GamePlayer();
-			$userGamesList = $gamePlayer->findAllUserGameId(Yii::$app->session['User']->getId());
-			foreach ($userGamesList as $userGame) {
-				$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $userGame->game_player_game_id);
-			}
+		$gamePlayer = new GamePlayer();
+		$userGamesList = $gamePlayer->findAllUserGameIdToArray(Yii::$app->session['User']->getId(), 0);
+		foreach ($userGamesList as $game) {
+			$gamePlayer->gameExitPlayer(Yii::$app->session['User']->getId(), $game->getGamePlayerGameId());
+		}
+		
     	// Session
     	$this->setSessionDataNull();
     	Yii::$app->session->setFlash('info', Yii::t('game', 'Notice_Games_Quit'));
 
-    	return $this->actionIndex();
+    	return $this->redirect(Url::to(['game/index']),302);
     }
 
     /**
@@ -409,17 +588,21 @@ class GameController extends \yii\web\Controller
      */
     public function actionCreate()
     {
-
     	$model = new GameCreateForm();
     	if ($model->load(Yii::$app->request->post()) && $model->create()) {
     		// all inputs are valid
     		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Created'));
-    		return $this->actionIndex();
+    		if(isset(Yii::$app->session['GameCreatedName']))
+    			return $this->actionJoin(Game::getGameByName(Yii::$app->session['GameCreatedName'])->getGameId());
+    		else
+    			return $this->redirect(Url::to(['game/index']),302);
     	}else{
     		// validation failed: $errors is an array containing error messages
     		$errors = $model->errors;
     		return $this->render('create', [
-    				'model' => $model,
+    				'model' 			=> $model,
+    				'MapData' 			=> Map::findAllMapToArray(0),
+    				'DifficultyData' 	=> Difficulty::findAllDifficulyToArray(0),
     		]);
     	}
     }
@@ -428,77 +611,15 @@ class GameController extends \yii\web\Controller
      *
      * @return string
      */
-    public function actionJoin()
+    public function actionJoin($game_id=null)
     {
-    	$urlparams = Yii::$app->request->queryParams;
-    	if (array_key_exists('gid', $urlparams)) {
-			// Game Data
-			$gameData = (new Game())->getGameById($urlparams['gid']);
-
-			if($gameData != null){
-				// Checks
-				$game_player = new GamePlayer();
-
-				// If already enter in this game
-				if($game_player->findUserGameIdIfExited(Yii::$app->session['User']->getId(), $urlparams['gid']) != null){
-					$game_player->updateEnterInGame(Yii::$app->session['User']->getId(), $urlparams['gid']);
-					$game_player->userJoinGame($gameData, Yii::$app->session['User']->getId(), true);
-					Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-					return $this->actionLobby();
-					// If never joined in this game
-				}else if($game_player->findUserGameId(Yii::$app->session['User']->getId()) == null){
-					// Max player
-					if($gameData->getGamePlayerMax() < (new Game())->getGameCountPlayer($urlparams['gid'])+1){
-						Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Game_Full'));
-						return $this->actionLobby();
-					}else{
-						// all inputs are valid
-						$model = new GameJoinForm($gameData);
-
-						// Confirm
-						if($model->join())
-							Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-							else
-								Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-						return $this->actionLobby();
-					}
-				// In another game
-				}else{
-					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_User_Already_In_Game'));
-					return $this->redirect(Url::to(['game/index']),302);
-				}
-			}else
-				return $this->actionIndex();
-    	}elseif(isset($model)){
-    		// validation failed: $errors is an array containing error messages
-    		Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-    		$errors = $model->errors;
-    		return $this->redirect(Url::to(['game/index']),302);
-    	}else
-    		return $this->redirect(Url::to(['game/index']),302);
-    }
-
-		/**
-     *
-     * @return string
-     */
-    public function actionReturn()
-    {
-    	$urlparams = Yii::$app->request->queryParams;
-			$gamePlayer = new GamePlayer();
-			$game_player = $gamePlayer->findUserGameId(Yii::$app->session['User']->getId());
-			if ($game_player != null) {
-				if ($game_player->game_player_game_id > 0) {
-					//Yii::$app->getSession()->setFlash('info', Yii::t('game', 'Notice_Last_Game_Entered'));
-					return $this->redirect(array('game/join', 'gid' => $game_player->game_player_game_id), 302);
-				} else {
-					Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Last_Game_Cant_Join')." n°".$game_player->game_player_game_id);
-					return $this->redirect(Url::to(['game/index']),302);
-				}
-			} else {
-				Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Last_Game_Cant_Join')." n°".$game_player->game_player_game_id);
-				return $this->redirect(Url::to(['game/index']),302);
-			}
+    	$model = new GameJoinForm($game_id);
+    	if ($model->join()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    	}else{
+    		return $this->actionIndex($model);
+    	}
     }
 
     /**
@@ -507,25 +628,30 @@ class GameController extends \yii\web\Controller
      */
     public function actionSpec()
     {
-    	if(false){
-	    	$urlparams = Yii::$app->request->queryParams;
-	    	if(array_key_exists('gid', $urlparams))
-	    		$model = new GameJoinForm((new Game())->getGameById($urlparams['gid']));
-	    		if (isset($model) && $model->joinSpec()) {
-	    			// all inputs are valid
-	    			Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
-	    			return $this->actionLobby();
-	    		}elseif(isset($model)){
-	    			// validation failed: $errors is an array containing error messages
-	    			Yii::$app->session->setFlash('error', Yii::t('game', 'Success_Game_Join'));
-	    			$errors = $model->errors;
-	    			return $this->actionIndex();
-	    		}else
-	    			return $this->actionIndex();
+    	$model = new GameJoinForm();
+    	if ($model->spec()) {
+    		Yii::$app->session->setFlash('success', Yii::t('game', 'Success_Game_Join'));
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    	}else{
+    		return $this->actionIndex($model);
     	}
-    	return $this->actionIndex();
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function actionAddbot(){
+    	// The game as started
+    	$started 	= $this->checkStarted(Yii::$app->session['Game']->getGameId());
+    	$model 		= new GameAddBotForm();
+    	if (!$started && $model->addBot()) { 		
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    	}else{
+    		return $this->actionLobby($model);
+    	}
+    }
+    
     /**
      *
      * @return string
@@ -547,14 +673,15 @@ class GameController extends \yii\web\Controller
 		    		$res		 	= new Resource();
 		    		$game_data		= new GameData();
 		    		$turn			= new Turn();
-		    		$continentData	= (new Continent())->findAllContinentToArray($game_current->getMapId());
-		    		$mapData		= (new Map())->findMapById($game_current->getMapId());
+		    		$continentData	= Continent::findAllContinentToArray($game_current->getMapId());
+		    		$mapData		= Map::findMapById($game_current->getMapId());
+		    		$difficultyData	= Difficulty::findAllDifficulyToArray();
 
 		    		// Datas
 		    		$resourceData 	= $res->findAllResourcesToArray();
 		    		$landData		= $land->findAllLandsToArray($game_current->getMapId());
 			    	$gamePlayerData = $game_player->findAllGamePlayer($game_current->getGameId());
-
+			    	
 			    	// Checks
 			    	if($gamePlayerData != null){
 			    		// check colors
@@ -565,21 +692,20 @@ class GameController extends \yii\web\Controller
 			    				$assignedLands 		= $land->assignLandsToArray($gamePlayerData, $game_current, $continentData, $mapData);
 
 			    				// Assign Resources
-			    				$assignedResources 	= $res->assignResourcesToArray($landData, $resourceData);
+			    				$assignedResources 	= $res->assignResourcesToArray($landData, $resourceData, $difficultyData[$game_current->getDifficultyId()]);
 
 			    				// Create Game Data
-			    				$gameData 			= $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current);
+			    				$gameData 			= $game_data->createGameData($assignedLands, $assignedResources, $landData, $game_current, $difficultyData[$game_current->getDifficultyId()]);
 
 						    	// Create turn order
 						    	$gameTurnOrder 		= $game_player->updateUserTurnOrder($game_current->getGameId());
-
+						    	
 						    	// Create first turn
-						    	$turn->createGameFirstTurn($game_current->getGameId() , array_values($gameTurnOrder)[0]->getUserID(), $gameData);
+						    	$turn->createGameFirstTurn($game_current->getGameId(), array_values($gameTurnOrder)[0]->getUserID(), $gameData, $difficultyData);
 
 						    	// Update Game statut
-						    	(new Game())->updateGameStatut($game_current->getGameId(), 50);
+						    	Game::updateGameStatut($game_current->getGameId(), 50);
 						    	Yii::$app->session['Game']->setGameStatut(50);
-
 			    				return $this->render('start');
 			    			}else
 			    				Yii::$app->session->setFlash('error', Yii::t('game', 'Error_Start_Not_Ready'));
@@ -595,23 +721,7 @@ class GameController extends \yii\web\Controller
 	    	Yii::$app->session['Game']->setGameStatut(50);
 	    	return $this->render('start');
     	}else
-    		return $this->actionLobby();
-    }
-
-    
-    /**
-     *
-     * @return string
-     */
-    public function actionAddbot(){
-    	// The game as started
-    	$urlparams 	= Yii::$app->request->queryParams;
-    	$started 	= $this->checkStarted(Yii::$app->session['Game']->getGameId());
-    	if($started || ($this->checkOwner() && array_key_exists('gid', $urlparams) && (array_key_exists('gid', $urlparams) == time()))){
-    		$bot_id = (GamePlayer::findGamePlayerLastBot($urlparams['gid'])->getGamePlayerBot() + 1);
-    		GamePlayer::userInsertJoinGame($urlparams['gid'], -$bot_id, $bot_id, 1);
-    	}
-    	return $this->redirect(Url::to(['game/lobby']));
+    		return $this->redirect(Url::to(['game/lobby']),302);
     }
 
     /**
@@ -619,38 +729,59 @@ class GameController extends \yii\web\Controller
      * @return string
      */
     public function actionMap(){
-    	// Create 1rst turn
-    	// Check if a turn exist
-
+    	Yii::$app->session['Game'] = Game::getGameById(Yii::$app->session['Game']->getGameId());
+    	
     	// The game as started
-    	if($this->checkStarted(Yii::$app->session['Game']->getGameId())){
-    		//$urlparams 		= Yii::$app->request->queryParams;
-
-    		// Session
-    		$this->updateSessionData(Yii::$app->session['Game']);
-
-	    	// Get data
-	    	$dataArray = $this->getGameData();
-
-	    	// Data to map
-	    	return $this->render('map', [
-	    			'User' 			=> Yii::$app->session['User'],
-	    			'Resource' 		=> Yii::$app->session['Resource'],
-	    			'Continent' 	=> Yii::$app->session['Contient'],
-	    			'Map' 			=> Yii::$app->session['Map'],
-	    			'Land'			=> Yii::$app->session['Land'],
-	    			'Color'			=> Yii::$app->session['Color'],
-	    			'Frontier'		=> Yii::$app->session['Frontier'],
-	    			'Building'		=> Yii::$app->session['Building'],
-	    			'Game' 			=> $dataArray['Game'],
-	    			'GamePlayer' 	=> $dataArray['GamePlayer'],
-	    			'GameData' 		=> $dataArray['GameData'],
-	    			'Turn' 			=> $dataArray['TurnData'],
-	    			'Users'			=> $dataArray['UserData'],
-	    			'UserFrontier'	=> $dataArray['FrontierData'],
-	    			'RefreshTime'	=> $this->refreshTime,
-	    	]);
+    	if($this->checkStarted()){
+    		
+    		// Game is end
+			if($this->checkEnded()){
+				
+	    		// Session
+	    		$this->updateSessionData(Yii::$app->session['Game']);
+	
+		    	// Get data
+		    	$dataArray = $this->getGameData();
+	
+		    	// Data to map
+		    	return $this->render('map', [
+		    			'User' 			=> Yii::$app->session['User'],
+		    			'Resource' 		=> Yii::$app->session['Resource'],
+		    			'Continent' 	=> Yii::$app->session['Contient'],
+		    			'Map' 			=> Yii::$app->session['Map'],
+		    			'Land'			=> Yii::$app->session['Land'],
+		    			'Color'			=> Yii::$app->session['Color'],
+		    			'Frontier'		=> Yii::$app->session['Frontier'],
+		    			'Building'		=> Yii::$app->session['Building'],
+		    			'Game' 			=> $dataArray['Game'],
+		    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+		    			'GameData' 		=> $dataArray['GameData'],
+		    			'Turn' 			=> $dataArray['TurnData'],
+		    			'Users'			=> $dataArray['UserData'],
+		    			'UserFrontier'	=> $dataArray['FrontierData'],
+		    			'RefreshTime'	=> $this->refreshTime,
+		    	]);
+    		}else
+    			return $this->redirect(Url::to(['game/end']),302);
     	}else
-    		return $this->actionLobby();
+    		return $this->redirect(Url::to(['game/lobby']),302);
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionRank()
+    {
+    	return $this->render('rank');
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function actionEnd()
+    {
+    	return $this->render('end'); 
     }
 }

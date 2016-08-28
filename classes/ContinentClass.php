@@ -2,6 +2,8 @@
 
 namespace app\classes;
 
+use Yii;
+
 /**
  * 
  * @author Paul
@@ -40,7 +42,7 @@ class ContinentClass{
 	}
 	
 	public function getContinentName(){
-		return $this->continent_name;
+		return Yii::t('continent', $this->continent_name);
 	}
 	
 	public function getContinentLandIdBegin(){

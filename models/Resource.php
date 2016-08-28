@@ -77,7 +77,7 @@ class Resource extends \yii\db\ActiveRecord
      * @param unknown $lands_count
      * @return number[]|unknown[]|\app\models\resource[]
      */
-    public static function assignResourcesToArray($landData, $resourceData)
+    public static function assignResourcesToArray($landData, $resourceData, $difficultyData)
     {
     	$assignedResourcesArray = array();
     
@@ -89,13 +89,13 @@ class Resource extends \yii\db\ActiveRecord
     		
     		foreach ($resourceData as $res) {
     			// If percent correspond
-    			if($resourceRand <= $res->getResourceFreq()){
+    			if($resourceRand <= self::getRessourceFreq($res->getResourceId(), $resourceData, $difficultyData)){
     				
     				// If resource already defined
     				if($assignedResourcesArray[$land->getLandId()] != 0){
     					
     					// If best percent
-    					if($res->getResourceFreq() < $resourceData[$assignedResourcesArray[$land->getLandId()]]->getResourceFreq()){
+    					if(self::getRessourceFreq($res->getResourceId(), $resourceData, $difficultyData) < self::getRessourceFreq($assignedResourcesArray[$land->getLandId()], $resourceData, $difficultyData)){
     						$assignedResourcesArray[$land->getLandId()] = $res->getResourceId();
     					}
     					
@@ -108,6 +108,17 @@ class Resource extends \yii\db\ActiveRecord
     	}
     
     	return $assignedResourcesArray;
+    }
+    
+    /**
+     * 
+     * @param unknown $resId
+     * @param unknown $resourceData
+     * @param unknown $difficultyData
+     * @return number
+     */
+    public static function getRessourceFreq($resId, $resourceData, $difficultyData){
+    	return round(($resourceData[$resId]->getResourceFreq())*$difficultyData->getDifficultyRateResourceFreq());
     }
     
     /**

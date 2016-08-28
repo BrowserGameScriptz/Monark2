@@ -28,10 +28,10 @@ $this->title = Yii::t('site', 'Title_Language');
 	<br><br>
 	<table  class="table table-striped table-bordered">
 		<tr>
-			<td><?= Html::a("<p class='flag flag-gb'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".Yii::t('site', 'en')."</p>", ['/site/lang', 'lang' => 'en'], ['style' => "text-decoration: none;"]); ?></a></td>
+			<td><?= Html::a("<p class='flag flag-gb'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".Yii::t('site', 'en')."</p>", ['/site/lang', 'lang' => 'en'], ['style' => "text-decoration: none;"]); ?></td>
 		</tr>
 		<tr>
-			<td><?= Html::a("<p class='flag flag-fr'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".Yii::t('site', 'fr')."</p>", ['/site/lang', 'lang' => 'fr'], ['style' => "text-decoration: none;"]); ?></a></td>
+			<td><?= Html::a("<p class='flag flag-fr'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".Yii::t('site', 'fr')."</p>", ['/site/lang', 'lang' => 'fr'], ['style' => "text-decoration: none;"]); ?></td>
 		</tr>
 	</table>
 </div>

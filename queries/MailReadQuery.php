@@ -3,21 +3,20 @@
 namespace app\queries;
 
 /**
- * This is the ActiveQuery class for [[\app\models\MessageRead]].
+ * This is the ActiveQuery class for [[\app\models\MailRead]].
  *
- * @see \app\models\MessageRead
+ * @see \app\models\MailRead
  */
-class MessageReadQuery extends \yii\db\ActiveQuery
+class MailReadQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
-        $this->andWhere('[[status]]=1');
-        return $this;
+        return $this->andWhere('[[status]]=1');
     }*/
 
     /**
      * @inheritdoc
-     * @return \app\models\MessageRead[]|array
+     * @return \app\models\MailRead[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +25,7 @@ class MessageReadQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return \app\models\MessageRead|array|null
+     * @return \app\models\MailRead|array|null
      */
     public function one($db = null)
     {

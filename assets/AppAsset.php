@@ -32,6 +32,8 @@ class AppAsset extends AssetBundle
     		'js/jquery.contextMenu.js',
     		'js/jquery.ui.position.js',
     		'js/jquery.rightClick.js',
+    		'js/jquery.flot.min.js',
+    		'js/jquery.flot.pie.min.js',
     		'js/json.min.js',
     		'js/chat.js',
     		'js/game/modals.js',

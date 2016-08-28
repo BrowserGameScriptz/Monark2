@@ -1,3 +1,6 @@
+// Prepare header
+$("document").ready(function(){	reloadHeader();});
+
 // Land interaction
 $(document).on("click", ".land_content", function (){
     var land_id = $(this).attr("i");
@@ -49,7 +52,6 @@ $(document).on("click", ".move_action_link", function (){
 	$(".build_action_link").html("...");
 	showMoveAction(land_id, land_id_to, units);
 });
-
 
 // ATK
 // begin

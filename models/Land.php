@@ -64,6 +64,23 @@ class Land extends \yii\db\ActiveRecord
     /**
      * 
      * @param unknown $units
+     * @return string
+     */
+    public static function LandCountUnitsToArrayShow($units){
+    	$data = self::LandCountUnitsToArray($units);
+    	$returned = "";
+    	for($i=1; $i <= $data['canon']; $i++)
+    		$returned.= "<img src='img/game/canon.png' class='land_canon' style='width:20px;'>";
+    	for($i=1; $i <= $data['horseman']; $i++)
+    		$returned.= "<img src='img/game/horseman.png' class='land_horseman' style='width:16px;'>";
+    	for($i=1; $i <= $data['soldier']; $i++)
+    		$returned.= "<img src='img/game/soldier.png' class='land_soldier' style='width:9px;'>";
+    	return $returned;
+    }
+    
+    /**
+     * 
+     * @param unknown $units
      * @return number[]
      */
     public static function LandCountUnitsToArray($units){
@@ -133,12 +150,11 @@ class Land extends \yii\db\ActiveRecord
     			// If map has continent
     			if($mapData['map_continent'] == 1){
     				// Random antarctic continent
-    				$antarcticRand 	= rand(1, 10);
-    				$antarcticId	= 6;
+    				$antarcticRand 	= rand(1, 100);
+    				$antarcticId	= 7;
     				
     				// 1/10 to go in antarctic
-    				if ($antarcticRand < 10) {
-    					//game_player_region_id
+    				if ($antarcticRand < 95) {
     					$landId = rand($continentData[$user['game_player_region_id']]->getContinentLandIdBegin(), $continentData[$user['game_player_region_id']]->getContinentLandIdEnd());
     				}else{
     					$landId = rand($continentData[$antarcticId]->getContinentLandIdBegin(), $continentData[$antarcticId]->getContinentLandIdEnd());

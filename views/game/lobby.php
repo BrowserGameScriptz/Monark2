@@ -39,6 +39,14 @@ $this->registerJs(
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+	<?php if(Yii::$app->session['Game']->getMapId() == 1): ?>
+		<div class="alert alert-info"><?= Yii::t('game', 'Info_Game_Lobby_Antartic') ?></div>
+	<?php endif; ?>
+	
+	<?php if(isset($model->errors["Game"])): ?>
+    	<div class='alert alert-danger'><?= $model->errors["Game"][0] ?></div>
+    <?php endif;?>
+	
     <!-- Top Buttons -->
     <div style="margin: 0 auto;"><table style="border-spacing: 4px;border-collapse: separate;"><tr>
     <!-- Classic -->
@@ -51,6 +59,7 @@ $this->registerJs(
     </tr></table></div>
     <br>
     <?php Pjax::begin(['id' => 'GridView-Lobby', 'timeout' => $ajax_reload]); ?>
+    <!--  TODO : LOBBY TO FORM = CHECK COLOR EXISTS... -->
     <?= GridView::widget([
         'summary' => '',
         'dataProvider' => $dataProvider,
@@ -85,7 +94,8 @@ $this->registerJs(
                 'value'     => function ($model, $key, $index, $column) use ($colorList, $colorSQl){
                 	if((Yii::$app->session['User']->getId() == $model->game_player_user_id) || ((Yii::$app->session['User']->getId() == Yii::$app->session['Game']->getGameOwnerID()) && $model->game_player_bot > 0))
                 		return Html::activeDropDownList($model, 'game_player_color_id',
-                			ArrayHelper::map($colorSQl,
+                			// TODO : Revoir utilisation de ColorClass
+                				ArrayHelper::map($colorSQl,
                 				function($model, $defaultValue) {
                 					return $model->color_id;
                 				},
@@ -115,11 +125,11 @@ $this->registerJs(
 		           						return $model->continent_id;
 		           					},
 		           					function($model, $defaultValue) {
-		           						return Yii::t('continent_name', $model->continent_name);
+		           						return Yii::t('continent', $model->continent_name);
 		           					}
 		           				),
 		           				[
-		           				'prompt'	=> Yii::t('continent_name', $continentList[$model->game_player_region_id]->getContinentName()),
+		           				'prompt'	=> Yii::t('continent', $continentList[$model->game_player_region_id]->getContinentName()),
 		           				'class'		=> 'selectpicker',
 		           				'onchange'	=> 'location = "'.Url::current().'&ui='.$model->game_player_user_id.'&bi='.$model->game_player_bot.'&ri="+this.options[this.selectedIndex].value;',
 			           		]);

@@ -6,11 +6,12 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use app\classes\Access;
 
 class UtilController extends Controller
 {
 	
-	private $local = false;
+	private $local = true;
 	
     public function behaviors()
     {
@@ -18,6 +19,10 @@ class UtilController extends Controller
     			'access' => [
     					'class' => AccessControl::className(),
     					'rules' => [
+    							[
+		    							'actions' => ['bot'],
+		    							'allow' => Access::UserIsInStartedGame() && $this->local, // In started
+    							],
     							[
     									'actions' => ['mdp', 'username'],
     									'allow' => Access::UserIsConnected() && $this->local, // Connected
@@ -64,6 +69,11 @@ class UtilController extends Controller
     public function actionGenerateallcolors()
     {
     	return $this->render('generateallcolors');
+    }
+    
+    public function actionBot()
+    {
+    	return $this->render('bot/bot');
     }
 
 }

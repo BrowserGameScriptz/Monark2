@@ -44,6 +44,10 @@ class TurnClass{
 		return $this->turnGold;
 	}
 	
+	public function setTurnGold($newGold){
+		$this->turnGold = $newGold;
+	}
+	
 	public function getTurnGoldBase(){
 		return $this->turnGoldBase;
 	}
