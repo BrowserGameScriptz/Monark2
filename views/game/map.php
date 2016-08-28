@@ -32,7 +32,7 @@ $this->registerCssFile("@web/css/map.css");
 	<?php Pjax::begin(['id' => 'map_content']); ?>
 	<div id='map_content'>
 		<?php $user_units = 0; ?>
-		<?php $max_show_units = 40; ?>
+		<?php $max_show_units = 36; ?>
 		<?php foreach ($GameData as $data): ?>
 			
 			<?php $land = $Land[$data->getGameDataLandId()]; ?>  
