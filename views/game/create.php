@@ -57,7 +57,7 @@ $this->title = Yii::t ( 'game', 'Title_Create' );
                 	'class'		=> 'selectpicker',
                ])->label(Yii::t('game', 'Tab_Difficulty'));?>
         <?= $form->field($model, 'game_pwd')->passwordInput()->label(Yii::t('game', 'Txt_Game_Pwd'))?>
-
+		<?= Html::checkbox('agree', true, ['label' => Yii::t('game', 'Spectator mod allowed')]); ?>
     <div class="form-group">
 		<div class="col-lg-offset-3 col-lg-2">
                 <?= Html::submitButton(Yii::t('game', 'Title_Create'), ['class' => 'btn btn-primary', 'name' => 'create-button'])?>

@@ -18,7 +18,7 @@ $this->registerCssFile("@web/css/ajax.css");
 						<td><font size='4'> <?= Yii::t('ajax', 'Text_Resource_In_Land'); ?> <?= $Land[$land_id]->getLandName() ?> : </font>
 						<font size='3' color="black">
 							 <?php if($GameData[$land_id]->getGameDataResourceId() > 0 && $Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImage() != ""): ?>
-		                         <?= "<img src='".$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImageUrl()."' height='20px' width='20px'>".$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceName(); ?>
+		                         <?= $Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImageUrl().$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceName(); ?>
 		                    <?php else: ?>
 		                    	<?= Yii::t('ajax', 'Text_Land_No_Resource'); ?>
 		                    <?php endif; ?>

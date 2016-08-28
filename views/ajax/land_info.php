@@ -76,7 +76,7 @@ $this->registerCssFile("@web/css/ajax.css");
 						<td style="padding: 4px;text-align:center;"><font size='3' color="black">
 						<?= Yii::t('ajax', 'Text_Resource'); ?> :
 						 <?php if($GameData[$land_id]->getGameDataResourceId() > 0 && $Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImage() != ""): ?>
-	                         <?= Html::tag('span', "<img src='".$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImageUrl()."' height='20px' width='20px'>".$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceName(), [
+	                         <?= Html::tag('span', $Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceImageUrl().$Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceName(), [
 					                          'title'=> $Resource[$GameData[$land_id]->getGameDataResourceId()]->getResourceDescription(),
 					                          'data-toggle'=>'tooltip',
 					                          'data-placement' => 'auto',
