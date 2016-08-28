@@ -70,13 +70,13 @@ class Land extends \yii\db\ActiveRecord
     	$data = self::LandCountUnitsToArray($units);
     	$returned = "";
     	for($i=1; $i <= $data['plane']; $i++)
-    		$returned.= "<img src='img/game/plane.png' class='land_plane' style='width:20px;'>";
+    		$returned.= "<img src='img/game/plane.png' class='land_plane' style='width:22px;'>";
     	for($i=1; $i <= $data['canon']; $i++)
-    		$returned.= "<img src='img/game/canon.png' class='land_canon' style='width:15px;'>";
+    		$returned.= "<img src='img/game/canon.png' class='land_canon' style='width:17px;'>";
     	for($i=1; $i <= $data['horseman']; $i++)
     		$returned.= "<img src='img/game/horseman.png' class='land_horseman' style='width:15px;'>";
     	for($i=1; $i <= $data['soldier']; $i++)
-    		$returned.= "<img src='img/game/soldier.png' class='land_soldier' style='width:7px;'>";
+    		$returned.= "<img src='img/game/soldier.png' class='land_soldier' style='width:8px;'>";
     	return $returned;
     }
     

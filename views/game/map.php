@@ -54,6 +54,7 @@ $this->registerCssFile("@web/css/map.css");
                          	<?= $land->getLandName(); ?>
                          	<!--<?php if($data->getGameDataCapital() >= 1): ?>
 	                        	<?= "<img src='img/game/star.png' height='20px' width='20px'>"; ?>
+	                        	<i style="fa fa-star"></i>
 	                        -->
 	                        <?php endif; ?>
 	                        <!-- Land data -->   
