@@ -12,7 +12,7 @@ use app\classes\Access;
 class SiteController extends Controller
 {
 	
-	public static $refreshTime = 1800;
+	public static $refreshTime = 1500;
 	public static $config;
 	
     public function behaviors()

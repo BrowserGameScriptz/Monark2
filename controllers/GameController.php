@@ -38,7 +38,7 @@ use app\models\Difficulty;
 class GameController extends \yii\web\Controller
 {
 
-	public $refreshTime = 1800;
+	public $refreshTime = 1500;
 
 	public function behaviors()
 	{
@@ -225,7 +225,6 @@ class GameController extends \yii\web\Controller
     			'GameData'			=> $data['GameData'],
     			'UserData'			=> $data['UserData'],
     			'BotData'			=> $data['BotData'],
-    			'RefreshTime'		=> $this->refreshTime,
     			'UserUnReadChat'	=> $user_unread_chat,
     			'UserUnReadMail'	=> $user_unread_mail,
     	);

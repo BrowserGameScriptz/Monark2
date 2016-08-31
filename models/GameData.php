@@ -25,8 +25,8 @@ class GameData extends \yii\db\ActiveRecord
 	public static $gold_base = 0;
 	
 	// Rank
-	public static $units_point = 0.1;
-	public static $building_point = 0.5; // * $building_cost
+	public static $units_point = 0.05;
+	public static $building_point = 0.2; // * $building_cost
 	public static $land_point = 2;
 	
     /**
