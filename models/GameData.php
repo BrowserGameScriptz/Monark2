@@ -24,6 +24,11 @@ class GameData extends \yii\db\ActiveRecord
 	
 	public static $gold_base = 0;
 	
+	// Rank
+	public static $units_point = 0.1;
+	public static $building_point = 0.5; // * $building_cost
+	public static $land_point = 2;
+	
     /**
      * @inheritdoc
      */
@@ -62,6 +67,34 @@ class GameData extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 
+     * @param unknown $game_id
+     * @param unknown $gameData
+     */
+    public static function getGameRanking($game_id, $buildingData, $gameData=null){
+    	$returned = array();
+    	if($gameData === null)
+    		$gameData = self::getGameDataByIdToArray($game_id);
+    	foreach ($gameData as $data){
+    		if($data->getGameDataUserId() != 0){
+    			$land_point = self::$land_point;
+    			$land_point += self::$units_point * $data->getGameDataUnits();
+    			
+    			foreach($data->getGameDataBuildings() as $building)
+    				if(isset($buildingData[$building]))
+    					$land_point += self::$building_point * $buildingData[$building]->getBuildingCost();
+    			
+    			if(isset($returned[$data->getGameDataUserId()]))
+    				$returned[$data->getGameDataUserId()] += $land_point;
+    			else
+    				$returned[$data->getGameDataUserId()] = $land_point;
+    		}
+    	}
+    	arsort($returned);
+    	return $returned;
+    }
+    
     /**
      * 
      * @param unknown $gameData

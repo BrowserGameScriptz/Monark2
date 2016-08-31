@@ -17,8 +17,7 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 	<h1><?= Html::encode($this->title) ?></h1>
              
     <div class="tab-content">
-        <div class="tab-pane" id="activity">
-                <!-- Post -->
+        <!--<div class="tab-pane" id="activity">
                 <div class="post">
                   <div class="user-block">
                     <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
@@ -28,7 +27,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                         </span>
                     <span class="description">Shared publicly - 7:30 PM today</span>
                   </div>
-                  <!-- /.user-block -->
                   <p>
                     Lorem ipsum represents a long-held tradition for designers,
                     typographers and the like. Some people hate it and argue for
@@ -47,9 +45,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 
                   <input class="form-control input-sm" type="text" placeholder="Type a comment">
                 </div>
-                <!-- /.post -->
-
-                <!-- Post -->
                 <div class="post clearfix">
                   <div class="user-block">
                     <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
@@ -59,7 +54,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                         </span>
                     <span class="description">Sent you a message - 3 days ago</span>
                   </div>
-                  <!-- /.user-block -->
                   <p>
                     Lorem ipsum represents a long-held tradition for designers,
                     typographers and the like. Some people hate it and argue for
@@ -79,9 +73,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                     </div>
                   </form>
                 </div>
-                <!-- /.post -->
-
-                <!-- Post -->
                 <div class="post">
                   <div class="user-block">
                     <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
@@ -91,12 +82,10 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                         </span>
                     <span class="description">Posted 5 photos - 5 days ago</span>
                   </div>
-                  <!-- /.user-block -->
                   <div class="row margin-bottom">
                     <div class="col-sm-6">
                       <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
                     </div>
-                    <!-- /.col -->
                     <div class="col-sm-6">
                       <div class="row">
                         <div class="col-sm-6">
@@ -104,19 +93,14 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                           <br>
                           <img class="img-responsive" src="../../dist/img/photo3.jpg" alt="Photo">
                         </div>
-                        <!-- /.col -->
                         <div class="col-sm-6">
                           <img class="img-responsive" src="../../dist/img/photo4.jpg" alt="Photo">
                           <br>
                           <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
                         </div>
-                        <!-- /.col -->
                       </div>
-                      <!-- /.row -->
                     </div>
-                    <!-- /.col -->
                   </div>
-                  <!-- /.row -->
 
                   <ul class="list-inline">
                     <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
@@ -129,25 +113,19 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
 
                   <input class="form-control input-sm" type="text" placeholder="Type a comment">
                 </div>
-                <!-- /.post -->
               </div>
-              <!-- /.tab-pane -->
               
               
               
               
               
               <div class="tab-pane active" id="timeline">
-                <!-- The timeline -->
                 <ul class="timeline timeline-inverse">
-                  <!-- timeline time label -->
                   <li class="time-label">
                         <span class="bg-red">
                           News
                         </span>
                   </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
                   <li>
                     <i class="fa fa-envelope bg-blue"></i>
 
@@ -168,8 +146,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                       </div>
                     </div>
                   </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
                   <li>
                     <i class="fa fa-user bg-aqua"></i>
 
@@ -180,8 +156,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                       </h3>
                     </div>
                   </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
                   <li>
                     <i class="fa fa-comments bg-yellow"></i>
 
@@ -200,15 +174,11 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                       </div>
                     </div>
                   </li>
-                  <!-- END timeline item -->
-                  <!-- timeline time label -->
                   <li class="time-label">
                         <span class="bg-green">
                           Previous
                         </span>
                   </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
                   <li>
                     <i class="fa fa-camera bg-purple"></i>
 
@@ -221,13 +191,11 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                       </div>
                     </div>
                   </li>
-                  <!-- END timeline item -->
                   <li>
                     <i class="fa fa-clock-o bg-gray"></i>
                   </li>
                 </ul>
               </div>
-              <!-- /.tab-pane -->
 
               <div class="tab-pane" id="settings">
                 <form class="form-horizontal">
@@ -281,8 +249,6 @@ $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className
                     </div>
                   </div>
                 </form>
-              </div>
-              <!-- /.tab-pane -->
+              </div>-->
             </div>
-            <!-- /.tab-content -->
 </div>

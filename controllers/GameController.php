@@ -773,7 +773,19 @@ class GameController extends \yii\web\Controller
      */
     public function actionRank()
     {
-    	return $this->render('rank');
+    	// Session
+    	$this->updateSessionData(Yii::$app->session['Game']);
+    	
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	return $this->render('rank', [
+    			'rankData' => GameData::getGameRanking(Yii::$app->session['Game']->getGameId(), Yii::$app->session['Building'], $dataArray['GameData']),
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    			]);
     }
     
     /**

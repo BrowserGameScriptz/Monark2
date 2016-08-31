@@ -27,6 +27,7 @@ return [
 	'Title_Game_Chat' => 'Game chat',
 	'Title_Game_News' => 'Game news',
 	'Title_Game_Stats' => 'Game stats',
+	'Title_Game_Rank' => 'Ranking',
 	'Title_Game_Diplomacy' => 'Diplomacy',
 	'Title_Game_History' => 'Game history',
 	'Title_Fight_Details' => 'Fight details',
