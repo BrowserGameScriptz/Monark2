@@ -36,6 +36,7 @@ use app\forms\game\GameAddBotForm;
 use app\models\Difficulty;
 use app\models\Alert;
 use app\models\AlertType;
+use app\models\AlertRead;
 
 class GameController extends \yii\web\Controller
 {
@@ -217,6 +218,7 @@ class GameController extends \yii\web\Controller
     	$data = $this->getGameData();
     	$user_unread_chat = Chat::countUserUnReadChat($game_current->getGameId(), Yii::$app->session['User']->getUserID());
     	$user_unread_mail = Mail::countUserGameMailUnread($game_current->getGameId(), Yii::$app->session['User']->getUserID());
+    	$user_unread_news = Alert::countUserUnReadAlert($game_current->getGameId(), Yii::$app->session['User']->getUserID());
     	
     	// Add header info to session 
     	Yii::$app->session['MapData'] = array(
@@ -229,6 +231,7 @@ class GameController extends \yii\web\Controller
     			'BotData'			=> $data['BotData'],
     			'UserUnReadChat'	=> $user_unread_chat,
     			'UserUnReadMail'	=> $user_unread_mail,
+    			'UserUnReadNews'	=> $user_unread_news,
     	);
     }
 
@@ -415,6 +418,9 @@ class GameController extends \yii\web\Controller
     	$user_unread_alert = Alert::countUserUnReadAlert($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID());
     	$alertData = Alert::getUserAlertToArray($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID(), 50);
     	$alertType = AlertType::findAllAlertTypeToArray();
+    	
+    	// Log
+    	AlertRead::insertAlertReadLog($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID());
     	
     	// Data to map
     	return $this->render('news', [

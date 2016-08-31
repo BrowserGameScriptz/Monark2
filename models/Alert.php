@@ -137,10 +137,10 @@ class Alert extends \yii\db\ActiveRecord
      * @param string $parameter
      * @return number
      */
-    public static function createAlert($game, $type_id, $user_id, $parameter=null){
+    public static function createAlert($game, $type_id, $user_id, $parameter=0){
     	return Yii::$app->db->createCommand()->insert(self::tableName(), [
     				'alert_type_id'     => $type_id,
-    				'alert_game_id'  	=> $gameData->getGameId(),
+    				'alert_game_id'  	=> $game->getGameId(),
     				'alert_user_id'     => $user_id,
     				'alert_time'        => time(),
     				'alert_parameter'   => $parameter,
