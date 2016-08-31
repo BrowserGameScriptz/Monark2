@@ -197,7 +197,7 @@ class Turn extends \yii\db\ActiveRecord
     		$new_turn_begin = $previousTurnData->getTurnTime();
     	
     	// If end
-    	if(GameData::checkGameEnd($user_id, $game_id, $gameData))
+    	if(GameData::checkGameEnd($user_id, $game_id, $gameData, $gamePlayerData))
     		return Game::updateGameStatut($game_id, 100);
     	
     	// New turn	

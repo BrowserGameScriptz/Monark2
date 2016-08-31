@@ -18,8 +18,6 @@ $n = 1;
 <div class="game-news">
 	<h1><?= Html::encode($this->title) ?></h1>
 
-
-
 	<div class="tab-content">  
 	     <?php foreach($rankData as $key => $rank): ?>
 			<div class="box box-default">

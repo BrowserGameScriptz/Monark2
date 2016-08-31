@@ -152,17 +152,15 @@ class Chat extends \yii\db\ActiveRecord
      */
     public static function getGameUnReadChat($game_id, $user_id, $time=null, $limit=null){
     	if($time === null) $time = ChatRead::getUserLastChatReadTimeInGame($game_id, $user_id);
-    	return self::find()->where(['chat_game_id' => $game_id])
-    	->andWhere("chat_time >= ".$time)
-    	->andWhere("chat_user_id != ".$user_id)->orderBy(['chat_time' => SORT_ASC])->orderBy(['chat_time' => SORT_ASC])->all();
+    	return self::find()->where(['chat_game_id' => $game_id])->andWhere("chat_time >= ".$time)->andWhere("chat_user_id != ".$user_id)->orderBy(['chat_time' => SORT_ASC])->all();
     }
     
     /**
-     * 
-     * @param number $limit
-     * @param unknown $time
-     * @return \app\models\Chat[]
-     */
+    * 
+    * @param number $limit
+    * @param unknown $time
+    * @return \app\models\Chat[]
+    */
     public static function getGlobalChat($limit=10, $time=null){
     	if($time == null)
     		return self::find()->orderBy(['chat_time' => SORT_ASC])->limit($limit)->all();

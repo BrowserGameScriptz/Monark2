@@ -127,15 +127,23 @@ class GameData extends \yii\db\ActiveRecord
      * @param unknown $user_id
      * @param unknown $game_id
      * @param unknown $gameData
+     * @param unknown $gamePlayerData
      * @return boolean
      */
-    public static function checkGameEnd($user_id, $game_id=null, $gameData=null){
-    	if($gameData === null)
-    		$gameData = self::getGameDataByIdToArray($game_id);
-    	foreach($gameData as $land)
+    public static function checkGameEnd($user_id, $game_id, $gameData, $gamePlayerData){
+    	$returned 	= true;
+    	$only_bots 	= true;
+    	foreach($gameData as $land){
+    		// Other user
     		if($land->getGameDataUserId() != 0 && $land->getGameDataUserId() != $user_id)
-				return false;
-    	return true;
+    			$returned = false;
+    		
+    		// Check bot
+    		if($land->getGameDataUserId() != 0 && $gamePlayerData[$land->getGameDataUserId()]->getGamePlayerBot() == 0)
+    			$only_bots = false;		
+    	}
+    		
+    	return $returned || $only_bots;
     }
     
     /**

@@ -189,6 +189,15 @@ class Fight extends \yii\db\ActiveRecord
 				$data['conquest']
 		);
 		
+		// Alerts
+		if($data['conquest'] == 1)
+			if($this->gameData[$data['def_land_id']]->getGameDataCapital() == $this->gameData[$data['def_land_id']]->getGameDataUserId())
+				Alert::createAlert($this->game, 2, $this->gameData[$data['def_land_id']]->getGameDataUserId());
+			else 
+				Alert::createAlert($this->game, 1, $this->gameData[$data['def_land_id']]->getGameDataUserId(), $data['def_land_id']);
+		else
+			Alert::createAlert($this->game, 3, $this->gameData[$data['def_land_id']]->getGameDataUserId(), $data['def_land_id']);
+		
 		return $data;
     }
     

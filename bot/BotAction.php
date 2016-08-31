@@ -200,6 +200,15 @@ class BotAction extends \yii\base\Object
 	 */
 	private function BotLandAttack($land_atk_id, $land_def_id, $degree){
 		$units_add = 0;
+		$percent = 2;
+		
+		// Percent units need
+		if($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits() > 30)
+			$percent = 1.2;
+		elseif($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits() > 15)
+			$percent = 1.4;
+		elseif($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits() > 5)
+			$percent = 1.8;
 		
 		// Need buy units
 		if($degree > 0){
@@ -214,13 +223,13 @@ class BotAction extends \yii\base\Object
 		}
 			
 		// Buy units
-		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) < round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
-			$this->BotOwnLandBuy($land_atk_id, abs(round($degree*1.2) - $this->getBuyInTurn($land_atk_id)));
+		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) < round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*$percent)){
+			$this->BotOwnLandBuy($land_atk_id, abs(round($degree*$percent) - $this->getBuyInTurn($land_atk_id)));
 		}
 		
 		// Attack
-		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2)){
-			$this->BotAttackLand($land_atk_id, $land_def_id, round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*1.2));
+		if(($this->bot->bot_data->gameData[$land_atk_id]->getGameDataUnits()) > round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*$percent)){
+			$this->BotAttackLand($land_atk_id, $land_def_id, round($this->bot->bot_data->gameData[$land_def_id]->getGameDataUnits()*$percent));
 		}
 		
 	}

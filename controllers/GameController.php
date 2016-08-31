@@ -34,6 +34,8 @@ use app\models\Mail;
 use app\forms\game\gameSendMailForm;
 use app\forms\game\GameAddBotForm;
 use app\models\Difficulty;
+use app\models\Alert;
+use app\models\AlertType;
 
 class GameController extends \yii\web\Controller
 {
@@ -406,7 +408,28 @@ class GameController extends \yii\web\Controller
      */
     public function actionNews()
     { 
-    	return $this->render('news');
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	// Chat data
+    	$user_unread_alert = Alert::countUserUnReadAlert($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID());
+    	$alertData = Alert::getUserAlertToArray($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID(), 50);
+    	$alertType = AlertType::findAllAlertTypeToArray();
+    	
+    	// Data to map
+    	return $this->render('news', [
+    			'User' 			=> Yii::$app->session['User'],
+    			'Color'			=> Yii::$app->session['Color'],
+    			'Land'			=> Yii::$app->session['Land'],
+    			'Game' 			=> $dataArray['Game'],
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'RefreshTime'	=> $this->refreshTime,
+    			'AlertData'		=> $alertData,
+    			'AlertType'		=> $alertType,
+    			'UnReadUser'	=> $user_unread_alert,
+    	]);
     }
     
     /**
@@ -552,7 +575,7 @@ class GameController extends \yii\web\Controller
     public function actionQuit()
     {
     	// DB
-			(new GamePlayer())->gameExitPlayer(Yii::$app->session['User']->getId(), Yii::$app->session['Game']->getGameId());
+		GamePlayer::gameExitPlayer(Yii::$app->session['User']->getId(), Yii::$app->session['Game']->getGameId());
 
     	// Session
     	$this->setSessionDataNull();
