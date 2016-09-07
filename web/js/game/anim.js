@@ -20,3 +20,21 @@ function getPopover(position){
     
     return {"popover_id":popover_id, "popover_name":popover_name};
 }
+
+// Roll dice
+function randomDice(element){
+    var d = Math.floor(Math.random() * 6) + 1;
+    setDice(element, d);
+} 
+
+function rollDice(element, finalvalue, timeout){
+	var rollIntervalId = setInterval(function(){randomDice(element);}, 30);
+	setTimeout(function () {clearInterval(rollIntervalId);setDice(element, finalvalue);}, timeout);
+}
+
+function setDice(element, value){
+	if(value == "")
+		$("#"+element).html("");
+	else
+		$("#"+element).html("<img src='img/de/de_"+value+".png' width='20px'>");
+}

@@ -18,6 +18,8 @@ $this->registerJs($this->context->getJSConfig(), View::POS_HEAD);
 $this->registerJsFile("@web/js/game/map.js", ['depends' => [AppAsset::className()]]);
 $this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className()]]);
 $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/anim.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/fight.js", ['depends' => [AppAsset::className()]]);
 $this->registerCssFile("@web/css/map.css");
 ?>
 

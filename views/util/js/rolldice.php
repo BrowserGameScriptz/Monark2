@@ -1,26 +1,32 @@
 <?php
-
-use yii\bootstrap\Progress;
 use app\assets\AppAsset;
+use yii\bootstrap\Progress;
+$this->title = "Roll dice test";
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Ajax */
+$atk_result = array(
+		'fight_nb' => 5,
+		'conquest' => 1,
+		'atk_engage_units' => 16,
+		'atk_result_units' => 16,
+		'def_engage_units' => 9,
+		'def_result_units' => 0,
+		"thimble_atk" => "/5;4;1;/6;4;4;/6;3;3;/6;5;4;/3;1;1;",
+		"thimble_def" => "/4;2;/5;1;/3;2;/3;1;/2;",
+		"atk_units" => "/16/16/16/16/16/16",
+		"def_units" => "/9/7/5/3/1/0",
+);
+
+// Call files
+$this->registerJsFile("@web/js/game/anim.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/fight.js", ['depends' => [AppAsset::className()]]);
+$this->registerJs('$("document").ready(function(){showFight('.json_encode($atk_result).');});');
 ?>
-<script type="text/javascript">
-<?php print '$("document").ready(function(){showFight(('.json_encode($atk_result).'));});'; ?>
-</script>
-<div class="atk-action-view-ajax">
-	<?php if($error === true): ?>
-	
 		<?= Progress::widget([
 			'id' => 'attack-action',
 			'percent' => 0,
 			'barOptions' => ['class' => 'progress-bar'],
 		    'options' => ['class' => 'active progress-striped']
 		]); ?>
-		<!--<div class="div-center">
-			<?= "<a href='#Build' class='build_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-success'><i class='fa fa-plus'></i> ".Yii::t('ajax', 'Text_Build_Other')." </span></a>"; ?>
-		</div>-->
 		<div id='fight-atk' style="width: 100%; margin: 0 auto;">
 			<table style="width: 100%">
 				<tr>
@@ -55,15 +61,4 @@ use app\assets\AppAsset;
 				</tr>
 			</table>
 		</div>	
-		<br><br><br><br>	
-	<?php else: ?>
-		<div class="alert alert-danger" style="text-align:center;">
-			<font size='3'>
-				<?= Yii::t('ajax', $error); ?>
-			</font>
-		</div>
-		<div class="div-center">
-			<?= "<a href='#Atk' class='atk_link' i='".$land_id."' style='text-decoration:none;'><span class='btn btn-success'><i class='fa fa-arrow-left'></i> ".Yii::t('ajax', 'Button_Return')." </span></a>"; ?>
-		</div>
-	<?php endif; ?>
-</div>
+		<br><br><br><br>

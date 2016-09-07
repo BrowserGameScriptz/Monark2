@@ -24,11 +24,11 @@ class UtilController extends Controller
 		    							'allow' => Access::UserIsInStartedGame() && $this->local, // In started
     							],
     							[
-    									'actions' => ['mdp', 'username'],
+    									'actions' => ['mdp', 'username', 'rolldice'],
     									'allow' => Access::UserIsConnected() && $this->local, // Connected
     							],
     							[
-    									'actions' => ['generateallcolors'],
+    									'actions' => ['generateallcolors', 'rolldice'],
     									'allow' => $this->local, // No access
     									'roles'=>['?'], // Guests
     							],
@@ -76,4 +76,8 @@ class UtilController extends Controller
     	return $this->render('bot/bot');
     }
 
+    public function actionRolldice()
+    {
+    	return $this->render('js/rolldice');
+    }
 }
