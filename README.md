@@ -8,7 +8,7 @@ Alpha version <a href="http://monark2.hebergratuit.net/web/" target="_blank">her
 <b>For developers </b>
 Start this scripts : <br>
 - 1_create_database.bat / .sh<br>
-- 2_create_tables.sh / .sh<br>
+- 2_create_tables.bat / .sh<br>
 - Modify config/web.php cookieValidationKey (what you want)<br>
 - Modify config/db.php for your configuration <br>
 
