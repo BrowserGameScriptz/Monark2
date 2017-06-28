@@ -18,6 +18,8 @@ $this->registerJs($this->context->getJSConfig(), View::POS_HEAD);
 $this->registerJsFile("@web/js/game/map.js", ['depends' => [AppAsset::className()]]);
 $this->registerJsFile("@web/js/game/game.js", ['depends' => [AppAsset::className()]]);
 $this->registerJsFile("@web/js/game/ajax.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/anim.js", ['depends' => [AppAsset::className()]]);
+$this->registerJsFile("@web/js/game/fight.js", ['depends' => [AppAsset::className()]]);
 $this->registerCssFile("@web/css/map.css");
 ?>
 
@@ -32,7 +34,7 @@ $this->registerCssFile("@web/css/map.css");
 	<?php Pjax::begin(['id' => 'map_content']); ?>
 	<div id='map_content'>
 		<?php $user_units = 0; ?>
-		<?php $max_show_units = 40; ?>
+		<?php $max_show_units = 36; ?>
 		<?php foreach ($GameData as $data): ?>
 			
 			<?php $land = $Land[$data->getGameDataLandId()]; ?>  
@@ -54,6 +56,7 @@ $this->registerCssFile("@web/css/map.css");
                          	<?= $land->getLandName(); ?>
                          	<!--<?php if($data->getGameDataCapital() >= 1): ?>
 	                        	<?= "<img src='img/game/star.png' height='20px' width='20px'>"; ?>
+	                        	<i style="fa fa-star"></i>
 	                        -->
 	                        <?php endif; ?>
 	                        <!-- Land data -->   

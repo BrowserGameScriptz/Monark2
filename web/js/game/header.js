@@ -39,3 +39,8 @@ $(document).on("click", "#last_chat_link", function(){
 $(document).on("click", "#last_mail_link", function(){
 	CallAjaxMethodHeader("lastmail", new Array(), {'id': "#last_mail_content"});
 });
+
+//last News
+$(document).on("click", "#last_news_link", function(){
+	CallAjaxMethodHeader("lastnews", new Array(), {'id': "#last_news_content"});
+});

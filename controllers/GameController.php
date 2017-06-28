@@ -34,11 +34,14 @@ use app\models\Mail;
 use app\forms\game\gameSendMailForm;
 use app\forms\game\GameAddBotForm;
 use app\models\Difficulty;
+use app\models\Alert;
+use app\models\AlertType;
+use app\models\AlertRead;
 
 class GameController extends \yii\web\Controller
 {
 
-	public $refreshTime = 1800;
+	public $refreshTime = 1500;
 
 	public function behaviors()
 	{
@@ -215,6 +218,7 @@ class GameController extends \yii\web\Controller
     	$data = $this->getGameData();
     	$user_unread_chat = Chat::countUserUnReadChat($game_current->getGameId(), Yii::$app->session['User']->getUserID());
     	$user_unread_mail = Mail::countUserGameMailUnread($game_current->getGameId(), Yii::$app->session['User']->getUserID());
+    	$user_unread_news = Alert::countUserUnReadAlert($game_current->getGameId(), Yii::$app->session['User']->getUserID());
     	
     	// Add header info to session 
     	Yii::$app->session['MapData'] = array(
@@ -225,9 +229,9 @@ class GameController extends \yii\web\Controller
     			'GameData'			=> $data['GameData'],
     			'UserData'			=> $data['UserData'],
     			'BotData'			=> $data['BotData'],
-    			'RefreshTime'		=> $this->refreshTime,
     			'UserUnReadChat'	=> $user_unread_chat,
     			'UserUnReadMail'	=> $user_unread_mail,
+    			'UserUnReadNews'	=> $user_unread_news,
     	);
     }
 
@@ -407,7 +411,31 @@ class GameController extends \yii\web\Controller
      */
     public function actionNews()
     { 
-    	return $this->render('news');
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	// Chat data
+    	$user_unread_alert = Alert::countUserUnReadAlert($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID());
+    	$alertData = Alert::getUserAlertToArray($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID(), 50);
+    	$alertType = AlertType::findAllAlertTypeToArray();
+    	
+    	// Log
+    	AlertRead::insertAlertReadLog($dataArray['Game']->getGameId(), Yii::$app->session['User']->getUserID());
+    	
+    	// Data to map
+    	return $this->render('news', [
+    			'User' 			=> Yii::$app->session['User'],
+    			'Color'			=> Yii::$app->session['Color'],
+    			'Land'			=> Yii::$app->session['Land'],
+    			'Game' 			=> $dataArray['Game'],
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'RefreshTime'	=> $this->refreshTime,
+    			'AlertData'		=> $alertData,
+    			'AlertType'		=> $alertType,
+    			'UnReadUser'	=> $user_unread_alert,
+    	]);
     }
     
     /**
@@ -553,7 +581,7 @@ class GameController extends \yii\web\Controller
     public function actionQuit()
     {
     	// DB
-			(new GamePlayer())->gameExitPlayer(Yii::$app->session['User']->getId(), Yii::$app->session['Game']->getGameId());
+		GamePlayer::gameExitPlayer(Yii::$app->session['User']->getId(), Yii::$app->session['Game']->getGameId());
 
     	// Session
     	$this->setSessionDataNull();
@@ -773,7 +801,19 @@ class GameController extends \yii\web\Controller
      */
     public function actionRank()
     {
-    	return $this->render('rank');
+    	// Session
+    	$this->updateSessionData(Yii::$app->session['Game']);
+    	
+    	// Get data
+    	$dataArray = $this->getGameData();
+    	
+    	return $this->render('rank', [
+    			'rankData' => GameData::getGameRanking(Yii::$app->session['Game']->getGameId(), Yii::$app->session['Building'], $dataArray['GameData']),
+    			'GamePlayer' 	=> $dataArray['GamePlayer'],
+    			'Users'			=> $dataArray['UserData'],
+    			'Bots'			=> $dataArray['BotData'],
+    			'Color'			=> Yii::$app->session['Color'],
+    			]);
     }
     
     /**

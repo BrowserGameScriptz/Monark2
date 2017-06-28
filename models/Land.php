@@ -69,12 +69,14 @@ class Land extends \yii\db\ActiveRecord
     public static function LandCountUnitsToArrayShow($units){
     	$data = self::LandCountUnitsToArray($units);
     	$returned = "";
+    	for($i=1; $i <= $data['plane']; $i++)
+    		$returned.= "<img src='img/game/plane.png' class='land_plane' style='width:22px;'>";
     	for($i=1; $i <= $data['canon']; $i++)
-    		$returned.= "<img src='img/game/canon.png' class='land_canon' style='width:20px;'>";
+    		$returned.= "<img src='img/game/canon.png' class='land_canon' style='width:17px;'>";
     	for($i=1; $i <= $data['horseman']; $i++)
-    		$returned.= "<img src='img/game/horseman.png' class='land_horseman' style='width:16px;'>";
+    		$returned.= "<img src='img/game/horseman.png' class='land_horseman' style='width:15px;'>";
     	for($i=1; $i <= $data['soldier']; $i++)
-    		$returned.= "<img src='img/game/soldier.png' class='land_soldier' style='width:9px;'>";
+    		$returned.= "<img src='img/game/soldier.png' class='land_soldier' style='width:8px;'>";
     	return $returned;
     }
     
@@ -84,10 +86,12 @@ class Land extends \yii\db\ActiveRecord
      * @return number[]
      */
     public static function LandCountUnitsToArray($units){
-    	$count_canon 		= (int)($units/10);
-    	$count_horseman 	= (int)(fmod($units, 10)/5);
-    	$count_soldier 		= (int)(fmod(fmod($units, 10), 5));
+    	$count_plane 		= (int)($units/20);
+    	$count_canon 		= (int)(fmod($units, 20)/10);
+    	$count_horseman 	= (int)(fmod(fmod($units, 20), 10)/5);
+    	$count_soldier 		= (int)(fmod(fmod(fmod($units, 20), 10), 5));
     	return array(
+    			'plane'		=> $count_plane,
     			'canon'		=> $count_canon,
     			'horseman'	=> $count_horseman,
     			'soldier'	=> $count_soldier,

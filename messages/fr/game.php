@@ -27,6 +27,7 @@ return [
 	'Title_Game_Chat' => 'Chat de la partie',
 	'Title_Game_News' => 'Dernières actualités',
 	'Title_Game_Stats' => 'Statistiques',
+	'Title_Game_Rank' => 'Classement',
 	'Title_Game_Diplomacy' => 'Portail diplomatique',
 	'Title_Game_History' => 'Histoire de la partie',
 	'Title_Fight_Details' => 'Détails du combat',

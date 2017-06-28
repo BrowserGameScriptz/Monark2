@@ -29,6 +29,9 @@ use app\models\Chat;
 use app\models\ChatRead;
 use app\models\Mail;
 use app\models\Difficulty;
+use app\models\Alert;
+use app\models\AlertType;
+use app\models\AlertRead;
 
 /**
  * AjaxController implements the CRUD actions for Ajax model.
@@ -48,7 +51,7 @@ class AjaxController extends Controller
 										'attackbegin', 'attackaction',
 										'movebegin', 'moveaction', 
 										'lastgold', 'income',
-										'lastchat', 'lastmail'],
+										'lastchat', 'lastmail', 'lastnews'],
 										'allow' => Access::UserIsInStartedGame(), // Into a started game
 								],
 								[
@@ -673,6 +676,34 @@ class AjaxController extends Controller
 				'lastMail'			=> $lastMail,
 				'UsersData'			=> $data['usersData'],
 				'BotData'			=> $data['usersBot'],
+		]);
+	}
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function actionLastnews(){
+		// Load data
+		$data = $this->getData(array(
+				'game_id' => true,
+				'user_id' => true,
+				'UsersData'	=> true,
+				'GamePlayer' => true,
+				'Land' => true,
+		));
+	
+		$lastNews = Alert::getUnReadAlertToArray($data['game']->getGameId(), $data['user']->getUserID());
+		$alertType = AlertType::findAllAlertTypeToArray();
+		
+		AlertRead::insertAlertReadLog($data['game']->getGameId(), $data['user']->getUserID());
+		
+		return $this->renderAjax('last_news', [
+				'lastNews'			=> $lastNews,
+				'alertType'			=> $alertType,
+				'UsersData'			=> $data['usersData'],
+				'BotData'			=> $data['usersBot'],
+				'Land'				=> $data['land'],
 		]);
 	}
 }

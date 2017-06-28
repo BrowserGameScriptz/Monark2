@@ -49,15 +49,7 @@ $this->registerCssFile("@web/css/ajax.css");
 					                          'data-placement' => 'auto',
 					                          'style'=>'text-decoration: none; cursor:pointer;'
 					            ]); ?>
-	                     <?php for($i=1; $i <= $land_units['canon']; $i++): ?>
-	                       	<img src='img/game/canon.png' class='land_canon' style=<?= "'left:".$i."px;'"; ?>>
-	                   	<?php endfor; ?>
-	                    <?php for($i=1; $i <= $land_units['horseman']; $i++): ?>
-	                       	<img src='img/game/horseman.png' class='land_horseman' style=<?= "'left:".$i."px;'"; ?>>
-	                    <?php endfor; ?>
-	                    <?php for($i=1; $i <= $land_units['soldier']; $i++): ?>
-	                    	<img src='img/game/soldier.png' class='land_soldier' style=<?= "'left:".$i."px;'"; ?>>
-	                  	<?php endfor; ?>
+	                    <?= Land::LandCountUnitsToArrayShow($GameData[$land_id]->getGameDataUnits()) ?>
 						</font></td>
 					</tr>
 					<?php endif; ?>
