@@ -1,4 +1,7 @@
 # Monark V2
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6fe36015b70e414db53a5213bbbe7191)](https://www.codacy.com/app/paul.bouquet/Monark2?utm_source=github.com&utm_medium=referral&utm_content=Herklos/Monark2&utm_campaign=badger)
+
 Risk game on browser.<br>
 Multiplayer strategy game.<br>
 It's totaly free !!<br>
