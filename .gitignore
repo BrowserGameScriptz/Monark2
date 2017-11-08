@@ -9,3 +9,4 @@ config/db.php
 config/db_srv.php
 
 \.idea/
+vendor/
