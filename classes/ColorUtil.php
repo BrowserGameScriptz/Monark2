@@ -1,6 +1,8 @@
 <?php 
 namespace app\classes;
 
+use yii\db\Exception;
+
 class ColorUtil{
 	
 	public static function colorizeBasedOnAplhaChannnel( $file, $targetR, $targetG, $targetB, $targetName ) {
@@ -32,7 +34,7 @@ class ColorUtil{
 						);
 	
 				if ( false === $col ) {
-					die( 'sorry, out of colors...' );
+                    throw(new Exception('sorry, out of colors...'));
 				}
 	
 				imagesetpixel( $im_dst, $x, $y, $col );
