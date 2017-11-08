@@ -41,7 +41,14 @@ $this->registerCssFile("@web/css/map.css");
 			<div class="land_content" i=<?= "'".$land->getLandId()."'"; ?>>
 				  <!-- Image -->
 	              <a href=<?= "'#".str_replace("'", "-", $land->getLandName())."'"; ?> class="link_land_img" style=<?= "'top:".$land->getLandPositionTop()."em;left:".$land->getLandPositionLeft()."em;text-decoration: none;'"; ?>>
-	                    <img src=<?= "'".$land->getLandImageTempUrl($Color[$GamePlayer[$data->getGameDataUserId()]->getGamePlayerColorId()]->getColorName2())."'"; ?> i=<?= "'".$land->getLandId()."'"; ?> alt=<?= '"'.$land->getLandName().'"'; ?> class="land_img" 
+                      <?php
+                      if(Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId()) || Yii::$app->session['GameSpec']){
+                          $colorName = $land->getLandImageTempUrl($Color[$GamePlayer[$data->getGameDataUserId()]->getGamePlayerColorId()]->getColorName2());
+                      }else{
+                          $colorName = $land->getLandImageTempUrl($Color[$GamePlayer[0]->getGamePlayerColorId()]->getColorName2());
+                      }
+                      ?>
+                        <img src=<?= "'".$land->getLandImageTempUrl($Color[$GamePlayer[$data->getGameDataUserId()]->getGamePlayerColorId()]->getColorName2())."'"; ?> i=<?= "'".$land->getLandId()."'"; ?> alt=<?= '"'.$land->getLandName().'"'; ?> class="land_img"
 	                    style=<?= "'top:".$land->getLandPositionTop()."em;left:".$land->getLandPositionLeft()."em;'"; ?>> 
 	                    <!--<div class="building" style=<?= "'position:absolute;top:".$land->getLandPositionTop()."em;left:".$land->getLandPositionLeft()."em;'"; ?>>
 	                        <?php //if($value['land_harbor']): ?>
@@ -51,7 +58,14 @@ $this->registerCssFile("@web/css/map.css");
 	                </a>
 	               <!-- Title -->
 	               <div class="land_title" style=<?= "'top:".$land->getLandPositionTop()."em;left:".$land->getLandPositionLeft()."em;'"; ?>>
-                        <font color=<?= "'".$Color[$GamePlayer[$data->getGameDataUserId()]->getGamePlayerColorId()]->getColorFontOther()."'"; ?>>
+                       <?php
+                       if(Frontier::userHaveFrontierLand($UserFrontier, $land->getLandId()) || Yii::$app->session['GameSpec']){
+                           $colorLandName = $Color[$GamePlayer[$data->getGameDataUserId()]->getGamePlayerColorId()]->getColorFontOther();
+                       }else{
+                           $colorLandName = $Color[$GamePlayer[0]->getGamePlayerColorId()]->getColorFontOther();
+                       }
+                       ?>
+                        <font color=<?= "'".$colorLandName."'"; ?>>
                          	<!-- <?= $land->getLandName(); ?> -->
                          	<?= $land->getLandName(); ?>
                          	<!--<?php if($data->getGameDataCapital() >= 1): ?>
